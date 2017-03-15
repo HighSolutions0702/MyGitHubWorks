@@ -1,0 +1,161 @@
+/*
+ Theme Name:   Divi Child
+ Template:     Divi
+*/
+@font-face {
+  font-family: 'icomoon';
+  src:  url('icomoon.eot?22pujg');
+  src:  url('icomoon.eot?22pujg#iefix') format('embedded-opentype'),
+    url('icomoon.ttf?22pujg') format('truetype'),
+    url('icomoon.woff?22pujg') format('woff'),
+    url('icomoon.svg?22pujg#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-box:before {
+  content: "\e900";
+}
+.icon-car:before {
+  content: "\e901";
+}
+.icon-chart:before {
+  content: "\e902";
+}
+.icon-education:before {
+  content: "\e903";
+}
+.icon-facebook:before {
+  content: "\e904";
+}
+.icon-google-plus:before {
+  content: "\e905";
+}
+.icon-heart:before {
+  content: "\e906";
+}
+.icon-house:before {
+  content: "\e907";
+}
+.icon-lead:before {
+  content: "\e908";
+}
+.icon-login:before {
+  content: "\e909";
+}
+.icon-phone:before {
+  content: "\e90a";
+}
+.icon-phone2:before {
+  content: "\e90b";
+}
+.icon-scale:before {
+  content: "\e90c";
+}
+.icon-sign-up:before {
+  content: "\e90d";
+}
+.icon-store:before {
+  content: "\e90e";
+}
+.icon-twitter:before {
+  content: "\e90f";
+}
+.icon-money:before {
+  content: "\e910";
+}
+.icon-tools:before {
+  content: "\e911";
+}
+.icon-click:before {
+  content: "\e912";
+}
+.icon-close:before {
+  content: "\e913";
+}
+.icon-linkedin2:before {
+  content: "\eaca";
+}
+
+@media (min-width: 1024px){
+.custom_cols--custom .col {
+    width: auto!important;
+    float: none!important;
+    display: inline-block;
+    vertical-align: top;
+}
+}
+.advantage--centered {
+    margin: 0 6px 15px;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+}
+.advantage {
+    padding: 40px 20px 20px;
+    width: 215px;
+    text-align: left;
+    color: #1f2b37;
+    min-height: 310px;
+    border: 1px solid #cfcfcf;
+    background-color: #fff;
+}
+.advantage__img {
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 30px;
+	text-align: center;
+}
+.advantage__img i {
+    font-size: 80px;
+}
+.advantage__img:after {
+    content: "";
+    width: 75%;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    margin: 0 auto;
+    display: block;
+    height: 1px;
+    position: absolute;
+    bottom: 0;
+    background-color: #faa61a;
+}
+.custom_cols--custom {
+    text-align: center;
+}
+#footer-bottom .box{
+	width:33%;
+	float:left
+}
+.box .et-social-icons{
+	float:none;
+	text-align:center;
+}
+.box3 ul{
+	text-align:right;
+}
+.bottom-nav{
+	padding:0px
+}
+.main_title{
+	text-align:center
+}

@@ -1,0 +1,4 @@
+select max(billing_seconds) as talk_time, max(duration_seconds) as ring_time, (max(duration_seconds)- max(billing_seconds)) as answer_speed, max(date_part('hour',timezone('CST', datetime))) as hour from data
+where direction='outbound' and account_id = '411b815b75737f06c54033463d1929ee' and (timezone('CST', datetime) between '2016-11-29 00:00:00' and '2016-11-30 00:00:00') and owner_id !='' and request like '%simplevoip%'
+group by bridge_id,date_part('hour',timezone('CST', datetime))
+order by date_part('hour',timezone('CST', datetime))
