@@ -1,0 +1,469 @@
+package com.obs.webservice;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import com.amazonaws.util.json.JSONException;
+import com.obs.base.BaseObject;
+import com.obs.model.User;
+import com.obs.model.Video;
+import com.obs.service.IUserService;
+import com.obs.service.UserService;
+import com.obs.utils.CommonProperties;
+import com.obs.webservice.messages.CountMessage;
+import com.obs.webservice.messages.ResponseStatus;
+import com.obs.webservice.messages.ResponseStatusCode;
+
+public class VideoShareOAuthServiceHelper extends BaseObject {
+
+	public final String YOUTUBE_CLIENT_ID 		= CommonProperties.getGoogleOAuthClientId();
+	public final String YOUTUBE_CLIENT_SECRET 	= CommonProperties.getGoogleOAuthClientSecret();
+
+	public final String GOOGLE_OAUTHTOKENURL			= "https://accounts.google.com/o/oauth2/token";
+
+	public final String DAILYMOTION_CLIENT_ID 		= CommonProperties.getDailymotionOAuthClientId();
+	public final String DAILYMOTION_CLIENT_SECRET 	= CommonProperties.getDailymotionOAuthClientSecret();
+
+	public final String DAILYMOTION_OAUTHTOKENURL				= "https://api.dailymotion.com/oauth/token";
+	public final String DAILYMOTION_UPLOADURL					= "https://api.dailymotion.com/file/upload";
+	public final String DAILYMOTION_SAVEURL						= "https://api.dailymotion.com/me/videos";
+	
+	public final String BLOG_URL 								= "http://174.142.115.238/wp/wp-content/themes/rundown/wp-post.php";
+
+	private IUserService userService = getUserService();
+	static JSONObject json;
+	/**
+	 * Singleton Instance
+	 */
+	private static VideoShareOAuthServiceHelper myInstance = null;
+	public static VideoShareOAuthServiceHelper getInstance()
+	{
+		if(myInstance == null)
+			myInstance = new VideoShareOAuthServiceHelper();
+		return myInstance;
+	}
+
+	public String getGoogleAccessToken(String refreshToken){
+		HttpClient httpclient = new DefaultHttpClient();
+		String accessToken = null;
+		try {
+			HttpPost httpPost = new HttpPost(GOOGLE_OAUTHTOKENURL);
+			List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+			nvps.add(new BasicNameValuePair("client_id", YOUTUBE_CLIENT_ID));
+			nvps.add(new BasicNameValuePair("client_secret", YOUTUBE_CLIENT_SECRET));
+			nvps.add(new BasicNameValuePair("refresh_token", refreshToken));
+			nvps.add(new BasicNameValuePair("grant_type", "refresh_token"));
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf-8"));
+			JSONObject value = getJSONObject(httpclient.execute(httpPost));
+			accessToken = (String) value.get("access_token");
+			System.out.println(accessToken);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return accessToken;
+	}
+
+	public CountMessage uploadDailyMotionVideo(int userId,File file,int umvideoId,String title,String description,int categroyId) {
+		String refreshToken = null;
+		ResponseStatus status = null;
+		String accessToken=null;
+		String videoId = null;
+		try {
+			User user = userService.getUserById(userId);
+			refreshToken = user.getToken_daily();
+			System.out.println("DM_refreshToken :"+refreshToken);
+			if(refreshToken!=null){
+				//generate umcast video page url
+				String umVideoUrl = generateVideoPageUrl(user.getUmcast_name(), umvideoId);
+				//get alternate keywords from xspinner 
+				Video xSpinnerVideoData = getXspinnerForNameAndDesc(title,description,2,umVideoUrl);
+				System.out.println("DM_title :"+xSpinnerVideoData.getVideoName());
+				//get dailymotion access token
+				accessToken = getDailyMotionAccessToken(refreshToken);
+				System.out.println("DM_accessToken :"+accessToken);
+				//upload video to dailymotion
+				videoId = publish_dailmotion_video(file,accessToken,xSpinnerVideoData.getVideoName(),xSpinnerVideoData.getVideoDescription());
+				System.out.println("DM_videoId :"+videoId);
+				//publish video to um blog
+				String blog_url_content = BLOG_URL+"?dTitle="+xSpinnerVideoData.getVideoName()+"&dContent="+xSpinnerVideoData.getVideoDescription()+"&dailyId="+videoId+"&cat_id="+categroyId+"&duname="+user.getFirstName();
+				String blogResult = http_get_access(blog_url_content);
+				
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new CountMessage(status, accessToken);
+	}
+
+	public String getDailyMotionAccessToken(String refreshToken){
+		HttpClient httpclient = new DefaultHttpClient();
+		String accessToken = null;
+		try {
+			HttpPost httpPost = new HttpPost(DAILYMOTION_OAUTHTOKENURL);
+			List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+			nvps.add(new BasicNameValuePair("client_id", DAILYMOTION_CLIENT_ID));
+			nvps.add(new BasicNameValuePair("client_secret", DAILYMOTION_CLIENT_SECRET));
+			nvps.add(new BasicNameValuePair("refresh_token", refreshToken));
+			nvps.add(new BasicNameValuePair("grant_type", "refresh_token"));
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf-8"));
+			JSONObject value = getJSONObject(httpclient.execute(httpPost));
+			accessToken = (String) value.get("access_token");
+			System.out.println(accessToken);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return accessToken;
+	}
+
+	public JSONObject getJSONObject(HttpResponse res) throws Exception{
+		String stringifiedResponse = null;
+		stringifiedResponse = EntityUtils.toString(res.getEntity());
+		return (JSONObject) new JSONParser().parse(stringifiedResponse);
+	}
+
+	public String publish_dailmotion_video(File f,String accessToken,String title,String description) throws ProtocolException, JSONException {
+		String tag ="tag";
+		String published ="true";
+		String videoId="";
+		String temp="";
+		if(f==null) {
+			return null;
+		}			
+		try {
+			String sUploadLink = get_dailmotion_upload_url(accessToken);
+			System.out.println("sUploadLink"+sUploadLink);
+			String url = upload_file(f, sUploadLink+"&access_token="+accessToken);
+
+			System.out.println("url"+url);
+
+			String encodedURL = URLEncoder.encode(url);
+			String urlfor = "url="+encodedURL+"&title="+title+"&description="+description+"&published="+published;
+			temp = http_post_access(DAILYMOTION_SAVEURL+"?access_token="+accessToken+"&url="+encodedURL,urlfor);
+			JSONObject json_answer = (JSONObject) new JSONParser().parse(temp);
+			videoId = (String) json_answer.get("id");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return videoId;
+	}
+
+	private String get_dailmotion_upload_url(String access_token) {
+		String upload_url=null;
+		String answer = http_get_access(DAILYMOTION_UPLOADURL+"?access_token="+access_token);
+		try {
+			JSONObject json = (JSONObject) new JSONParser().parse(answer);
+			upload_url = (String) json.get("upload_url");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return upload_url;
+	}
+
+	private static String http_post_access(String url,String body){
+		String response=null;
+		HttpURLConnection login_request=null;
+		//JSONObject json = getJson_token();
+		try {
+			URL login_url = new URL(url);
+			login_request = (HttpURLConnection) login_url.openConnection();
+			login_request.setRequestMethod("POST");
+			login_request.setAllowUserInteraction(false); // you may not ask the user
+			login_request.setDoInput(true);
+			login_request.setDoOutput(true);
+			login_request.setUseCaches(false);
+			// the Content-type should be default, but we set it anyway
+			login_request.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+
+			OutputStream out = new BufferedOutputStream(login_request.getOutputStream());
+			out.write(body.getBytes());
+			out.close();
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(login_request.getInputStream()));
+			String currentLine 	= "";
+			response="";
+			while((currentLine = in.readLine()) != null)
+				response += currentLine + "\n";
+			in.close();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(login_request!=null)
+				login_request.disconnect();
+		}
+		return response;
+	}
+
+	private static String http_get_access(String url){
+		String response=null;
+		HttpURLConnection login_request=null;
+		try {
+			URL login_url = new URL(url);
+			login_request = (HttpURLConnection) login_url.openConnection();
+			login_request.setRequestMethod("GET");
+			login_request.setAllowUserInteraction(false); // you may not ask the user
+			login_request.setDoInput(true);
+			login_request.setDoOutput(false);
+			login_request.setUseCaches(false);
+			BufferedReader in = new BufferedReader(new InputStreamReader(login_request.getInputStream()));
+			response = "";
+			String currentLine 	= "";
+			while((currentLine = in.readLine()) != null)
+				response += currentLine + "\n";
+			in.close();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (ProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+		}finally {
+			if(login_request!=null)
+				login_request.disconnect();
+		}
+		return response;
+	}
+
+	private static String upload_file(File f,String upload_uri) throws ProtocolException {
+		HttpURLConnection conn = null;
+		DataOutputStream dos = null;
+		String lineEnd = "\r\n";
+		String twoHyphens = "--";
+		String boundary =  "*****";
+		String real_upload_url="";
+		int bytesRead, bytesAvailable, bufferSize;
+		byte[] buffer;
+		int maxBufferSize = 1*1024*1024;
+		try {
+			FileInputStream fileInputStream = new FileInputStream(f);
+			// open a URL connection to the Servlet
+			URL url = new URL(upload_uri);
+			// Open a HTTP connection to the URL
+			conn = (HttpURLConnection) url.openConnection();
+			// Allow Inputs
+			conn.setDoInput(true);
+			// Allow Outputs
+			conn.setDoOutput(true);
+			// Don't use a cached copy.
+			conn.setUseCaches(false);
+			// Use a post method.
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Connection", "Keep-Alive");
+			conn.setRequestProperty("Content-Type", "multipart/form-data;boundary="+boundary);
+			dos = new DataOutputStream( conn.getOutputStream() );
+			dos.writeBytes(twoHyphens + boundary + lineEnd);
+			dos.writeBytes("Content-Disposition: form-data; name=\"uploadedfile\";filename=\"" + f.getPath() + "\"" + lineEnd);
+			dos.writeBytes(lineEnd);
+			// create a buffer of maximum size
+			bytesAvailable = fileInputStream.available();
+			bufferSize = Math.min(bytesAvailable, maxBufferSize);
+			buffer = new byte[bufferSize];
+			// read file and write it into form...
+			bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+			while (bytesRead > 0)
+			{
+				dos.write(buffer, 0, bufferSize);
+				bytesAvailable = fileInputStream.available();
+				bufferSize = Math.min(bytesAvailable, maxBufferSize);
+				bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+			}
+			// send multipart form data necesssary after file data...
+			dos.writeBytes(lineEnd);
+			dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+			// close streams
+			fileInputStream.close();
+			dos.flush();
+			dos.close();
+		}
+		catch (MalformedURLException ex) {
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//------------------ read the SERVER RESPONSE
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String currentLine 	= "";
+			String answer = "";
+			while((currentLine = in.readLine()) != null)
+				answer += currentLine + "\n";
+			in.close();
+			JSONObject json_answer = (JSONObject) new JSONParser().parse(answer);
+			real_upload_url = (String) json_answer.get("url");
+		}
+		catch (IOException ioex){
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return real_upload_url;
+	}
+
+	public Video getXspinnerForNameAndDesc(String txt1,String txt2,int keyPosition, String umVideoUrl)
+	{
+		Video video = new Video();
+		try{
+			String title = getXspinnerValue(txt1,keyPosition);
+			String desc = getXspinnerValue(txt2,keyPosition) + " " +umVideoUrl;
+
+			video.setVideoName((title!=null && !title.isEmpty())?title:txt1);
+			video.setVideoDescription((desc!=null && !desc.isEmpty())?desc:txt2);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return video;
+	}
+
+	public String getXspinnerValue(String txt,int keyPosition)
+	{
+		String ret = null;
+		try{
+			if(txt!=null && !txt.isEmpty()){
+				String url = "http://127.0.0.1:9090";
+				String postdata = "xstext=" + txt;
+				byte[] postdata1 = postdata.getBytes(Charset.forName("UTF-8"));
+				System.out.println("posting to xspinner");
+				ret = http_post_access(url,postdata1);
+				System.out.println(ret);
+				ret = shuffleWord(ret,keyPosition);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	public String shuffleWord(String input,int keyPosition){
+		String outword = input;
+		if(input!=null && !input.isEmpty()){
+			if(input.contains("{")){
+				outword = "";
+				String[] words = input.split("\\{");
+				for (int i = 0; i < words.length; i++) {
+					if(words[i].contains("}")){
+						String[] keys = words[i].split("\\}");
+						for (int j = 0; j < keys.length; j++) {
+							if(keys[j].contains("|")){
+								String[] values = keys[j].split("\\|");
+								if(values.length>0){
+									int position = values.length-1;
+									if(keyPosition<values.length-1)
+										position = keyPosition;
+									outword += values[position];
+								}
+							}else{
+								outword += keys[j];
+							}
+						}
+					}else{
+						outword += words[i];
+					}
+				}
+			}
+		}
+		return outword;
+	}
+
+	private static String http_post_access(String url,byte[] body){
+		String response=null;
+		HttpURLConnection login_request=null;
+		//JSONObject json = getJson_token();
+		try {
+			URL login_url = new URL(url);
+			login_request = (HttpURLConnection) login_url.openConnection();
+			login_request.setRequestMethod("POST");
+			login_request.setAllowUserInteraction(false); // you may not ask the user
+			login_request.setDoInput(true);
+			login_request.setDoOutput(true);
+			login_request.setUseCaches(false);
+			// the Content-type should be default, but we set it anyway
+			login_request.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+
+			OutputStream out = new BufferedOutputStream(login_request.getOutputStream());
+			out.write(body);
+			out.close();
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(login_request.getInputStream()));
+			String currentLine 	= "";
+			response="";
+			while((currentLine = in.readLine()) != null)
+				response += currentLine + "\n";
+			in.close();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(login_request!=null)
+				login_request.disconnect();
+		}
+		return response;
+	}
+
+	public String generateVideoPageUrl(String castName, int videoId){
+		String videoPageUrl = null;
+		if(castName!=null && !castName.isEmpty()){
+			videoPageUrl = CommonProperties.getBaseURL()+CommonProperties.getContextPath()+castName+"/"+videoId;
+		}
+		else{
+			videoPageUrl = CommonProperties.getBaseURL()+CommonProperties.getContextPath()+"channelcast.html?ved="+videoId;
+		}
+		return videoPageUrl;
+	}
+
+	public static void main(String[] args) {
+		/*String output = new VideoShareOAuthServiceHelper().shuffleWord("{check|examine|verify} upload {spinner|twist}",1);
+		String output2 = new VideoShareOAuthServiceHelper().shuffleWord("{check|examine|verify} upload {spinner|twist}",2);
+		System.out.println(output);
+		System.out.println(output2);*/
+		//publish video to um blog
+		/*String blog_url_content = "http://174.142.115.238/wp/wp-content/themes/rundown/wp-post.php?dTitle=check&dContent=checkdesc&dailyId=xxclfv&cat_id=2&duname=ram";
+		String blogResult = http_get_access(blog_url_content);
+		System.out.println(blogResult);*/
+	}
+
+
+}

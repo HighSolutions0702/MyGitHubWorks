@@ -1,0 +1,65 @@
+package com.obs.dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import com.obs.base.BaseObject;
+import com.obs.model.User;
+import com.obs.model.UserProfileImages;
+
+public class UserProfileDAO implements IUserProfileDAO{
+
+	SessionFactory sessionFactory;
+
+	/**
+	 * @return the sessionFactory
+	 */
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	/**
+	 * @param sessionFactory the sessionFactory to set
+	 */
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	@Override
+	public void addProfileImage(UserProfileImages userProfileImg) {
+		try{
+			sessionFactory.getCurrentSession().save(userProfileImg);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public UserProfileImages getUserProfileById(int userId) {
+		List list = null;
+		try{
+			list = sessionFactory.getCurrentSession()
+					.createQuery("from UserProfileImages where user.id =? and isDeleted = 0")
+					.setParameter(0,userId).list();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return (list!=null && list.size()>0)?(UserProfileImages)list.get(0):null;
+	}
+
+	@Override
+	public void updateUserProfile(UserProfileImages userProfileObj) {
+		try{
+			sessionFactory.getCurrentSession().update(userProfileObj);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+}

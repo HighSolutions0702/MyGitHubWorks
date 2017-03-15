@@ -1,0 +1,125 @@
+package com.obs.dao;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import com.obs.base.BaseObject;
+import com.obs.model.Video;
+
+public class VideoDAO extends BaseObject implements IVideoDAO{
+
+
+
+	/**
+	 * Add Video
+	 * 
+	 * @param  Video video
+	 */
+	@Override
+	public Integer addVideo(Video video) {
+		Session session = getCurrentSession();
+		Integer id = -1;
+		try{
+			session.beginTransaction();
+			id = (Integer)session.save(video);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		return id;
+	}
+
+	/**
+	 * Delete Video
+	 * 
+	 * @param  Video video
+	 */
+	@Override
+	public void deleteVideo(Video video) {
+		Session session = getCurrentSession();
+		try{
+			session.beginTransaction();
+			session.delete(video);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+	}
+
+	/**
+	 * Update Video
+	 * 
+	 * @param  Video video
+	 */
+	@Override
+	public void updateVideo(Video video) {
+		Session session = getCurrentSession();
+		try{
+			session.beginTransaction();
+			session.update(video);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+	}
+
+	/**
+	 * 
+	 * Get Video List
+	 * 
+	 * @return List - Video list
+	 */
+	@Override
+	public List<Video> getVideosByUser(long userId) {
+		Session session = getCurrentSession();
+		List<Video> list = new ArrayList<Video>();
+		try{
+			String SQL = "from Video WHERE isDeleted = 0 AND DN_OWNER="+userId;
+			session.beginTransaction();
+			list = session.createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Video> getAllVideos() {
+		Session session = getCurrentSession();
+		List<Video> list = null;
+		try{
+			session.beginTransaction();
+			String SQL = "from Video WHERE isDeleted = 0 ";
+			list = session.createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		return list;
+	}
+
+}

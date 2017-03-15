@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html ng-app="com.obs.video">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="shortcut icon" href="images/favicon.png"/>
+    <title>Unstoppable Marketers</title>
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css"    media="all"/>
+    <link rel="stylesheet" href="css/plugins.css" type="text/css"  media="all"/>
+    <link rel="stylesheet" href="css/style_on.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_aligh.css"  type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_media.css"  type="text/css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="css/style_tooltip.css"/>
+    <link rel="stylesheet" type="text/css" href="css/ng-tags-input.min.css"/>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css"/>
+    <!-- <script src="js/angular-file-uploadVideosController.js"></script>
+    <script src="js/youtube.js"></script>
+    <script src="http://connect.facebook.net/en_US/all.js"></script> -->
+
+</head>
+<body>
+<div id="wrap" ng-controller="videoEditController" ng-cloak>
+    <header>
+        <ng-include src="'umcastheader.html'"></ng-include>
+    </header>
+    <section class="section_h">
+        <div class="col-lg-12 col-xs-12 p-0 f_l">
+            <div class="main_cnt_section">
+                <!--Recent Videos-->
+                <div class="col-lg-12  col-xs-12 p-0 m-t-20">
+                    <div class="silver_pannel">
+                        <div class="row m-0">
+                            <div class="bold_l">
+                                <img src="images/bold.png"/>
+                            </div>
+                            <div class="bold_r">
+                                <img src="images/bold.png"/>
+                            </div>
+                        </div>
+                        <!--row-->
+                        <div class="col-lg-9 col-sm-6 col-xs-12 p-0">
+                            <div class="row m-0 panel_title">
+                                <h1>Video Manager</h1>
+                            </div>
+                            <!--row-->
+                            <div class="row m-0 m-t-10">
+                                <div class="col-lg-11 col-sm-6 col-xs-12 ">
+                                    <ng-form name="videoForm">
+                                        <div class="back_link" style="float: left;width: 22%;">
+                                            <a href="video/videomanager.html">Back to
+                                                VideoManager</a>
+                                        </div>
+                                        <div class="upload_pro">
+                                            <div ng-show="checkStatus && !checkErrorStatus"
+                                                 class="alert-success" style="padding: 5px;">
+											<span ng-show="checkStatus && !checkErrorStatus"
+                                                  class="alert-success" style="margin-left: 165px">{{msg}}</span>
+                                            </div>
+                                            <div ng-show="checkErrorStatus && !checkStatus"
+                                                 class="alert-danger" style="padding: 5px;">
+											<span ng-show="checkErrorStatus && !checkStatus"
+                                                  class="alert-danger" style="margin-left: 165px">{{msg}}</span>
+                                            </div>
+                                            <div class="col-md-12">
+
+                                                <!-- Tab panes -->
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active">
+                                                        <div class="col-md-6 col-xs-12 m-t-20">
+                                                            <div class="row m-0 m-b-10 " style="width: 500px;">
+                                                                <div class="col-lg-5 col-xs-12">Video Name *</div>
+                                                                <div class="col-lg-7 col-xs-12">
+                                                                    <!--   <title-box formname="videoForm"
+                                                                                  modelref="editedVideo.videoName"
+                                                                                  limit="55" placeHolder="Title of the Video *" ></title-box>-->
+                                                                    <title-box limit="55" formname="videoForm"
+                                                                               modelref="editedVideo.videoName"
+                                                                               placeholder="Please enter a  title"
+                                                                               allowedchars="/^[a-zA-Z0-9 ,.@!%$&*?-]+$/"></title-box>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row m-0 m-b-10" style="width: 500px;">
+                                                                <div class="col-lg-5 col-xs-12">Video Description *
+                                                                </div>
+                                                                <div class="col-lg-7 col-xs-12">
+                                                                    <textarea rows="5" id="videoDesc"
+                                                                              value="{{editedVideo.videoDescription}}"
+                                                                              ng-model="editedVideo.videoDescription"
+                                                                              name="videoDesc"
+                                                                              class="form-control valid parsley-validated"
+                                                                              ng-blur="visitedvideoDesc = true"
+                                                                              placeholder="Description *"
+                                                                              required></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row m-0 m-b-10 " style="width: 500px;">
+                                                                <div class="col-lg-5 col-xs-12">Video Category *</div>
+                                                                <div class="col-lg-7 col-xs-12">
+                                                                    <select name="menu_id"
+                                                                            style="width: 100%;"
+                                                                            class="btn btn-default dropdown-toggle"
+                                                                            id="videoCategory"
+                                                                            ng-model="editedVideo.videoCategoryId"
+                                                                            name="videoCategory"
+                                                                            ng-options="c.categoryId as c.categoryName for c in categoryItems">
+                                                                        <!-- <option
+                                                                            value='{{editedVideo.videoCategoryId}}'></option> -->
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row m-0 m-b-10" style="width: 500px;">
+                                                                <div class="col-lg-5 col-xs-12">Video Tags *</div>
+                                                                <div class="col-lg-7 col-xs-12">
+                                                                    <tags-input ng-model="tagValues" name="tagsDetails">
+                                                                        <auto-complete
+                                                                                source="loadTags($query)"></auto-complete>
+                                                                    </tags-input>
+                                                                    <!-- 		<input ng-model="editedVideo.videoTag"/> -->
+                                                                </div>
+                                                            </div>
+                                                            <div class="row m-10 p-20 ">
+                                                                <div class="col-lg-6 col-xs-12">
+                                                                    <div class="col-lg-3 col-xs-12  m-t-5 blue_button ">
+                                                                        <a href="" ng-click="update()"><h1
+                                                                                style="margin: -17px;">Update</h1></a>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-lg-6 col-xs-12">
+                                                                    <div class="col-lg-3 col-xs-12  m-t-5 red_button ">
+                                                                        <a href="video/videomanager.html"><h1
+                                                                                style="margin: -17px;">Cancel</h1></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- 		<div class="col-md-6 col-xs-12 m-t-20">
+                                                            <div class="row m-0 thumb">
+                                                                <h1>VIDEO THUMBNAILS</h1>
+                                                            </div>
+                                                            <div class="row m-0">
+                                                                <div class="col-md-4 col-sm-4 col-xs-12 p-5  resp_img"
+                                                                    ng-repeat="thumbnail in thumbnails">
+                                                                    <img ng-src="{{thumbnail}}" />
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div> -->
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    </ng-form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--row-->
+
+
+                        <!--End Recommended-->
+
+                        <!--row-->
+
+
+                        <div class="row m-0">
+                            <div class="bold_l">
+                                <img src="images/bold.png"/>
+                            </div>
+                            <div class="bold_r">
+                                <img src="images/bold.png"/>
+                            </div>
+                        </div>
+                        <!--row-->
+                    </div>
+                    <!--silver_pannel-->
+                </div>
+                <!--12-->
+                <!--End Recent Videos-->
+
+
+            </div>
+            <!--main_cnt_section-->
+        </div>
+        <!--12--> </section>
+
+    <ng-include src="'footer.html'"></ng-include>
+    <script src="https://apis.google.com/js/client.js"></script>
+
+</div>
+<script type="text/javascript" src="bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="bower_components/ng-tags-input/ng-tags-input.js"></script>
+<script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script type="text/javascript"  src="bower_components/danialfarid-angular-file-upload/dist/angular-file-upload-shim.js"></script>
+<script type="text/javascript" src="application/app.js"></script>
+<script type="text/javascript" src="controllers/videoEditController.js"></script>
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script type="text/javascript" src="bower_components/angular-mocks/angular-mocks.js"></script>
+<script type="text/javascript" src="directives/titleBox.js"></script>
+<script src="js/bootstrap-dropdown.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+package com.obs.webservice;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import org.springframework.stereotype.Component;
+
+import com.obs.base.BaseObject;
+import com.obs.model.Login;
+import com.obs.model.User;
+import com.obs.service.ILoginService;
+import com.obs.service.IUserService;
+import com.obs.service.LoginService;
+import com.obs.service.UserService;
+import com.obs.utils.CommonUtils;
+import com.obs.webservice.messages.ResponseStatus;
+import com.obs.webservice.messages.ResponseStatusCode;
+
+public class LoginServiceHelper extends BaseObject {
+
+	private ILoginService loginService = getLoginService();
+	//private IUserService userService = getUserService();
+	private final int EXP_TIME = 150;
+
+	/**
+	 * Singleton Instance
+	 */
+	/*private static LoginServiceHelper myInstance = null;
+	public static LoginServiceHelper getInstance()
+	{
+		if(myInstance == null)
+			myInstance = new LoginServiceHelper();
+		return myInstance;
+	}*/
+
+	/**
+	 * check token is valid or not
+	 * @param token
+	 * @return ResponseStatus
+	 */
+	public ResponseStatus checkTokenValid(String token){
+		ResponseStatus status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+		if(token != null && !(token).isEmpty()){
+			boolean flag = checkToken(token);
+			if(!flag){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");	
+			}
+		}else{
+			status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+		}
+		return status;
+	}
+	/**
+	 * Add or update Login object when user login
+	 * 
+	 * @param  Login login
+	 */
+	public String createLoginToken(int userId) {
+		Login login ;
+		login = loginService.getLoginByUserId(userId);
+		if(login!=null){
+			login.setLoginDate(new Date());
+			loginService.updateLogin(login);
+		}
+		else{
+			login	= new Login();
+			login.setUserId(userId);
+			login.setLoginDate(new Date());
+			login.setToken(generateToken(userId));
+			loginService.addLogin(login);
+		}
+		return login.getToken();
+	}
+
+	/**
+	 * Delete Login
+	 * 
+	 * @param  Login login
+	 */
+	public void deleteLogin(int userId) {
+		loginService.deleteLogin(loginService.getLoginByUserId(userId));
+	}
+
+	/**
+	 * Update Login
+	 * 
+	 * @param  Login login
+	 */
+	public boolean checkToken(String token) {
+		boolean flag = false;
+		Login login  = loginService.getLoginByToken(token);
+		if(login!=null){
+			Date logindate = login.getLoginDate();
+			Calendar loginCal = Calendar.getInstance();
+			loginCal.setTime(logindate);
+			loginCal.add(Calendar.MINUTE, EXP_TIME );
+			Calendar currentCal = Calendar.getInstance();
+			if(loginCal.after(currentCal)){
+				flag = true;
+				login.setLoginDate(new Date());
+				loginService.updateLogin(login);
+			}
+		}
+		return flag;
+	}
+
+	/**
+	 * generateToken
+	 * @param userId
+	 * @return
+	 */
+	public String generateToken(int userId){
+		String token = null;
+		long i = (long)((double)(Math.random()*(double)10000000));
+		token = CommonUtils.getInstance().generateEncryptedPwd(String.valueOf(userId))+"@@@"+i;
+		return token;
+	}
+
+	/**
+	 * get UserId By Token
+	 * @param token
+	 * @return
+	 */
+	public int getUserByToken(String token){
+		Login login = loginService.getLoginByToken(token);
+		return login!=null?login.getUserId():-1;
+	}
+	/**
+	 * get UserId By Token
+	 * @param token
+	 * @return
+	 */
+	public String getUserReferenceByToken(String token){
+		IUserService userService = getUserService();
+		String refreshToken = null;
+		User user=null;
+		Login login = loginService.getLoginByToken(token);
+		if(login!=null){
+			int userId=login.getUserId();
+			user = userService.getUserById(userId);
+			refreshToken=user.getToken_youtube();
+		}
+		return refreshToken;
+	}
+	public boolean updateToken(String token) {
+		boolean flag = false;
+		Login login  = loginService.getLoginByToken(token);
+		if(login!=null){
+			loginService.deleteLogin(login);
+		}
+		return flag;
+	}
+}

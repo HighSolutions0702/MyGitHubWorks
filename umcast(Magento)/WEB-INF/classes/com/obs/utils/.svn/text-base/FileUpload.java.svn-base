@@ -1,0 +1,94 @@
+package com.obs.utils;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import com.obs.imagecutter.ThumbnailCreation;
+import com.obs.webservice.LoginServiceHelper;
+
+public class FileUpload extends HttpServlet {
+	private static final long serialVersionUID = -8244073279641189889L;
+
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		try {
+
+			if (req.getHeader("Content-Type") != null
+					&& req.getHeader("Content-Type").startsWith("multipart/form-data")) {
+				//get user from token and create a folder in temp dir
+				String token = req.getParameter("token");
+				int userId = new LoginServiceHelper().getUserByToken(token);
+				//remove files 
+				IoUtils.getInstance().deleteDirectory(new File(CommonProperties.getBasePath()+CommonProperties.getTempFilePath()+userId));
+				new File(CommonProperties.getBasePath()+CommonProperties.getTempFilePath()+userId+"/thumbnail").mkdirs();
+				//new File(CommonProperties.getBasePath()+CommonProperties.getTempFilePath()+userId).mkdirs();
+				//file upload
+				ServletFileUpload upload = new ServletFileUpload();
+				FileItemIterator iterator = upload.getItemIterator(req);
+				while (iterator.hasNext()) {
+					FileItemStream item = iterator.next();
+					if("myFile".equals(item.getFieldName())){
+						String tempName = /*(Math.random()*1000)+*/item.getName();
+						String fileName=tempName.replaceAll("[^\\w._]","_");
+						fileName = fileName.toLowerCase();
+						IoUtils.getInstance().writeFileFromInputStream(item.openStream(),new File(CommonProperties.getBasePath()+CommonProperties.getTempFilePath()+userId+"/"+fileName));
+						//Thumbnail creation
+						new ThumbnailCreation().createThumbnail(CommonProperties.getBasePath()+CommonProperties.getTempFilePath()+userId+"/"+fileName,CommonProperties.getBasePath()+CommonProperties.getTempFilePath()+userId+"/thumbnail/");
+					}
+				}
+			} 
+			res.getWriter().write("success");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.out.println(ex.getMessage());
+			throw new ServletException(ex);
+		}
+	}
+
+	protected int size(InputStream stream) {
+		int length = 0;
+		try {
+			byte[] buffer = new byte[2048];
+			int size;
+			while ((size = stream.read(buffer)) != -1) {
+				length += size;
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return length;
+
+	}
+
+	protected String read(InputStream stream) {
+		StringBuilder sb = new StringBuilder();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		try {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				reader.close();
+			} catch (IOException e) {
+			}
+		}
+		return sb.toString();
+
+	}
+}

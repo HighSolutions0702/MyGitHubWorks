@@ -1,0 +1,215 @@
+package com.obs.model;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+@Entity
+@Table(name="tbl_video")
+public class Video implements Serializable{
+	/**
+	 *  Default SerialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private int videoId;
+	private User owner;
+	private String videoName;
+	private String videoUrl;
+	private String videoDescription;
+	private Category videoCategory;
+	private short videoType;
+	private Boolean isDeleted;
+	private String posterUrl;
+	private Date uploaded_Date;
+	private String videoTag;
+	private int videoVisible;
+	
+	/**
+	 * 
+	 * @return the videoId
+	 */
+	@Id
+	@GeneratedValue( strategy = GenerationType.AUTO )
+	@Column(name="DN_ID" , nullable = false )
+
+	public int getVideoId() {
+		return videoId;
+	}
+	/**
+	 * 
+	 * @param videoId
+	 */
+	public void setVideoId(int videoId) {
+		this.videoId = videoId;
+	}
+
+
+	/**
+	 * @return the owner
+	 */
+	@OneToOne ( targetEntity = User.class, fetch = FetchType.EAGER )
+	@JoinColumn (name = "DN_OWNER")
+	public User getOwner() {
+		return owner;
+	}
+	/**
+	 * @param owner the owner to set
+	 */
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+	/**
+	 * 
+	 * @return videoName
+	 */
+	@JsonIgnore
+	@Column(name="DC_VIDEONAME", nullable = true)
+
+	public String getVideoName() {
+		return videoName;
+	}
+	/**
+	 * 
+	 * @param videoName
+	 */
+	public void setVideoName(String videoName) {
+		this.videoName = videoName;
+	}
+	/**
+	 * 
+	 * @return videoUrl
+	 */
+	@Column(name="DC_VIDEOURL", nullable = true)
+
+	public String getVideoUrl() {
+		return videoUrl;
+	}
+	/**
+	 * 
+	 * @param videoUrl
+	 */
+	public void setVideoUrl(String videoUrl) {
+		this.videoUrl = videoUrl;
+	}
+	/**
+	 * 
+	 * @return videoDescription
+	 */
+	@Column(name="DC_VIDEODESCRIPTION", nullable = true)
+
+	public String getVideoDescription() {
+		return videoDescription;
+	}
+	/**
+	 * 
+	 * @param videoDescription
+	 */
+	public void setVideoDescription(String videoDescription) {
+		this.videoDescription = videoDescription;
+	}
+	/**
+	 * 
+	 * @return videoCategory
+	 */
+	@OneToOne ( targetEntity = Category.class, fetch = FetchType.EAGER )
+	@JoinColumn (name="DC_VIDEOCATEGORY", nullable = true)
+
+	public Category getVideoCategory() {
+		return videoCategory;
+	}
+	public void setVideoCategory(Category videoCategory) {
+		this.videoCategory = videoCategory;
+	}
+
+	/**
+	 * 
+	 * @return videoType
+	 */
+	@Column(name="DN_VIDEOTYPE", nullable = true)
+
+	public short getVideoType() {
+		return videoType;
+	}
+	/**
+	 * 
+	 * @param videoType
+	 */
+	public void setVideoType(short videoType) {
+		this.videoType = videoType;
+	}
+	/**
+	 * 
+	 * @return isDeleted
+	 */
+	@Column(name="DB_DELETED")
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	/**
+	 * 
+	 * @param isDeleted
+	 */
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	/**
+	 * 
+	 * @return posterurl of videos
+	 */
+	@Column(name="DC_POSTERURL", nullable = true)
+
+	public String getPosterUrl() {
+		return posterUrl;
+	}
+	public void setPosterUrl(String posterUrl) {
+		this.posterUrl = posterUrl;
+	}
+	/**
+	 * 
+	 * @return uploaded date and time
+	 */
+	@Column(name="DD_UPLOADED_DATE", nullable = true)
+
+	public Date getUploaded_Date() {
+		return uploaded_Date;
+	}
+	public void setUploaded_Date(Date uploaded_Date) {
+		this.uploaded_Date = uploaded_Date;
+	}
+
+	/**
+	 * 
+	 * @return set tags of videos
+	 */
+	//@OneToOne ( targetEntity = Category.class, fetch = FetchType.EAGER )
+	@Column(name="DC_VIDEOTAG", nullable = true)
+
+	public String getVideoTag() {
+		return videoTag;
+	}
+	public void setVideoTag(String videoTag) {
+		this.videoTag = videoTag;
+	}
+	
+	@Column(name="DC_VIDEOVISIBLE", nullable = true)
+	public int getVideoVisible() {
+		return videoVisible;
+	}
+	public void setVideoVisible(int videoVisible) {
+		this.videoVisible = videoVisible;
+	}
+
+}

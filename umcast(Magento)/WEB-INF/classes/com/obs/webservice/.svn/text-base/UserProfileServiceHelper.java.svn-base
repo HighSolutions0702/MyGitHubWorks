@@ -1,0 +1,114 @@
+package com.obs.webservice;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.simple.JSONObject;
+import org.springframework.stereotype.Component;
+
+import com.amazonaws.services.opsworks.model.UserProfile;
+import com.obs.base.BaseObject;
+import com.obs.model.User;
+import com.obs.model.UserProfileImages;
+import com.obs.model.Video;
+import com.obs.service.IUserProfileService;
+import com.obs.service.IUserService;
+import com.obs.service.UserProfileService;
+import com.obs.service.UserService;
+import com.obs.utils.CommonProperties;
+import com.obs.utils.CommonUtils;
+import com.obs.utils.IoUtils;
+import com.obs.utils.StringUtility;
+import com.obs.webservice.messages.ProfileMessage;
+import com.obs.webservice.messages.ResponseStatus;
+import com.obs.webservice.messages.ResponseStatusCode;
+import com.obs.webservice.messages.UserMessage;
+import com.obs.webservice.messages.UsersMessage;
+import com.obs.webservice.messages.VideoMessage;
+import com.obs.webservice.messages.VideosMessage;
+import com.sun.org.apache.bcel.internal.generic.F2D;
+
+public class UserProfileServiceHelper extends BaseObject 
+{
+	//IUserProfileService userProfileService;
+	private IUserProfileService userProfileService = getUserProfileService();
+	private IUserService userService = getUserService();
+
+	IoUtils ioUtils = IoUtils.getInstance();
+	LoginServiceHelper loginServiceHelper = new LoginServiceHelper();
+	StringUtility stringUtility = StringUtility.getInstance();
+
+	/*private static UserProfileServiceHelper myInstance = null;
+	public static UserProfileServiceHelper getInstance()
+	{
+		if(myInstance == null)
+			myInstance = new UserProfileServiceHelper();
+		return myInstance;
+	}*/
+	/**
+	 * 
+	 * @param is
+	 * @param token
+	 * @param tokenId 
+	 * @return
+	 */
+
+	public ProfileMessage getProfileImage(String token, String tokenId) {
+		ResponseStatus status = null;
+		int userId=0;
+		UserProfileImages userProfile = new UserProfileImages();
+		User userVal=null;
+		try{
+			if(token != null && !(token).isEmpty()){
+				userId= loginServiceHelper.getUserByToken(token);
+			}
+			if(tokenId !=null && !(tokenId).isEmpty())
+			{
+				userVal=userService.getUserById(Integer.valueOf(tokenId));
+				userId=userVal!=null?userVal.getId():0;
+			}
+			if(userId>0){
+				userProfile = userProfileService.getUserProfileById(userId);
+				if(userProfile!=null){
+					if(userProfile.getProfileImage()!=null){
+						userProfile.setProfileImage(CommonProperties.getBaseURL()+"files"+"/"+"usm"+"/"+"images"+"/"+userId+"/"+userProfile.getProfileImage());
+					}
+					else
+					{
+						userProfile.setProfileImage(CommonProperties.getBaseURL()+CommonProperties.getContextPath()+"images"+"/"+"default-avatar.png");
+					}
+					if(userProfile.getCoverImage()!=null){
+						userProfile.setCoverImage(CommonProperties.getBaseURL()+"files"+"/"+"usm"+"/"+"coverimages"+"/"+userId+"/"+userProfile.getCoverImage());
+					}
+					else
+					{
+						userProfile.setCoverImage(CommonProperties.getBaseURL()+CommonProperties.getContextPath()+"images"+"/"+"default_cover_bg-2.jpg");
+					}
+					status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+				}
+				else{
+					userProfile = new UserProfileImages();
+					userProfile.setProfileImage(CommonProperties.getBaseURL()+CommonProperties.getContextPath()+"images"+"/"+"default-avatar.png");
+					userProfile.setCoverImage(CommonProperties.getBaseURL()+CommonProperties.getContextPath()+"images"+"/"+"default_cover_bg-2.jpg");
+					status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+					return new ProfileMessage(status, userProfile);
+				}
+			}
+			else
+			{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+				return new ProfileMessage(status, userProfile);
+			}
+			return new ProfileMessage(status, userProfile);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new ProfileMessage(status, null);
+		}
+	}
+
+}

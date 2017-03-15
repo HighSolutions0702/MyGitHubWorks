@@ -1,0 +1,52 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.obs.webservice.messages;
+
+/**
+ *
+ * @author ram
+ */
+
+
+import javax.xml.bind.annotation.*;
+
+import com.obs.model.User;
+
+@XmlRootElement(name="user")
+public class UserMessage {
+
+	@XmlElement(name="status")
+	public ResponseStatus status;
+	private User _entity = new User();
+
+	@XmlElement(name="user")
+	public User getEntity(){
+		return _entity;
+	}
+
+	public void setEntity(User entity){
+		this._entity = entity;
+	}
+
+	public UserMessage(){
+		super();
+	}
+
+	public UserMessage(User entity){
+		super();
+		setEntity(entity);
+	}
+	
+	public UserMessage(ResponseStatus status, User  entity){
+		super();
+		this.status=status;
+		this._entity = entity;
+	}
+
+
+
+
+}

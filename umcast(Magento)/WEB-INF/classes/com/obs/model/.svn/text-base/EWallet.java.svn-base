@@ -1,0 +1,172 @@
+package com.obs.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+/**
+ * 
+ * @author rameshbabu_s
+ *
+ */
+@Entity
+@Table(name="tbl_ewallet")
+public class EWallet {
+	/**
+	 * Default SerialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private int id;
+	private int user_id;
+	private String userName;
+	private String LogTransactionID;
+	private String TransactionRefID;
+	private String ACHTransactionID;
+	private String ProcessorTransactionRefNumber;
+	private String CustomerFeeAmount;
+	private String CurrencyCode;
+	private String Balance;
+	private Boolean isDeleted;
+	
+	/**
+	 * Get EWallet Id
+	 * 
+	 * @return int - EWallet Id
+	 */
+	@Id
+	@GeneratedValue( strategy = GenerationType.AUTO )
+	@Column(name="DN_ID" , nullable = false )
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	/**
+	 * @return the user
+	 */
+	@Column(name="DN_USER_ID" , nullable = true )
+	public int getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
+	}
+	/**
+	 * 
+	 * @return LogTransactionID
+	 */
+	@Column(name="DC_USER_NAME", nullable = true)
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	/**
+	 * 
+	 * @return LogTransactionID
+	 */
+	@Column(name="DC_LOG_TRANSACTION_ID", nullable = true)
+	public String getLogTransactionID() {
+		return LogTransactionID;
+	}
+
+	public void setLogTransactionID(String logTransactionID) {
+		LogTransactionID = logTransactionID;
+	}
+	/**
+	 * 
+	 * @return TransactionRefID
+	 */
+	@Column(name="DC_TRANSACTION_REF_ID", nullable = true)
+	public String getTransactionRefID() {
+		return TransactionRefID;
+	}
+
+	public void setTransactionRefID(String transactionRefID) {
+		TransactionRefID = transactionRefID;
+	}
+	/**
+	 * 
+	 * @return ACHTransactionID
+	 */
+	@Column(name="DC_ACH_TRANSACTION_ID", nullable = true)
+	public String getACHTransactionID() {
+		return ACHTransactionID;
+	}
+
+	public void setACHTransactionID(String aCHTransactionID) {
+		ACHTransactionID = aCHTransactionID;
+	}
+	/**
+	 * 
+	 * @return ProcessorTransactionRefNumber
+	 */
+	@Column(name="DC_PROCESSOR_TRANSACTION_REF_NUMBER", nullable = true)
+	public String getProcessorTransactionRefNumber() {
+		return ProcessorTransactionRefNumber;
+	}
+
+	public void setProcessorTransactionRefNumber(
+			String processorTransactionRefNumber) {
+		ProcessorTransactionRefNumber = processorTransactionRefNumber;
+	}
+	/**
+	 * 
+	 * @return CustomerFeeAmount
+	 */
+	@Column(name="DC_CUSTOMER_FEE_AMOUNT", nullable = true)
+	public String getCustomerFeeAmount() {
+		return CustomerFeeAmount;
+	}
+
+	public void setCustomerFeeAmount(String customerFeeAmount) {
+		CustomerFeeAmount = customerFeeAmount;
+	}
+	/**
+	 * 
+	 * @return CurrencyCode
+	 */
+	@Column(name="DC_CURRENCY_CODE", nullable = true)
+	public String getCurrencyCode() {
+		return CurrencyCode;
+	}
+
+	public void setCurrencyCode(String currencyCode) {
+		CurrencyCode = currencyCode;
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	@Column(name="DC_BALANCE", nullable = true)
+	public String getBalance() {
+		return Balance;
+	}
+
+	public void setBalance(String balance) {
+		Balance = balance;
+	}
+	/**
+	 * 
+	 * @return isDeleted
+	 */
+	@Column(name="DB_DELETED", nullable = true)
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	
+}

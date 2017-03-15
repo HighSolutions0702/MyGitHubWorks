@@ -1,0 +1,33 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.obs.webservice.messages;
+
+import javax.xml.bind.annotation.*;
+
+/**
+ *
+ * @author Ram
+ */
+
+@XmlRootElement
+public class ResponseStatus {
+
+	@XmlElement(name="status")
+	public int status=0;
+
+	@XmlElement(name="message")
+	public String msg="";
+
+	public ResponseStatus(){
+		super();
+	}
+
+	public ResponseStatus(int status, String msg){
+		super();
+		this.status =status;
+		this.msg=msg;
+	}
+}

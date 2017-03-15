@@ -1,0 +1,39 @@
+package com.obs.webservice.messages;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.Settings;
+
+
+@XmlRootElement(name="menu")
+public class SettingMessage {
+	@XmlElement(name="status")
+	public ResponseStatus status;
+	private Settings _entity = new Settings();
+	@XmlElement(name="menu")
+	public Settings getEntity(){
+		return _entity;
+	}
+
+	public void setEntity(Settings entity){
+		this._entity = entity;
+	}
+
+	public SettingMessage(){
+		super();
+	}
+
+	public SettingMessage(Settings entity){
+		super();
+		setEntity(entity);
+	}
+	
+	public SettingMessage(ResponseStatus status, Settings  entity){
+		super();
+		this.status=status;
+		this._entity = entity;
+	}
+	
+
+}

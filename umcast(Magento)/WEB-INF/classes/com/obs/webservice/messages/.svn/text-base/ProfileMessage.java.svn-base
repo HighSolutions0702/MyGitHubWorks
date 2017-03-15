@@ -1,0 +1,38 @@
+package com.obs.webservice.messages;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.amazonaws.services.opsworks.model.UserProfile;
+import com.obs.model.UserProfileImages;
+
+@XmlRootElement(name="userprofile")
+public class ProfileMessage {
+
+	@XmlElement(name="status")
+	public ResponseStatus status;
+	private UserProfileImages  _entity = new UserProfileImages();
+
+	@XmlElement(name="userprofile")
+	public UserProfileImages getEntity() {
+		return _entity;
+	}
+	public void setEntity(UserProfileImages entity) {
+		this._entity = entity;
+	}
+	public ProfileMessage() {
+		super();
+	}
+
+	public ProfileMessage(UserProfileImages entity){
+		super();
+		setEntity(entity);
+	}
+
+	public ProfileMessage(ResponseStatus status, UserProfileImages userProfile){
+		super();
+		this.status=status;
+		this._entity = userProfile;
+	}
+}
+

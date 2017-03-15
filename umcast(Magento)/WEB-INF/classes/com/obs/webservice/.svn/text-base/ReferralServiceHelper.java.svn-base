@@ -1,0 +1,436 @@
+package com.obs.webservice;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.obs.base.BaseObject;
+import com.obs.model.Amount;
+import com.obs.model.Level;
+import com.obs.model.Referral;
+import com.obs.model.User;
+import com.obs.service.IReferralService;
+import com.obs.service.ISettingsService;
+import com.obs.service.IUserService;
+import com.obs.service.ReferralService;
+import com.obs.service.SettingsService;
+import com.obs.service.UserService;
+import com.obs.utils.CommonUtils;
+import com.obs.utils.IoUtils;
+import com.obs.webservice.messages.CountMessage;
+import com.obs.webservice.messages.ReferralsMessage;
+import com.obs.webservice.messages.ResponseStatus;
+import com.obs.webservice.messages.ResponseStatusCode;
+import com.obs.webservice.messages.UsersMessage;
+
+public class ReferralServiceHelper extends BaseObject {
+
+	private IReferralService referralService 	= getReferralService();
+	//private IUserService userService 			= getUserService();
+	private ISettingsService settingsService 	= getSettingsService();
+
+	LoginServiceHelper loginServiceHelper 		= new LoginServiceHelper();
+
+	IoUtils ioUtils = IoUtils.getInstance();
+	CommonUtils commonUtils=CommonUtils.getInstance();
+	List<User> referralUserList = new ArrayList<User>();
+	private String referral_parents = null;
+	/**
+	 * Singleton Instance
+	 */
+	/*private static ReferralServiceHelper myInstance = null;
+	public static ReferralServiceHelper getInstance()
+	{
+		if(myInstance == null)
+			myInstance = new ReferralServiceHelper();
+		return myInstance;
+	}*/
+
+	/**
+	 * add Referral record with order no and parent id
+	 * @param userId
+	 * @param reffalId
+	 */
+	public Long addReferral(long userId,long referralId,String referralCode){
+		Referral referral =	createReferralObj(userId,referralId,referralCode);
+		int orderNo = referralService.getRecentOrderNo(referralId);
+		referral.setOrder(String.valueOf(orderNo+1));
+		if((orderNo+1) % 2 == 1){
+			referral.setCurrent_parent_id(referralId);
+			referral.setParents(String.valueOf(referralId));
+		}
+		else{
+			referral_parents = "";
+			long parentId = getReferralParentId(referralId);
+			referral.setCurrent_parent_id(parentId>0?parentId:referralId);
+			referral.setParents(referral_parents);
+		}
+		Long referralObjectId = referralService.addReferral(referral);
+		return referralObjectId;
+	}
+
+	/**
+	 * get referral parent using recursing method
+	 * @param referralId
+	 * @return parentId
+	 */
+	public long getReferralParentId(long referralId){
+		long parentId = referralId;
+		referral_parents = referral_parents+ parentId + ",";
+		Referral referral =	referralService.getReferralByUserId((int)referralId);
+		if(referral!=null){
+			parentId = referral.getCurrent_parent_id();
+			if(parentId>0){
+				int orderNo = referralService.getRecentOrderNo(parentId);
+				if((orderNo+1) % 2 == 1){
+					referral_parents = referral_parents+ parentId + ",";
+					return parentId;
+				}
+				else{
+					return getReferralParentId(parentId);
+				}
+			}
+			else{
+				return referralId;
+			}
+		}
+		return parentId;
+	}
+
+	/**
+	 * create new referral object
+	 * @param userId
+	 * @param referralId
+	 * @param referralCode
+	 * @return
+	 */
+	public Referral createReferralObj(long userId,long referralId,String referralCode){
+		Referral ref = new Referral();
+		User user = new User();
+		user.setId((int)userId);
+		ref.setUser(user);
+		ref.setReferred_by_id(referralId);
+		ref.setReferralCode(referralCode);
+		ref.setCreated_On(new Date());
+		return ref;
+	}
+	/**
+	 * get Direct Referrals Count from token
+	 * @param token
+	 * @return
+	 */
+	public CountMessage getDirectReferralsCount(String token) {
+		ResponseStatus status = null;
+		try{
+			int refId=loginServiceHelper.getUserByToken(token);
+			String count = referralService.getDirectReferralCount(refId);
+
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new CountMessage(status, count);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new CountMessage(status, null);
+		}
+	}
+
+	/**
+	 * get Direct Referrals from token
+	 * @param token
+	 * @return
+	 */
+	public ReferralsMessage getDirectReferrals(Integer refId) {
+		ResponseStatus status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		List<Referral> referrals = null;
+		try{
+			if(refId>0){
+				referrals = referralService.getDirectReferralByRefId(refId);
+
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			return new ReferralsMessage(status, referrals);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new ReferralsMessage(status, null);
+		}
+	}
+	
+	/**
+	 * get Direct Referrals from token
+	 * @param token
+	 * @return
+	 */
+	public ReferralsMessage getUnSubscribedDirectReferral(Integer refId) {
+		ResponseStatus status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		List<Referral> referrals = null;
+		try{
+			if(refId>0){
+				referrals = referralService.getUnsubscribedDirectReferralByRefId(refId);
+
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			return new ReferralsMessage(status, referrals);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new ReferralsMessage(status, null);
+		}
+	}
+	
+
+	/**
+	 * get Direct Referrals Count from token
+	 * @param token
+	 * @return
+	 */
+	public CountMessage getAllReferralsCount(String token) {
+		ResponseStatus status = null;
+		try{
+			int refId=loginServiceHelper.getUserByToken(token);
+			String count = null;//referralService.getDirectReferralCount(refId);
+
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new CountMessage(status, count);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new CountMessage(status, null);
+		}
+	}
+
+	/**
+	 * add amount when create new referral 
+	 */
+	public Long addAmount(long userId, long referralObjectId, long levelId){
+		Long amountId = 0L;
+		Level content = settingsService.getLevelContentById(levelId);
+		Referral referral = referralService.getReferralById(referralObjectId);
+
+
+		Amount amount = new Amount();
+		amount.setAmount(content.getAmount());
+		amount.setLevel(levelId);
+		User user = new User();
+		user.setId((int)userId);
+		amount.setUser(user);		
+		if(referral!=null){
+
+			amount.setReferred_by_id(referral.getReferred_by_id());
+			amount.setParent_id(referral.getCurrent_parent_id());
+			amount.setReferral_tbl_id(referralObjectId);
+			//set commission Percentage
+			int referralCommissionPercentage = 60;
+			int parentCommissionPercentage = 0;
+			if(Integer.valueOf(referral.getOrder())%2 == 0 && referral.getReferred_by_id() != referral.getCurrent_parent_id()){
+				referralCommissionPercentage = 20;
+				parentCommissionPercentage = 60;
+			}
+			int referral_share = ((Integer.valueOf(amount.getAmount()))*referralCommissionPercentage)/100;
+			int parent_share = ((Integer.valueOf(amount.getAmount()))*parentCommissionPercentage)/100;
+			amount.setReferral_share(String.valueOf(referral_share));
+			amount.setParent_share(String.valueOf(parent_share));
+		}
+		amountId = referralService.addAmount(amount);
+		return amountId;
+	}
+
+	/**
+	 * get Direct Referrals and all passups from token
+	 * @param refId
+	 * @return
+	 */
+	public ReferralsMessage getDirectReferralsAndPassups(Integer refId) {
+		ResponseStatus status = null;
+		try{
+
+			List referrals = referralService.getDirectReferralsAndPassupsByRefId(refId);
+
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new ReferralsMessage(status, referrals);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new ReferralsMessage(status, null);
+		}
+	}
+
+	/**
+	 * get all referrals (full hierarchy)
+	 * @param token
+	 * @return
+	 */
+	public UsersMessage getAllReferrals(String token) {
+		ResponseStatus status = null;
+		referralUserList = new ArrayList<User>();
+		try{
+			int refId=loginServiceHelper.getUserByToken(token);
+			refChildList(refId);
+			//remove current object from list
+			if(referralUserList!=null && referralUserList.size()>0 )
+			{
+				for(int i=0;i<referralUserList.size();i++)
+				{
+					if(referralUserList.get(i).getId()==refId)
+					{
+						referralUserList.remove(i);
+						break;
+					}
+				}
+			}
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new UsersMessage(status, referralUserList);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new UsersMessage(status, null);
+		}
+	}
+
+	private void refChildList(int refId) {
+		IUserService userService 			= getUserService();
+		List<Referral> temp = referralService.getDirectReferralByRefId(refId);
+		User refUserObj=new User();
+		if(temp !=null && temp.size()>0)
+		{
+			for(int i=0;i<temp.size();i++)
+			{
+				refChildList(temp.get(i).getUser().getId());
+			}
+			User user = userService.getUserById(refId);
+			if(user!=null && user.getRefered_by()!=0 )
+			{
+				//refUserObj=userService.getUserById(user.getRefered_by());
+				//user.setReferer_name(refUserObj.getFirstName()+" "+refUserObj.getLastName());
+			}
+			referralUserList.add(user);
+		}else{
+			User user = userService.getUserById(refId);
+			/*if(user!=null && user.getRefered_by()!=0 )
+			{
+				refUserObj=userService.getUserById(user.getRefered_by());
+				user.setReferer_name(refUserObj.getFirstName()+" "+refUserObj.getLastName());
+			}*/
+			referralUserList.add(user);
+		}
+
+	}
+
+	/**
+	 * get users direct Referral amount from token
+	 * @param token
+	 * @return
+	 */
+	public CountMessage getDirectReferralAmount(String token) {
+		ResponseStatus status = null;
+		try{
+			int refId=loginServiceHelper.getUserByToken(token);
+			String amount = referralService.getReferralAmount(refId);
+
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new CountMessage(status, amount);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new CountMessage(status, null);
+		}
+	}
+
+	/**
+	 * get pass up users share amount from token
+	 * @param refId
+	 * @return
+	 */
+	public CountMessage getPassupParentReferralAmount(Integer refId) {
+		ResponseStatus status = null;
+		try{
+
+			String amount = referralService.getPassupParentReferralAmount(refId);
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new CountMessage(status, amount);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new CountMessage(status, null);
+		}
+	}
+
+	public CountMessage getReferralAmountFromDirectNonPassup(Integer refId) {
+		ResponseStatus status = null;
+		try{
+
+			String amount = referralService.getReferralAmountFromDirectNonPassup(refId);
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new CountMessage(status, amount);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new CountMessage(status, null);
+		}
+	}
+
+	public CountMessage getReferralAmountFromDirectPassup(Integer refId) {
+		ResponseStatus status = null;
+		try{
+
+			String amount = referralService.getReferralAmountFromDirectPassup(refId);
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new CountMessage(status, amount);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new CountMessage(status, null);
+		}
+	}
+
+	public ReferralsMessage getInDirectReferrals(Integer refId) {
+		ResponseStatus status = null;
+		try{
+			List<Referral> referrals = referralService.getInDirectReferralsByRefId(refId);
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new ReferralsMessage(status, referrals);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new ReferralsMessage(status, null);
+		}
+	}
+
+	public ReferralsMessage getPassupReferrals(Integer refId) {
+		ResponseStatus status = null;
+		try{
+			List<Referral> referrals = referralService.getPassupReferralsByRefId(refId);
+
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new ReferralsMessage(status, referrals);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new ReferralsMessage(status, null);
+		}
+	}
+}

@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/unstoppablemarketers/!svn/ver/599/usm/src/com/obs/servlets
+END
+VimeoOAuth.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/unstoppablemarketers/!svn/ver/376/usm/src/com/obs/servlets/VimeoOAuth.java
+END
+TwitterOAuth.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/unstoppablemarketers/!svn/ver/454/usm/src/com/obs/servlets/TwitterOAuth.java
+END
+CheckEmail.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/unstoppablemarketers/!svn/ver/535/usm/src/com/obs/servlets/CheckEmail.java
+END
+ReferralScript.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/unstoppablemarketers/!svn/ver/599/usm/src/com/obs/servlets/ReferralScript.java
+END
+DailyMotionOAuth.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/unstoppablemarketers/!svn/ver/376/usm/src/com/obs/servlets/DailyMotionOAuth.java
+END
+GoogleOAuth.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/unstoppablemarketers/!svn/ver/376/usm/src/com/obs/servlets/GoogleOAuth.java
+END

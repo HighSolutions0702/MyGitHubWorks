@@ -1,0 +1,630 @@
+<!doctype html>
+<html ng-app="com.obs.channel" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>Unstoppable Marketers</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="images/favicon.png"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/plugins.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_on.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_aligh.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_media.css" type="text/css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="css/style_tooltip.css"/>
+    <link rel="stylesheet" type="text/css" href="css/custom.css"/>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/menu.css">
+</head>
+
+<body ng-controller="channelCtrl">
+<div id="wrap" ng-cloak>
+<form name="form">
+<header>
+    <ng-include src="'umchannelheader.html'"></ng-include>
+</header>
+<!-- 			<ng-include src="'menu.html'"></ng-include> -->
+<section class="section_h">
+<div class="col-lg-12 col-xs-12 p-0 f_l">
+<div class="main_cnt_section">
+<!--Recent Videos-->
+<div class="col-lg-12  col-xs-12 p-0 m-t-20">
+    <div class="silver_pannel">
+        <div class="row m-0">
+            <div class="bold_l">
+                <img src="images/bold.png"/>
+            </div>
+            <div class="bold_r">
+                <img src="images/bold.png"/>
+            </div>
+        </div>
+        <!--row-->
+        <div class="row m-0 panel_title">
+            <h1>Recent Videos</h1>
+        </div>
+        <!--row-->
+        <div class="row m-0 m-t-12">
+            <div class="col-lg-5 col-xs-12 m-b-5" style="width: 42.667% !important">
+                <div class="video_pan" style="height: 435px;">
+                    <div class="video_frame resp_img">
+                        <a href="#" ng-click="redirectToVideo(latestlst_1)"> <img
+                                ng-src='{{latestlst_1.posterUrl?latestlst_1.posterUrl:"images/upload_sign.png"}}'
+                                style="height: 300px"/></a>
+                    </div>
+                    <div class="video_title">
+                        <h2><a href="#" ng-click="redirectToVideo(latestlst_1)" class="title_link">
+                            <label class="label_txt">{{latestlst_1.videoName | ellipseFilter : 55}}</label>
+                        </a></h2>
+
+                        <h1>by {{latestlst_1.owner.firstName}}</h1>
+                    </div>
+                    <div class="video_statistics">
+                        <!-- <div class="row m-0">
+                            <i class="fa fa-eye"></i> 31,3445
+                        </div> -->
+                        <div class="row m-0 p-t-5">
+
+                            <i class="fa fa-calendar-o"></i> {{latestlst_1.uploaded_Date|date:'yyyy-MM-dd'}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7 col-xs-12"
+                 style="width: 57.333% !important;  padding-right: 0px !important;   padding-left: 0px !important;">
+                <div class="col-md-3 col-xs-4  f_l p-0 video_pan m-b-5 "
+                     style="margin-right: 5px !important;width: 24%!important" ng-repeat="latestlst in latestLists">
+                    <div class="col-lg-11 col-md-5 col-sm-6 col-xs-12 p-0 video_frame resp_img">
+                        <a href="#" ng-click="redirectToVideo(latestlst)"> <img
+                                ng-src='{{latestlst.posterUrl?latestlst.posterUrl:"images/upload_sign.png"}}'/></a>
+                    </div>
+                    <div class="col-lg-12 col-md-5 col-sm-5 col-xs-12 p-0">
+                        <div class="video_title_sml">
+                            <h2><a href="#" ng-click="redirectToVideo(latestlst)" class="title_link">
+                                <label class="label_txt">{{latestlst.videoName | ellipseFilter : 55}}</label>
+                            </a></h2>
+
+                            <h1>by {{latestlst.owner.firstName}}</h1>
+                        </div>
+                        <div class="video_statistics_sml">
+                            <div class="row m-0 p-t-5">
+                                <i class="fa fa-calendar-o"></i> {{latestlst.uploaded_Date | date:'yyyy-MM-dd'}}
+                            </div>
+                        </div>
+                    </div>
+                    <!--7-->
+                </div>
+            </div>
+        </div>
+        <!--row-->
+        <div class="row m-0">
+            <div class="bold_l">
+                <img src="images/bold.png"/>
+            </div>
+            <div class="bold_r">
+                <img src="images/bold.png"/>
+            </div>
+        </div>
+        <!--row-->
+    </div>
+    <!--silver_pannel-->
+</div>
+<!--12-->
+<!--End Recent Videos-->
+<!--Recommended-->
+<div class="col-lg-12  col-xs-12 p-0 m-t-20">
+<div class="silver_pannel">
+<div class="row m-0">
+    <div class="bold_l">
+        <img src="images/bold.png"/>
+    </div>
+    <div class="bold_r">
+        <img src="images/bold.png"/>
+    </div>
+</div>
+<!--Animation List -->
+<div ng-repeat="category in categoryItems">
+    <div onload="videosByCategory(category)">
+        <div ng-repeat="videos in videoInformationList">
+            <video-block ng-model="videos"></video-block>
+        </div>
+    </div>
+</div>
+<!--Game List -->
+<div class="col-lg-12 p-t-10 p-b-10" style="min-width: 1055px;"
+     ng-show="gameRecordLength &gt; 0">
+    <div class="row m-0 panel_title" ng-show="gameRecordLength &gt; 0">
+        <h1>Paid Traffic</h1>
+    </div>
+    <div class="col-lg-2 col-xs-12 p-0 com_vid_width" ng-repeat="gamelst in gameListsInfo">
+        <div class="video_pan">
+            <div class="row video_frame resp_img">
+                <a href="#" ng-click="redirectToVideo(gamelst)"> <img
+                        ng-src='{{gamelst.posterUrl?gamelst.posterUrl:"images/upload_sign.png"}}'/></a>
+            </div>
+            <div class="row m-0">
+                <div class="video_title_sml">
+                    <h2><a href="#" ng-click="redirectToVideo(gamelst)" class="title_link">
+                        <label class="label_txt"> {{gamelst.videoName | ellipseFilter : 55 }}</label>
+                    </a></h2>
+
+                    <h1 style="font-size: 13px">by {{gamelst.owner.firstName}}</h1>
+                </div>
+                <div class="video_statistics_sml">
+                    <div class="row m-0"></div>
+                    <div class="row m-0 p-t-5">
+                        <i class="fa fa-calendar-o"></i> {{gamelst.uploaded_Date|date:'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="profile_menu" ng-show="gameRecordLength &gt; 0">
+    <div class="back_link" style="float: right;">
+        <a href="#" ng-click="seeMoreVideo(2)">See more ... </a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<!--Sports List -->
+<div class="col-lg-12 p-t-10 p-b-10" style="min-width: 1055px;"
+     ng-show="sportsRecordLength &gt; 0">
+    <div class="row m-0 panel_title" ng-show="sportsRecordLength &gt; 0">
+        <h1>Free Traffic</h1>
+    </div>
+    <div class="col-lg-2 col-xs-12 p-0 com_vid_width" ng-repeat="sprtlst in sportsListsInfo">
+        <div class="video_pan">
+            <div class="row video_frame resp_img">
+                <a href="#" ng-click="redirectToVideo(sprtlst)"> <img
+                        ng-src='{{sprtlst.posterUrl?sprtlst.posterUrl:"images/upload_sign.png"}}'/></a>
+            </div>
+            <div class="row m-0">
+                <div class="video_title_sml">
+                    <h2><a href="#" ng-click="redirectToVideo(sprtlst)" class="title_link">
+                        <label class="label_txt">{{sprtlst.videoName | ellipseFilter : 55}}</label>
+                    </a></h2>
+
+                    <h1 style="font-size: 13px">by {{sprtlst.owner.firstName}}</h1>
+                </div>
+                <div class="video_statistics_sml">
+                    <div class="row m-0"></div>
+                    <div class="row m-0 p-t-5">
+                        <i class="fa fa-calendar-o"></i> {{sprtlst.uploaded_Date|date:'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="profile_menu" ng-show="sportsRecordLength &gt; 0">
+    <div class="back_link" style="float: right;">
+        <a href="#" ng-click="seeMoreVideo(3)">See more ... </a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<!--Music List -->
+<div class="col-lg-12 p-t-10 p-b-10" style="min-width: 1055px;"
+     ng-show="musicRecordLength &gt; 0">
+    <div class="row m-0 panel_title" ng-show="musicRecordLength &gt; 0">
+        <h1>Social Media</h1>
+    </div>
+    <div class="col-lg-2 col-xs-12 p-0 com_vid_width" ng-repeat="musiclst in musicListsInfo">
+        <div class="video_pan">
+            <div class="row video_frame resp_img">
+                <a href="#" ng-click="redirectToVideo(musiclst)"> <img
+                        ng-src='{{musiclst.posterUrl?musiclst.posterUrl:"images/upload_sign.png"}}'/></a>
+            </div>
+            <div class="row m-0">
+                <div class="video_title_sml">
+                    <h2><a href="#" ng-click="redirectToVideo(musiclst)" class="title_link">
+                        <label class="label_txt">{{musiclst.videoName}}</label>
+                    </a></h2>
+
+                    <h1>by {{musiclst.owner.firstName}}</h1>
+                </div>
+                <div class="video_statistics_sml">
+                    <div class="row m-0"></div>
+                    <div class="row m-0 p-t-5">
+                        <i class="fa fa-calendar-o"></i> {{musiclst.uploaded_Date|date:'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="profile_menu" ng-show="musicRecordLength &gt; 0">
+    <div class="back_link" style="float: right;">
+        <a href="#" ng-click="seeMoreVideo(4)">See more ... </a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<!--Education List -->
+<div class="col-lg-12 p-t-10 p-b-10" ng-show="eduRecordLength &gt; 0">
+    <div class="row m-0 panel_title" ng-show="eduRecordLength &gt; 0">
+        <h1>Email Marketing</h1>
+    </div>
+    <div class="col-lg-2 col-xs-12 p-0 com_vid_width" ng-repeat="edulst in eduListsInfo">
+        <div class="video_pan">
+            <div class="row video_frame resp_img">
+                <a href="#" ng-click="redirectToVideo(edulst)"> <img
+                        ng-src='{{edulst.posterUrl?edulst.posterUrl:"/images/upload_sign.png"}}'
+                        style="height: 135px; width: 235px;"/></a>
+            </div>
+            <div class="row m-0">
+                <div class="video_title_sml">
+                    <a href="#" ng-click="redirectToVideo(edulst)">
+                        <h2 style="height: 50px; word-wrap: break-word;">{{edulst.videoName}}</h2>
+                    </a>
+                </div>
+                <div class="video_statistics_sml">
+                    <div class="row m-0"></div>
+                    <div class="row m-0 p-t-5">
+                        <h1 style="font-size: 13px">by {{edulst.owner.firstName}}</h1>
+                        <i class="fa fa-calendar-o"></i> {{edulst.uploaded_Date|date:'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="profile_menu" ng-show="musicRecordLength &gt; 0">
+    <div class="back_link" style="float: right;">
+        <a href="#" ng-click="seeMoreVideo(4)">See more ... </a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<!--Education List -->
+<div class="col-lg-12 p-t-10 p-b-10" ng-show="eduRecordLength &gt; 0">
+    <div class="row m-0 panel_title" ng-show="eduRecordLength &gt; 0">
+        <h1>Email Marketing</h1>
+    </div>
+    <div class="col-lg-2 col-xs-12 p-0 com_vid_width" ng-repeat="edulst in eduListsInfo">
+        <div class="video_pan">
+            <div class="row video_frame resp_img">
+                <a href="#" ng-click="redirectToVideo(edulst)"> <img
+                        ng-src='{{edulst.posterUrl?edulst.posterUrl:"images/upload_sign.png"}}'/></a>
+            </div>
+            <div class="row m-0">
+                <div class="video_title_sml">
+                    <h2><a href="#" ng-click="redirectToVideo(edulst)" class="title_link">
+                        <label class="label_txt">{{edulst.videoName}}</label>
+                    </a></h2>
+
+                    <h1>by {{edulst.owner.firstName}}</h1>
+                </div>
+                <div class="video_statistics_sml">
+                    <div class="row m-0"></div>
+                    <div class="row m-0 p-t-5">
+                        <i class="fa fa-calendar-o"></i> {{edulst.uploaded_Date|date:'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="profile_menu" ng-show="eduRecordLength &gt; 0">
+    <div class="back_link" style="float: right;">
+        <a href="#" ng-click="seeMoreVideo(5)">See more ... </a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<!--Movies List -->
+<div class="col-lg-12 p-t-10 p-b-10" ng-show="movieRecordLength &gt; 0">
+    <div class="row m-0 panel_title" ng-show="movieRecordLength &gt; 0">
+        <h1>Local Business</h1>
+    </div>
+    <div class="col-lg-2 col-xs-12 p-0 com_vid_width" ng-repeat="movelst in movieListsInfo">
+        <div class="video_pan">
+            <div class="row video_frame resp_img">
+                <a href="#" ng-click="redirectToVideo(movelst)"> <img
+                        ng-src='{{movelst.posterUrl?movelst.posterUrl:"images/upload_sign.png"}}'/></a>
+            </div>
+            <div class="row m-0">
+                <div class="video_title_sml">
+                    <h2><a href="#" ng-click="redirectToVideo(movelst)" class="title_link"><label class="label_txt">{{movelst.videoName}}</label></a>
+                    </h2>
+                </div>
+                <div class="video_statistics_sml">
+                    <div class="row m-0"></div>
+                    <div class="row m-0 p-t-5">
+                        <h1 style="font-size: 13px">by {{movelst.owner.firstName}}</h1>
+                        <i class="fa fa-calendar-o"></i> {{movelst.uploaded_Date|date:'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="profile_menu" ng-show="movieRecordLength &gt; 0">
+    <div class="back_link" style="float: right;">
+        <a href="#" ng-click="seeMoreVideo(6)">See more ... </a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<!-- 							Tv Show List -->
+<div class="col-lg-12 p-t-10 p-b-10" style="min-width: 1055px;"
+     ng-show="tvShowRecordLength &gt; 0">
+    <div class="row m-0 panel_title" ng-show="tvShowRecordLength &gt; 0">
+        <h1>Music</h1>
+    </div>
+    <div class="col-lg-2 col-xs-12 p-0 com_vid_width" ng-repeat="tvShwlst in tvShowListsInfo">
+        <div class="video_pan">
+            <div class="row video_frame resp_img">
+                <a href="#" ng-click="redirectToVideo(tvShwlst)"> <img
+                        ng-src='{{tvShwlst.posterUrl?tvShwlst.posterUrl:"/images/upload_sign.png"}}'
+                        style="height: 135px; width: 235px;"/></a>
+            </div>
+            <div class="row m-0">
+                <div class="video_title_sml">
+                    <a href="#" ng-click="redirectToVideo(tvShwlst)">
+                        <h2 style="height: 50px; word-wrap: break-word;">{{tvShwlst.videoName}}</h2>
+                    </a>
+                </div>
+                <div class="video_statistics_sml">
+                    <div class="row m-0"></div>
+                    <div class="row m-0 p-t-5">
+                        <h1 style="font-size: 13px">by {{tvShwlst.owner.firstName}}</h1>
+                        <i class="fa fa-calendar-o"></i> {{tvShwlst.uploaded_Date|date:'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="profile_menu" ng-show="movieRecordLength &gt; 0">
+    <div class="back_link" style="float: right;">
+        <a href="#" ng-click="seeMoreVideo(6)">See more ... </a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<!-- 							Tv Show List -->
+<div class="col-lg-12 p-t-10 p-b-10" style="min-width: 1055px;"
+     ng-show="tvShowRecordLength &gt; 0">
+    <div class="row m-0 panel_title" ng-show="tvShowRecordLength &gt; 0">
+        <h1>Music</h1>
+    </div>
+    <div class="col-lg-2 col-xs-12 p-0 com_vid_width" ng-repeat="tvShwlst in tvShowListsInfo">
+        <div class="video_pan">
+            <div class="row video_frame resp_img">
+                <a href="#" ng-click="redirectToVideo(tvShwlst)"> <img
+                        ng-src='{{tvShwlst.posterUrl?tvShwlst.posterUrl:"images/upload_sign.png"}}'/></a>
+            </div>
+            <div class="row m-0">
+                <div class="video_title_sml">
+                    <h2><a href="#" ng-click="redirectToVideo(tvShwlst)" class="title_link">
+                        <label class="label_txt"> {{tvShwlst.videoName}}</label>
+                    </a></h2>
+
+                    <h1>by {{tvShwlst.owner.firstName}}</h1>
+                </div>
+                <div class="video_statistics_sml">
+                    <div class="row m-0"></div>
+                    <div class="row m-0 p-t-5">
+                        <i class="fa fa-calendar-o"></i> {{tvShwlst.uploaded_Date|date:'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="profile_menu" ng-show="tvShowRecordLength &gt; 0">
+    <div class="back_link" style="float: right;">
+        <a href="#" ng-click="seeMoreVideo(7)">See more ... </a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<!-- 							Tv Show List -->
+<div class="col-lg-12 p-t-10 p-b-10" style="min-width: 1055px;"
+     ng-show="menu8RecordLength &gt; 0">
+    <div class="row m-0 panel_title" ng-show="menu8RecordLength &gt; 0">
+        <h1>Webinar</h1>
+    </div>
+    <div class="col-lg-2 col-xs-12 p-0 com_vid_width" ng-repeat="menu8lst in menu8ListsInfo">
+        <div class="video_pan">
+            <div class="row video_frame resp_img">
+                <a href="#" ng-click="redirectToVideo(menu8lst)"> <img
+                        ng-src='{{menu8lst.posterUrl?menu8lst.posterUrl:"images/upload_sign.png"}}'/></a>
+            </div>
+            <div class="row m-0">
+                <div class="video_title_sml">
+                    <h2><a href="#" ng-click="redirectToVideo(tvShwlst)" class="title_link">
+                        <label class="label_txt">{{menu8lst.videoName}}</label>
+                    </a></h2>
+
+                    <h1>by {{menu8lst.owner.firstName}}</h1>
+                </div>
+                <div class="video_statistics_sml">
+                    <div class="row m-0"></div>
+                    <div class="row m-0 p-t-5">
+                        <i class="fa fa-calendar-o"></i> {{menu8lst.uploaded_Date|date:'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="profile_menu" ng-show="menu8RecordLength &gt; 0">
+    <div class="back_link" style="float: right;">
+        <a href="#" ng-click="seeMoreVideo(8)">See more ... </a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<!-- 							Tv Show video marketing -->
+<div class="col-lg-12 p-t-10 p-b-10" style="min-width: 1055px;"
+     ng-show="menu9RecordLength &gt; 0">
+    <div class="row m-0 panel_title" ng-show="menu9RecordLength &gt; 0">
+        <h1>Video Marketing</h1>
+    </div>
+    <div class="col-lg-2 col-xs-12 p-0 com_vid_width" ng-repeat="menu9lst in menu9ListsInfo">
+        <div class="video_pan">
+            <div class="row video_frame resp_img">
+                <a href="#" ng-click="redirectToVideo(menu9lst)"> <img
+                        ng-src='{{menu9lst.posterUrl?menu9lst.posterUrl:"images/upload_sign.png"}}'
+                        /></a>
+            </div>
+            <div class="row m-0">
+                <div class="video_title_sml">
+                    <h2><a href="#" ng-click="redirectToVideo(tvShwlst)" class="title_link">
+                        <label class="label_txt">{{menu9lst.videoName}}</label>
+                    </a></h2>
+                </div>
+                <div class="video_statistics_sml">
+                    <div class="row m-0"></div>
+                    <div class="row m-0 p-t-5">
+                        <h1 style="font-size: 13px">by {{menu9lst.owner.firstName}}</h1>
+                        <i class="fa fa-calendar-o"></i> {{menu9lst.uploaded_Date|date:'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="profile_menu" ng-show="menu9RecordLength &gt; 0">
+    <div class="back_link" style="float: right;">
+        <a href="#" ng-click="seeMoreVideo(9)">See more ... </a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<!-- 							Tv Show brand recognition -->
+<div class="col-lg-12 p-t-10 p-b-10" style="min-width: 1055px;"
+     ng-show="menu10RecordLength &gt; 0">
+    <div class="row m-0 panel_title" ng-show="menu10RecordLength &gt; 0">
+        <h1>Brand Recognition</h1>
+    </div>
+    <div class="col-lg-2 col-xs-12 p-0 com_vid_width" ng-repeat="menu10lst in menu10ListsInfo">
+        <div class="video_pan">
+            <div class="row video_frame resp_img">
+                <a href="#" ng-click="redirectToVideo(menu10lst)"> <img
+                        ng-src='{{menu10lst.posterUrl?menu10lst.posterUrl:"images/upload_sign.png"}}'/></a>
+            </div>
+            <div class="row m-0">
+                <div class="video_title_sml">
+                    <h2><a href="#" ng-click="redirectToVideo(tvShwlst)" class="title_link">
+                        <label>{{menu10lst.videoName}}</label>
+                    </a></h2>
+
+                    <h1>by {{menu10lst.owner.firstName}}</h1>
+                </div>
+                <div class="video_statistics_sml">
+                    <div class="row m-0"></div>
+                    <div class="row m-0 p-t-5">
+                        <i class="fa fa-calendar-o"></i> {{menu10lst.uploaded_Date|date:'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="profile_menu" ng-show="menu10RecordLength &gt; 0">
+    <div class="back_link" style="float: right;">
+        <a href="#" ng-click="seeMoreVideo(10)">See more ... </a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<!-- 							Tv Show Other -->
+<div class="col-lg-12 p-t-10 p-b-10" style="min-width: 1055px;"
+     ng-show="menu11RecordLength &gt; 0">
+    <div class="row m-0 panel_title" ng-show="menu11RecordLength &gt; 0">
+        <h1>Other</h1>
+    </div>
+    <div class="col-lg-2 col-xs-12 p-0 com_vid_width" ng-repeat="menu11lst in menu11ListsInfo">
+        <div class="video_pan">
+            <div class="row video_frame resp_img">
+                <a href="#" ng-click="redirectToVideo(menu11lst)"> <img
+                        ng-src='{{menu11lst.posterUrl?menu11lst.posterUrl:"images/upload_sign.png"}}'/></a>
+            </div>
+            <div class="row m-0">
+                <div class="video_title_sml">
+                    <h2><a href="#" ng-click="redirectToVideo(tvShwlst)" class="title_link">
+                        <label>{{menu11lst.videoName}}</label>
+                    </a></h2>
+
+                    <h1>by {{menu11lst.owner.firstName}}</h1>
+                </div>
+                <div class="video_statistics_sml">
+                    <div class="row m-0"></div>
+                    <div class="row m-0 p-t-5">
+                        <i class="fa fa-calendar-o"></i> {{menu11lst.uploaded_Date|date:'yyyy-MM-dd'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="profile_menu" ng-show="menu11RecordLength &gt; 0">
+    <div class="back_link" style="float: right;">
+        <a href="#" ng-click="seeMoreVideo(11)">See more ... </a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<div class="row m-0">
+    <div class="bold_l">
+        <img src="images/bold.png"/>
+    </div>
+    <div class="bold_r">
+        <img src="images/bold.png"/>
+    </div>
+</div>
+</div>
+</div>
+<!--12-->
+<!--End Recommended-->
+</div>
+<!--main_cnt_section-->
+</div>
+<!--12-->
+</section>
+<ng-include src="'footer.html'"></ng-include>
+</form>
+</div>
+
+<!--wrap-->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script type="text/javascript" src="bower_components/ng-tags-input/ng-tags-input.js"></script>
+<script src="js/messageResource.js"></script>
+<script type="text/javascript" src="application/app.js"></script>
+<script type="text/javascript" src="controllers/channelController.js"></script>
+<script type="text/javascript" src="filters/ellipses.js"></script>
+<script type="text/javascript" src="directives/videoBlock.js"></script>
+<script src="js/bootstrap-dropdown.js"></script>
+<script src="js/menu.js"></script>
+</body>
+</html>

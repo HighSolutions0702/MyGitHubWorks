@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/unstoppablemarketers/!svn/ver/608/usm/src/com/obs/properties
+END
+aws.properties
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/unstoppablemarketers/!svn/ver/496/usm/src/com/obs/properties/aws.properties
+END
+emailConfig.properties
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/unstoppablemarketers/!svn/ver/608/usm/src/com/obs/properties/emailConfig.properties
+END
+payment.properties
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/unstoppablemarketers/!svn/ver/496/usm/src/com/obs/properties/payment.properties
+END
+ewallet.properties
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/unstoppablemarketers/!svn/ver/560/usm/src/com/obs/properties/ewallet.properties
+END
+Application.properties
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/unstoppablemarketers/!svn/ver/608/usm/src/com/obs/properties/Application.properties
+END

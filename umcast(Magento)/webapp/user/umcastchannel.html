@@ -1,0 +1,288 @@
+<!doctype html>
+<html ng-app="com.obs.videocast">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>Unstoppable Marketers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0"/>
+    <link rel="shortcut icon" href="images/favicon.png"/>
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/plugins.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_on.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_aligh.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_media.css" type="text/css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="css/style_tooltip.css"/>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css"/>
+</head>
+<body>
+<div id="wrap" ng-controller="umcastCntrl" ng-cloak ng-init="onload=true">
+<form name="form">
+<header>
+    <ng-include src="'umcastheader.html'"></ng-include>
+</header>
+<section class="section_h">
+<div class="col-lg-12 col-xs-12 p-0 f_l">
+<div class="main_cnt_section">
+<!--Recent Videos-->
+<div class="col-lg-12  col-xs-12 p-0 m-t-20">
+<div class="silver_pannel">
+<div class="row m-0">
+    <div class="bold_l">
+        <img src="images/bold.png"/>
+    </div>
+    <div class="bold_r">
+        <img src="images/bold.png"/>
+    </div>
+</div>
+<!--row-->
+<div class="profile_header row m-0">
+    <div ng-show="checkValidImage " class="alert-danger"
+         style="padding: 10px; width: 99%; text-align: center;">
+                              <span ng-show="checkValidImage " class="alert-danger" style="margin-left: 165px">Invalid
+                                 file format(.jpg,.png,.jpeg,.gif only allowed) </span>
+    </div>
+    <div ng-show="checkVal && !checkValidImage" class="alert-success"
+         style="padding: 10px; width: 99%; text-align: center;">
+        <span ng-show="checkVal && !checkValidImage" class="alert-success">{{msg}}</span>
+    </div>
+    <div class="cover_bg resp_img" style="width: 99.3%;">
+        <loading></loading>
+        <img ng-src="{{coverImageUrl}}" style="min-width: 1600px; min-height: 741px;"/>
+    </div>
+    <div class="on_cover ">
+        <div class="profile_details">
+            <input type="file" id="my_file" ng-file-select="onUploadImage($files);"
+                   style="display: none;">
+
+            <div class="profile_pic resp_img col-md-3 p-0">
+                <img ng-src="{{profileImageUrl}}" style="height: 170px;; width: 100%"/>
+
+                <div class="change_pro_pic">
+                    <a href="#" onclick="my_file.click()">Update Photo</a>
+                </div>
+            </div>
+            <div class="col-md-6 p-0">
+                <div class="profile_name">
+                    <h2>{{profile.firstName}}</h2>
+
+                    <p>
+                        http:/.com/<input class="form-control input-sm"
+                                          name="umcast_name" ng-model="profile.umcast_name"
+                                          style="width: 150px; height: 35px;" type="text"
+                                          placeholder="UMcast Name"
+                                          id="text_hide">
+                    </p>
+
+                    <div align="center" style="display: none" id="link_div">
+                        <a href="#" ng-click="changeUmName()" class="update">Update</a> <a href="#"
+                                                                                           ng-click="cancelFunc()"
+                                                                                           class="cancel">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--profile_details-->
+    </div>
+    <div class="change_cover">
+        <input type="file" id="my_file1" ng-file-select="onUploadCoverImage($files);"
+               style="display: none"> <a href="#" onclick="my_file1.click()">Changer Cover
+        Photo</a>
+    </div>
+</div>
+<!--row-->
+<div class="profile_menu">
+    <div class="back_link">
+        <a href="https://www.unstoppablemarketers.com/unstoppablemarketers/member/dashboard.html">Back
+            to Dashboard</a>
+    </div>
+    <div class="theme_link"></div>
+    <!--theme_link-->
+</div>
+<div class="row m-0 m-t-10" ng-show="checkUserVideo">
+    <div class="col-lg-7 col-xs-12 p-0 p-l-10 m-b-5"
+         style="min-width: 1055px; min-height: 350px;">
+        <div class="col-lg-7 col-xs-12 p-0 p-l-10 m-b-5" align="center">
+            <h1 style="margin-top: 123px; text-align: right;">{{videoMsg}}</h1>
+        </div>
+    </div>
+</div>
+<div class="row m-0 m-t-10" ng-hide="checkUserVideo">
+    <div class="col-lg-7 col-xs-12 p-0 p-l-10 m-b-5" ng-show="checkUserVideo">
+        <label><h2>{{Msg}}</h2></label>
+    </div>
+    <div class="col-lg-7 col-xs-12 p-0 p-l-10 m-b-5" ng-show="!checkUserVideo">
+        <div class="row  profile_sub_tit">
+            <h2>{{userVideo.videoName}}</h2>
+        </div>
+        <!--row-->
+        <div class="video_pan">
+            <div class="video_frame resp_img">
+                <div id='mediaplayer'></div>
+            </div>
+            <div class="video_title">
+                <h2 style="height: 50px; word-wrap: break-word;">{{userVideo.videoName}}</h2>
+            </div>
+            <div class="video_statistics">
+                <div class="row m-0"></div>
+                <div class="row m-0 p-t-5">
+                    <h1 style="font-size: 13px;">by {{userVideo.owner.firstName}}</h1>
+                    <i class="fa fa-calendar-o"></i> {{userVideo.uploaded_Date|date:'yyyy-MM-dd'}}
+                </div>
+            </div>
+        </div>
+        <div class="video_info row ">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#home" role="tab" data-toggle="tab">Basic info</a></li>
+                <li><a href="#profile" role="tab" data-toggle="tab">Share Link</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="home">
+                    <div class="video_dis row m-0 p-10">
+                        <h1>{{userVideo.videoCategory.categoryName}}</h1>
+                        <label>
+                            <div ng-bind-html="description | linky" id="desc_content"></div>
+                        </label>
+                    </div>
+                </div>
+                <div class="tab-pane" id="profile">
+                    <div class="video_dis row m-0 p-10">
+                        <h1>Share this Link</h1>
+                        <input class="video_link" name="share_url" value="{{videoShareLink}}"
+                               style="height: 45px; width: 50%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--row-->
+        <div class="row m-0 m-b-10">
+            <div class="col-xs-2">
+                <div class="cmt_profile_pic resp_img col-md-3 p-0">
+                    <img ng-src="{{profileImageUrl}}" style="height: 75px; width: 100%;"/>
+                </div>
+            </div>
+            <div class="col-xs-9 p-0">
+                <textarea maxlength='255' id="textarea1" style="overflow: hidden" cols="30" rows="2"
+                          class="form-control valid parsley-validated" name="comments"
+                          onkeyup="AutoGrowTextArea(this)"
+                          placeholder="Leave Comments(upto 255 characters)"
+                          ng-model="userVideoCmt.comments" autofocus ng-focus="isFocused=true"
+                          ng-blur="isVisited=true"></textarea>
+                <a href="#" ng-click="userCommentsFunc(userVideo)"
+                   class="col-lg-3 col-xs-12 m-l-10
+												f_r m-t-5 blue_button ">
+                    <h1>Post comments</h1>
+                </a> <span ng-show="(!isFocused && !cmtMsgCheck) " class="alert-danger">{{cmtMsg}}</span>
+            </div>
+        </div>
+        <div class="row m-0 m-b-10" ng-repeat="cmtsList in commentsListInfo"
+             ng-show="commentsRecordLength &gt; 0">
+            <div class="col-xs-2">
+                <div class="cmt_profile_pic resp_img col-md-3 p-0" style="height: 60px; width: 70%">
+                    <img ng-src="{{cmtsList.userProfImageUrl}}" style="height: 60px;; width: 100%"/>
+                </div>
+            </div>
+            <div class="col-xs-8" style="margin-top: 5px; display: flex; text-align: justify;">
+                <label>{{cmtsList.comments}}</label>
+            </div>
+            <div class="col-xs-2">
+                <a href="#" ng-click="deleteCmt(cmtsList)">Delete</a>
+            </div>
+        </div>
+    </div>
+    <!--main 6-->
+    <div class="col-lg-5 col-xs-12" ng-show="!checkUserVideo">
+        <div class="row  profile_sub_tit">
+            <h2>{{profile.firstName}}'s Videos</h2>
+        </div>
+        <!--row-->
+        <div class="row m-0 own_video" style="border: 1px solid #ccc;">
+            <div class="col-lg-6 p-5 rec_vid_width" ng-repeat="otherVideo in ownerVideosList">
+                <div class="video_pan">
+                    <div class="row video_frame resp_img">
+                        <a href="#" ng-click="redirectToVideo(otherVideo)"><img
+                                ng-src='{{otherVideo.posterUrl!=null?otherVideo.posterUrl:"images/upload_sign.png"}}'
+                                style="height: 135px; width: 235px;"/></a>
+                    </div>
+                    <div class="row m-0">
+                        <div class="video_title_sml">
+                            <a href="#" ng-click="redirectToVideo(otherVideo)">
+                                <h2 style="height: 50px; word-wrap: break-word;">{{otherVideo.videoName}}</h2>
+                            </a>
+                        </div>
+                        <div class="video_statistics_sml">
+                            <div class="row m-0"></div>
+                            <div class="row m-0 p-t-5">
+                                <h1 style="font-size: 13px;">by {{otherVideo.owner.firstName}}</h1>
+                                <i class="fa fa-calendar-o"></i>
+                                {{otherVideo.uploaded_Date|date:'yyyy-MM-dd'}}
+                            </div>
+                        </div>
+                    </div>
+                    <!--7-->
+                </div>
+            </div>
+        </div>
+        <!--row-->
+        <div class="row m-0"></div>
+        <!--row-->
+    </div>
+    <!--main 6-->
+</div>
+<!--row-->
+<div class="row m-0">
+    <div class="bold_l">
+        <img src="images/bold.png"/>
+    </div>
+    <div class="bold_r">
+        <img src="images/bold.png"/>
+    </div>
+</div>
+<!--row-->
+</div>
+<!--silver_pannel-->
+</div>
+<!--12-->
+<!--End Recent Videos-->
+</div>
+<!--main_cnt_section-->
+</div>
+<!--12-->
+</section>
+<ng-include src="'footer.html'"></ng-include>
+</form>
+</div>
+<!--wrap-->
+<!-- jQuery tooltip needed -->
+<script>
+    // auto expanding
+    function AutoGrowTextArea(textField) {
+        if (textField.clientHeight < textField.scrollHeight) {
+            textField.style.height = textField.scrollHeight + "px";
+            if (textField.clientHeight < textField.scrollHeight) {
+                textField.style.height = (textField.scrollHeight * 2 - textField.clientHeight)
+                        + "px";
+            }
+        }
+    }
+</script>
+<script type="text/javascript">
+    AutoGrowTextArea(document.getElementById("textarea1"));
+</script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/danialfarid-angular-file-upload/dist/angular-file-upload-shim.js"></script>
+<script src="bower_components/danialfarid-angular-file-upload/dist/angular-file-upload.js"></script>
+<script type="text/javascript" src="application/app.js"></script>
+<script type="text/javascript" src="controllers/umCastController.js"></script>
+<script type="text/javascript" src="filters/descriptionLink.js"></script>
+<script type="text/javascript" src="directives/loading.js"></script>
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
+<script src="js/bootstrap-dropdown.js" type="text/javascript"></script>
+<script type='text/javascript' src='https://d2nr9wnsqx54zt.cloudfront.net/jwplayer.js'></script>
+</body>
+</html>

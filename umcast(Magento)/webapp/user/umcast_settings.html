@@ -1,0 +1,125 @@
+<!doctype html>
+<html ng-app="com.obs.videocast">
+<head>
+    <meta charset="utf-8">
+    <title>Unstoppable Marketers</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0"/>
+    <link rel="shortcut icon" href="images/favicon.png"/>
+    <title>Unstoppable Marketers</title>
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/plugins.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_on.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_aligh.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_media.css" type="text/css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="css/style_tooltip.css"/>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css"/>
+</head>
+<body>
+<div id="wrap" ng-controller="umcastCntrl" ng-cloak>
+    <form name="form">
+        <header>
+            <ng-include src="'umcastheader.html'"></ng-include>
+        </header>
+        <section class="section_h">
+            <div class="col-lg-12 col-xs-12 p-0 f_l">
+                <div class="main_cnt_section">
+                    <!--Recent Videos-->
+                    <div class="col-lg-12  col-xs-12 p-0 m-t-20">
+                        <div class="silver_pannel">
+                            <div class="row m-0">
+                                <div class="bold_l">
+                                    <img src="images/bold.png"/>
+                                </div>
+                                <div class="bold_r">
+                                    <img src="images/bold.png"/>
+                                </div>
+                            </div>
+                            <!--row-->
+                            <div class="col-lg-9 col-sm-6 col-xs-12 p-0">
+                                <div class="row  panel_inner_title">
+                                    <h1>Video sharing sites settings</h1>
+                                </div>
+                                <!--row-->
+                                <div class="settings_box" style="text-align: center;">
+                                    <div class="col-md-3">
+                                        <a href="/googleOAuth?state={{cookie}}"><img
+                                                src="images/youtube.png"/></a>
+
+                                        <h1 ng-show="profile.token_youtube!=null && profile.token_youtube!='' "
+                                            style="margin: 10px 25px; color: green">Active</h1>
+
+                                        <h1 ng-show="profile.token_youtube==null && profile.token_youtube!='' "
+                                            style="margin: 10px 25px; color: red">InActive</h1>
+                                    </div>
+                                    <!-- <div class="col-md-3"><a href="/vimeoOAuth?state={{cookie}}"><img src="/images/vimeo.png" /></a>
+                                      <h1 ng-show="profile.token_vimeo!=null && profile.token_vimeo!='' " style="margin: 10px 25px; color:green">Active</h1>
+                                      <h1 ng-show="profile.token_vimeo==null && profile.token_vimeo!='' " style="margin: 10px 25px; color:red">InActive</h1>
+                                      </div>		 -->
+                                    <div class="col-md-3">
+                                        <a href="/dailyMotionOAuth?state={{cookie}}"><img
+                                                src="images/daily.png"/></a>
+
+                                        <h1 ng-show="profile.token_daily!=null && profile.token_daily!='' "
+                                            style="margin: 10px 25px; color: green">Active</h1>
+
+                                        <h1 ng-show="profile.token_daily==null && profile.token_daily!='' "
+                                            style="margin: 10px 25px; color: red">InActive</h1>
+                                    </div>
+                                </div>
+                                <div class="row  panel_inner_title">
+                                    <h1>Social media Pages settings</h1>
+                                </div>
+                                <!--row-->
+                                <div class="settings_box" style="text-align: center;">
+                                    <div class="col-md-3">
+                                        <a href="#" ng-click="setFacebook()"><img
+                                                src="images/1facebook.png"/></a>
+
+                                        <h1 ng-show="profile.token_facebook!=null && profile.token_facebook!='' "
+                                            style="margin: 10px 25px; color: green">Active</h1>
+
+                                        <h1 ng-show="profile.token_facebook==null && profile.token_facebook!='' "
+                                            style="margin: 10px 25px; color: red">InActive</h1>
+                                    </div>
+                                    <!-- 								<div class="col-md-3"><a href="#" ng-click="aetLinkedin()"><img src="/images/1linkedin.png" /></a></div>							 -->
+                                    <!-- <div class="col-md-3"><a href="/twitterOAuth?state={{cookie}}"><img src="/images/1twitter.png" /></a>
+                                      <h1 ng-show="profile.token_twitter!=null && profile.token_twitter!='' " style="margin: 10px 25px; color:green">Active</h1>
+                                      <h1 ng-show="profile.token_twitter==null && profile.token_twitter!='' " style="margin: 10px 25px; color:red">InActive</h1>
+                                      </div>	 -->
+                                </div>
+                            </div>
+                            <!--row-->
+                        </div>
+                        <!--silver_pannel-->
+                    </div>
+                    <!--12-->
+                    <!--End Recent Videos-->
+                </div>
+                <!--main_cnt_section-->
+            </div>
+            <!--12-->
+        </section>
+        <ng-include src="'footer.html'"></ng-include>
+    </form>
+</div>
+<!--wrap-->
+
+<!-- jQuery tooltip needed -->
+
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script type="text/javascript" src="application/app.js"></script>
+<script type="text/javascript" src="controllers/umCastController.js"></script>
+
+<script src="bower_components/danialfarid-angular-file-upload/dist/angular-file-upload-shim.js"></script>
+<script src="bower_components/danialfarid-angular-file-upload/dist/angular-file-upload.js"></script>
+<script type='text/javascript' src='https://d2nr9wnsqx54zt.cloudfront.net/jwplayer.js'></script>
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap-dropdown.js" type="text/javascript"></script>
+</body>
+</html>

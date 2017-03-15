@@ -1,0 +1,31 @@
+package com.obs.webservice.messages;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.Country;
+
+@XmlRootElement(name="country")
+
+public class CountryMessage {
+	@XmlElement(name="status")
+	public ResponseStatus status;
+	private Country _entity = new Country();
+
+	@XmlElement(name="country")
+	public Country getEntity(){
+		return _entity;
+	}
+
+	public void setEntity(Country entity){
+		this._entity = entity;
+	}
+	public CountryMessage() {
+		super();
+	}
+	public CountryMessage(Country entity){
+		super();
+		setEntity(entity);
+	}
+
+}

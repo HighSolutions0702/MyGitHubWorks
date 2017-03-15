@@ -1,0 +1,31 @@
+package com.obs.webservice.messages;
+
+import java.util.Collection;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.CMSMenu;
+
+@XmlRootElement(name="menus")
+public class CMSMenusMessage {
+	@XmlElement(name="status")
+	public ResponseStatus status;
+
+	@XmlElement(name="menus")
+	private Collection<CMSMenu> entities;
+	
+	public CMSMenusMessage(){
+		super();
+	}
+
+	public CMSMenusMessage(ResponseStatus status, Collection<CMSMenu>  entities){
+		super();
+		this.status=status;
+		this.entities = entities;
+	}
+
+	public Collection<CMSMenu> getMenusEntities() {
+		return entities;
+	}
+}

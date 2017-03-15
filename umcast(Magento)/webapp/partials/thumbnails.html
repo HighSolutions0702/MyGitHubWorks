@@ -1,0 +1,17 @@
+<div class="col-md-6 col-xs-12 m-t-20">
+    <div class="row m-0 thumb">
+        <h2>VIDEO THUMBNAILS</h2>
+    </div>
+    <div class="row m-0">
+        <div class="col-md-4 col-sm-4 col-xs-12 p-5  resp_img"
+             ng-show="thumbLen==0">
+            <label>No Records found</label>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-12 p-5  resp_img"
+             ng-repeat="thumbnail in thumbnails" ng-show="thumbLen &gt; 0">
+            <a href="#" ng-click="setSelectedThumb(thumbnail)"> <img
+                    ng-src="{{thumbnail}}" alt=""/>
+            </a>
+        </div>
+    </div>
+</div>

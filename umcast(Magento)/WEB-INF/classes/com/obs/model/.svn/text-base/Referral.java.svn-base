@@ -1,0 +1,123 @@
+package com.obs.model;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="tbl_referral")
+public class Referral implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private long id;
+	private User user;
+	private long referred_by_id;
+	private long current_parent_id;
+	private String parents;
+	private String referralCode;
+	private String order;
+	private Date created_On;
+
+	@Id
+	@GeneratedValue( strategy = GenerationType.AUTO )
+	@Column(name="DN_ID" , nullable = false )
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	@OneToOne ( targetEntity = User.class, fetch = FetchType.EAGER )
+	@JoinColumn (name = "DN_USER_ID")
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	@Column(name="DN_REFERRED_BY_ID", nullable = true)
+	public long getReferred_by_id() {
+		return referred_by_id;
+	}
+	public void setReferred_by_id(long referred_by_id) {
+		this.referred_by_id = referred_by_id;
+	}
+
+	@Column(name="DD_CREATED_ON", nullable = true)
+	public Date getCreated_On() {
+		return created_On;
+	}
+	public void setCreated_On(Date created_On) {
+		this.created_On = created_On;
+	}
+	/**
+	 * @return the referralCode
+	 */
+	@Column(name="DC_REFERRAL_CODE", nullable = true)
+	public String getReferralCode() {
+		return referralCode;
+	}
+	/**
+	 * @param referralCode the referralCode to set
+	 */
+	public void setReferralCode(String referralCode) {
+		this.referralCode = referralCode;
+	}
+	/**
+	 * @return the order
+	 */
+	@Column(name="DN_ORDER", nullable = true)
+	public String getOrder() {
+		return order;
+	}
+	/**
+	 * @param order the order to set
+	 */
+	public void setOrder(String order) {
+		this.order = order;
+	}
+	/**
+	 * @return the parent_id
+	 */
+	@Column(name="DN_CURRENT_PARENT_ID", nullable = true)
+	public long getCurrent_parent_id() {
+		return current_parent_id;
+	}
+	/**
+	 * @param parent_id the parent_id to set
+	 */
+	public void setCurrent_parent_id(long current_parent_id) {
+		this.current_parent_id = current_parent_id;
+	}
+	/**
+	 * @return the parents
+	 */
+	@Column(name="DC_PARENTS", nullable = true)
+	public String getParents() {
+		return parents;
+	}
+	/**
+	 * @param parents the parents to set
+	 */
+	public void setParents(String parents) {
+		this.parents = parents;
+	}
+
+
+}

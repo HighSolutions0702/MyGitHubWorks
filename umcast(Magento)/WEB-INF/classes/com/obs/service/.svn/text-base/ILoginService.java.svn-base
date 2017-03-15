@@ -1,0 +1,41 @@
+package com.obs.service;
+
+import com.obs.model.Login;
+
+public interface ILoginService {
+
+	/**
+	 * Add Login
+	 * 
+	 * @param  Login login
+	 */
+	public Integer addLogin(Login login);
+
+	/**
+	 * Update Login
+	 * 
+	 * @param  Login login
+	 */
+	public void updateLogin(Login login);
+
+	/**
+	 * Delete Login
+	 * 
+	 * @param  Login login
+	 */
+	public void deleteLogin(Login login);
+
+	/**
+	 * Get Login
+	 * 
+	 * @param  String token
+	 */
+	public Login getLoginByToken(String token);
+	
+	/**
+	 * Get Login
+	 * 
+	 * @param  String userId
+	 */
+	public Login getLoginByUserId(int userId);
+}

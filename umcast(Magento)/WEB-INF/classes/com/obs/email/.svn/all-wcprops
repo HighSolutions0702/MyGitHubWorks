@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/unstoppablemarketers/!svn/ver/608/usm/src/com/obs/email
+END
+EmailConfiguration.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/unstoppablemarketers/!svn/ver/608/usm/src/com/obs/email/EmailConfiguration.java
+END
+EmailManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/unstoppablemarketers/!svn/ver/608/usm/src/com/obs/email/EmailManager.java
+END
+EmailSender.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/unstoppablemarketers/!svn/ver/608/usm/src/com/obs/email/EmailSender.java
+END
+SMTPAuthenticator.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/unstoppablemarketers/!svn/ver/20/usm/src/com/obs/email/SMTPAuthenticator.java
+END

@@ -1,0 +1,263 @@
+package com.obs.servlets;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import com.obs.base.BaseObject;
+import com.obs.model.Amount;
+import com.obs.model.Referral;
+import com.obs.model.User;
+import com.obs.service.IReferralService;
+import com.obs.service.IUserService;
+import com.obs.utils.CommonUtils;
+import com.obs.utils.IoUtils;
+
+public class ReferralScript extends BaseObject {
+	private IReferralService referralService 	= getReferralService();
+	private IUserService userService 			= getUserService();
+
+	IoUtils ioUtils = IoUtils.getInstance();
+	CommonUtils commonUtils=CommonUtils.getInstance();
+	List<User> referralUserList = new ArrayList<User>();
+	private String referral_parents = null;
+	
+	private int ROOT_USER_ID = 95;
+
+	public void updateReferralBatch(){
+		List<User> allUsers = userService.getSubscribedUsers();
+		System.out.println("Total users :"+allUsers.size());
+		for (int i = 0; i < allUsers.size(); i++) {
+			User user = allUsers.get(i);
+			if(user!=null){
+				if(user.getId()!=ROOT_USER_ID){
+					System.out.println("-----------------------");
+					System.out.println("Count :"+(i+1));
+					System.out.println(" user :"+user.getId());
+					updateReferralInfo(user.getId(),user.getRefered_by(),user.getReferralCode(),user.getSubscribe_On());
+				}
+			}
+		}
+	}
+	
+	public void updateReferralBatchForSomeSubscribers(){
+		List<User> allUsers = userService.getSubscribedUsers();
+		System.out.println("Total users :"+allUsers.size());
+		
+		for (int i = 0; i < allUsers.size(); i++) {
+			User user = allUsers.get(i);
+			if(user!=null){
+				if(user.getId()!=ROOT_USER_ID){
+					Calendar selectedCal = Calendar.getInstance();
+					selectedCal.set(2014, 9, 06);
+					Date selectedDate = selectedCal.getTime();
+					if(user.getSubscribe_On().after(selectedDate)){/*
+					System.out.println("-----------------------");
+					System.out.println("Count :"+(i+1));
+					System.out.println(" user :"+user.getId());
+					updateReferralInfo(user.getId(),user.getRefered_by(),user.getReferralCode(),user.getSubscribe_On());
+				*/}
+				}
+			}
+		}
+	}
+
+	public void updateAllBatch(){
+		List<User> allUsers = userService.getUsers();
+		System.out.println("Total users :"+allUsers.size());
+		for (int i = 0; i < allUsers.size(); i++) {
+			User user = allUsers.get(i);
+			if(user!=null){
+				System.out.println("-----------------------");
+				System.out.println("Count :"+(i+1));
+				System.out.println(" user :"+user.getId());
+				Referral referral =	getReferralObj(user.getId(),user.getRefered_by(),user.getReferralCode());
+				Long referralObjectId = referralService.addReferral(referral);
+			}
+		}
+		System.out.println("********* completed");
+	}
+
+
+	/**
+	 * add Referral record with order no and parent id
+	 * @param userId
+	 * @param reffalId
+	 */
+	public void updateReferralInfo(int userId,int referralId,String referralCode,Date userSubscriptionDate){
+		int orderNo = 0;
+		referralId = referralId==0?ROOT_USER_ID:referralId;
+		Referral referral =	getReferralObj(userId,referralId,referralCode);
+		User referreduser = userService.getUserById(referralId);
+		if(referreduser!=null && referreduser.getSubscribe_On()!=null){
+			orderNo = referralService.getOrderNoByDate(referralId,userSubscriptionDate);
+		}
+		referral.setOrder(String.valueOf(orderNo+1));
+		if((orderNo+1) % 2 == 1 && checkUserSubscription(referralId)){
+			System.out.println("parent added - "+referralId+"(subscribed user) and reffered user Id:"+referralId+" referred order"+(orderNo+1));
+			referral.setCurrent_parent_id(referralId);
+			referral.setParents(String.valueOf(referralId));
+		}
+		else{
+			referral_parents = "";
+			long parentId = getReferralParentId(referralId,userSubscriptionDate);
+			referral.setCurrent_parent_id(parentId>0?parentId:referralId);
+			referral.setParents(referral_parents);
+			System.out.println("parent added - "+parentId+"(subscribed user) and reffered user Id:"+referralId+" referred order"+(orderNo+1));
+		}
+		referralService.updteReferral(referral);
+		addAmount(userId, referral, 193, "47",userSubscriptionDate);
+	}
+
+	public boolean checkUserSubscription(long referralId){
+		boolean flag = false;
+		User user = userService.getUserById((int)referralId);
+		if(user!=null && !user.getIsDeleted()){
+			Date subDate = user.getSubscribe_On();
+			if(subDate!=null){
+				flag = true;
+				System.out.println("subscribed parent or referral :"+referralId);
+			}
+		}
+		if(referralId==1){
+			flag = true;
+		}
+		if(!flag){
+			System.out.println("parent or referral not subscribed :"+referralId);
+		}
+		return flag;
+	}
+
+	/**
+	 * get referral parent using recursing method
+	 * @param referralId
+	 * @return parentId
+	 */
+	public long getReferralParentId(long referralId,Date userSubscriptionDate){
+		long parentId = referralId;
+		System.out.println("checking parent for this parent:"+parentId);
+		referral_parents = referral_parents+ parentId + ",";
+		Referral referral =	referralService.getReferralByUserId((int)referralId);
+		if(referral!=null){
+			parentId = referral.getCurrent_parent_id();
+			if(parentId>1){
+				int orderNo = 0;
+				User parentuser = userService.getUserById((int)parentId);
+				if(parentuser!=null && parentuser.getSubscribe_On()!=null){
+					orderNo = referralService.getOrderNoByDate(parentId,userSubscriptionDate);
+				}
+				System.out.println("order no for this parent :"+(orderNo+1));
+				if((orderNo+1) % 2 == 1 && checkUserSubscription(parentId)){
+					referral_parents = referral_parents+ parentId + ",";
+					System.out.println("returning this parent id:"+parentId);
+					return parentId;
+				}
+				else{
+					System.out.println("check new parent (current parent order no or subscription invalid)");
+					return getReferralParentId(parentId,userSubscriptionDate);
+				}
+			}
+			else if(parentId==0){
+				parentId = referral.getReferred_by_id();
+				int orderNo = 0;
+				User parentuser = userService.getUserById((int)parentId);
+				if(parentuser!=null && parentuser.getSubscribe_On()!=null){
+					orderNo = referralService.getOrderNoByDate(parentId,userSubscriptionDate);
+				}
+				System.out.println("order no for this parent :"+(orderNo+1));
+				if((orderNo+1) % 2 == 1 && checkUserSubscription(parentId)){
+					referral_parents = referral_parents+ parentId + ",";
+					System.out.println("returning this parent id:"+parentId);
+					return parentId;
+				}
+				else{
+					System.out.println("check new parent (current parent order no or subscription invalid)");
+					return getReferralParentId(parentId,userSubscriptionDate);
+				}
+			}
+			else if(parentId==1){
+				System.out.println("returning this parent id:"+parentId);
+				return parentId;
+			}
+			else{
+				System.out.println("returning this parent id:"+referralId);
+				return referralId;
+			}
+		}
+		return parentId;
+	}
+
+	/**
+	 * add amount when create new referral 
+	 */
+	public Long addAmount(long userId, Referral referral, long levelId, String amountvalue,Date userSubscriptionDate){
+		Long amountId = 0L;
+		DecimalFormat f = new DecimalFormat("##.00");
+		Amount amount = new Amount();
+		amount.setAmount(amountvalue);
+		amount.setLevel(levelId);
+		User user = new User();
+		user.setId((int)userId);
+		amount.setUser(user);		
+		if(referral!=null){
+
+			amount.setReferred_by_id(referral.getReferred_by_id());
+			amount.setParent_id(referral.getCurrent_parent_id());
+			amount.setReferral_tbl_id(referral.getId());
+			if(checkUserSubscription(referral.getReferred_by_id())){
+				//set commission Percentage
+				double referralCommissionPercentage = 60;
+				double parentCommissionPercentage = 0;
+				if(Integer.valueOf(referral.getOrder())%2 == 0 && (referral.getReferred_by_id() != referral.getCurrent_parent_id()) ){
+					referralCommissionPercentage = 20;
+					parentCommissionPercentage = 60;
+				}
+				double referral_share = ((Double.valueOf(amount.getAmount()))*referralCommissionPercentage)/100;
+				double parent_share = ((Double.valueOf(amount.getAmount()))*parentCommissionPercentage)/100;
+				amount.setReferral_share(String.valueOf(f.format(referral_share)));
+				amount.setParent_share(String.valueOf(f.format(parent_share)));
+			}else{
+				double referralCommissionPercentage = 0;
+				double parentCommissionPercentage = 60;
+				double referral_share = ((Double.valueOf(amount.getAmount()))*referralCommissionPercentage)/100.00;
+				double parent_share = ((Double.valueOf(amount.getAmount()))*parentCommissionPercentage)/100.00;
+				amount.setReferral_share(String.valueOf(f.format(referral_share)));
+				amount.setParent_share(String.valueOf(f.format(parent_share)));
+			}
+
+		}
+		amountId = referralService.addAmount(amount);
+		return amountId;
+	}
+
+	/**
+	 * get referral object
+	 * @param userId
+	 * @param referralId
+	 * @param referralCode
+	 * @return
+	 */
+	public Referral getReferralObj(long userId,long referralId,String referralCode){
+		Referral ref = null;
+		ref =referralService.getReferralByUserId((int)(userId));
+		if(ref==null || ref.getId()<=0){
+			ref = new Referral();
+			User user = new User();
+			user.setId((int)userId);
+			ref.setUser(user);
+			ref.setReferred_by_id(referralId == 0?1:referralId);
+			ref.setReferralCode(referralCode);
+			ref.setCreated_On(new Date());
+			System.out.println("new referral record created for "+userId+" referred by :"+referralId);
+		}
+		return ref;
+	}
+
+	/*public static void main(String[] args) {
+		//new ReferralScript().updateAllBatch();
+		//new ReferralScript().updateReferralBatch();
+		new ReferralScript().updateReferralBatchForSomeSubscribers();
+	}*/
+}

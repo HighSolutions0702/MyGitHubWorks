@@ -1,0 +1,164 @@
+<!doctype html>
+<html ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+    <title>Unstoppable Marketers</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0"/>
+    <link rel="shortcut icon" href="/images/favicon.png"/>
+    <link rel="stylesheet" href="/css/bootstrap.css" type="text/css"
+          media="all"/>
+    <link rel="stylesheet" href="/css/plugins.css" type="text/css"
+          media="all"/>
+    <link rel="stylesheet" href="/css/style_on.css" type="text/css"
+          media="all"/>
+    <link rel="stylesheet" href="/css/style_aligh.css" type="text/css"
+          media="all"/>
+
+    <!-- <link rel="stylesheet" href="../css/style_media.css" type="text/css" -->
+    <!-- 	media="all" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../css/style_tooltip.css" /> -->
+
+    <link rel="stylesheet" href="/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/custom.css"/>
+
+</head>
+<body>
+
+<div id="wrap" ng-controller="tagCtrl" ng-cloak>
+    <header>
+        <ng-include src="'adminheader.html'"></ng-include>
+    </header>
+    <ng-include src="'adminmenu.html'"></ng-include>
+
+    <section class="section_h">
+        <div class="col-lg-12 col-xs-12 p-0 f_l">
+            <div class="cnt_section">
+
+                <div class="col-lg-12  col-xs-12 p-0 silver_pannel">
+
+                    <div class="row  page_heading">
+                        <h2>Manage Tags</h2>
+                    </div>
+                    <div class="col-lg-3 col-xs-12 step">
+                        <aside>
+                            <div>
+                                <div class="row m-0 m-b-30"></div>
+                                <!--12-->
+                                <div class="row m-10 step_btn"></div>
+                                <div class="row m-10 step_btn"></div>
+                                <div class="row m-10 step_btn"></div>
+
+                            </div>
+                        </aside>
+                    </div>
+                    <!--row-->
+                    <div class="col-lg-6">
+                        <!--row-->
+
+                        <div class="row p-0">
+                            <div style="float: right; margin-top: 20px;" class="col-lg-3 col-xs-12  m-t-5 blue_button ">
+                                <a href="" ng-click="addNewTag()"
+                                   style="font-size: 17px; font-family: 'OpenSans'"><h1 style="margin: -22px;">Add New
+                                    Tag</h1>
+                                </a>
+                            </div>
+                        </div>
+                        <!--row-->
+
+                        <div class="row p-0">
+                            <div class="home_table">
+                                <table class="table table-striped table_space ">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tag Name</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td ng-show="checkTags" colspan="3" ng-show="tagsLength==0">No Reccords found
+                                        </td>
+                                    </tr>
+                                    <tr ng-repeat="tags in tagsDetails" ng-show="tagsLength>0">
+                                        <td>{{tags.tagId}}</td>
+                                        <td>{{tags.tagName}}</td>
+                                        <td><a href="" ng-click=" editTag(tags)">Edit</a></td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <!--table-->
+                        </div>
+                        <!--row-->
+                    </div>
+
+
+                </div>
+                <!--12-->
+
+            </div>
+            <!--cnt_section-->
+        </div>
+        <!--12-->
+    </section>
+    <ng-include src="'../footer.html'"></ng-include>
+
+</div>
+
+<script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src='/js/textAngular-sanitize.min.js'></script>
+<script src='/js/textAngular.min.js'></script>
+<script type="text/javascript">
+    function DropDown(el) {
+        this.dd = el;
+        this.initEvents();
+    }
+    DropDown.prototype = {
+        initEvents: function () {
+            var obj = this;
+
+            obj.dd.on('click', function (event) {
+                $(this).toggleClass('active');
+                event.stopPropagation();
+            });
+        }
+    }
+
+    $(function () {
+
+        var dd = new DropDown($('#dd'));
+
+        $(document).click(function () {
+            // all dropdowns
+            $('.wrapper-dropdown-5').removeClass('active');
+        });
+
+    });
+</script>
+<script src="/js/jquery.jscrollpane.min.js"></script>
+<script src="/js/jquery.bookblock.js"></script>
+<script src="/js/page.js"></script>
+<script src="/js/modernizr.custom.79639.js"></script>
+
+
+<script>
+    $(function () {
+
+        Page.init();
+
+    });
+</script>
+<script type="text/javascript" src="/application/app.js"></script>
+<script src="/bower_components/angular/angular.js"></script>
+<script src="/bower_components/angular-cookies/angular-cookies.js"></script>
+<script type="text/javascript" src="/controllers/tagController.js"></script>
+</body>
+</html>

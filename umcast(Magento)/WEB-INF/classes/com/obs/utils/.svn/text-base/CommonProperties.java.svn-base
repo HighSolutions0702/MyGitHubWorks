@@ -1,0 +1,90 @@
+package com.obs.utils;
+
+import java.util.ResourceBundle;
+
+/**
+ * 
+ * @author Ram
+ *
+ */
+public class CommonProperties {
+
+	private static ResourceBundle commonBundle = getResourceBundle();
+
+	// Bundle Names  
+	public static final String COMMON = "com.obs.properties.Application";
+
+	private static ResourceBundle getResourceBundle() {
+		return getResourceBundle(COMMON);
+	}
+
+	private static ResourceBundle getResourceBundle(String bundleName) {
+		ResourceBundle bundle = null;
+		bundle = ResourceBundle.getBundle(bundleName);
+		return bundle;
+	}
+
+	/** Get Common Properties **/
+	private static String getString(String key) {
+		return commonBundle.getString(key);
+	}
+
+	public static String getBaseURL() {
+		return getString("baseURL");
+	}
+
+	public static String getBasePath() {
+		return getString("basePath");
+	}
+
+	public static String getContextPath() {
+		return getString("contextPath");
+	}
+	
+	public static String getTempFilePath() {
+		return getString("tempFile");
+	}
+	
+	/** OAuth **/
+	/** google **/
+	public static String getGoogleOAuthClientId() {
+		return getString("google_client_id");
+	}
+	
+	public static String getGoogleOAuthClientSecret() {
+		return getString("google_client_secret");
+	}
+	
+	public static String getGoogleOAuthScope() {
+		return getString("google_scope");
+	}
+	/** vimeo **/
+	public static String getVimeoOAuthClientId() {
+		return getString("vimeo_client_id");
+	}
+	
+	public static String getVimeoOAuthClientSecret() {
+		return getString("vimeo_client_secret");
+	}
+	
+	public static String getVimeoOAuthScope() {
+		return getString("vimeo_scope");
+	}
+	/** dailymotion **/
+	public static String getDailymotionOAuthClientId() {
+		return getString("dailymotion_client_id");
+	}
+	
+	public static String getDailymotionOAuthClientSecret() {
+		return getString("dailymotion_client_secret");
+	}
+	
+	public static String getDailymotionOAuthScope() {
+		return getString("dailymotion_scope");
+	}
+
+	public static String getLogoPath() {
+		return getString("logoPath");
+	}
+}
+

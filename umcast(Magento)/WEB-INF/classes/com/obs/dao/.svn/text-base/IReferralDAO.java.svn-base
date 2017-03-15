@@ -1,0 +1,138 @@
+package com.obs.dao;
+
+import java.util.Date;
+import java.util.List;
+
+import com.obs.model.Amount;
+import com.obs.model.Referral;
+
+public interface IReferralDAO {
+
+	/**
+	 * check Referral by referral code
+	 * @param referralCode
+	 * @return user
+	 */
+	public Referral getReferralByReferralCode(String referralCode);
+
+	/**
+	 * check Referral by id
+	 * @param id
+	 * @return user
+	 */
+	public Referral getReferralById(long id);
+
+	/**
+	 * check Referral by userId
+	 * @param userId
+	 * @return user
+	 */
+	public Referral getReferralByUserId(int userId);
+
+	/**
+	 * add Referral
+	 * @param referral
+	 */
+	public Long addReferral(Referral referral);
+	
+	/**
+	 * update Referral
+	 * @param referral
+	 */
+	public void updteReferral(Referral referral);
+	
+	/**
+	 * add Referral
+	 * @param referral
+	 */
+	public void deleteReferral(Referral referral);
+	/**
+	 * get direct Referral object By referred by id
+	 * @param refId
+	 * @return Referral
+	 */
+	public List<Referral> getDirectReferralByRefId(int refId);
+	
+	/**
+	 * get direct Referral object By referred by id
+	 * @param refId
+	 * @return Referral
+	 */
+	public List<Referral> getUnsubscribedDirectReferralByRefId(int refId);
+
+	/**
+	 * get all Referral object By referred by id
+	 * @param refId
+	 * @return List of Referrals
+	 */
+	public List<Referral> getAllReferralsByRefId(int refId);
+
+	/**
+	 * get Direct Referral count By referred by id
+	 * @param refId
+	 * @return count
+	 */
+	public String getDirectReferralCount(int refId);
+
+	/**
+	 * get all Referral count By referred by id
+	 * @param refId
+	 * @return count
+	 */
+	public String getAllReferralCount(int refId);
+
+	/**
+	 * get recent order for the referred user
+	 * @param refId
+	 * @return count
+	 */
+	public int getRecentOrderNo(long referralId);
+	
+	/**
+	 * get order for the referred user by subscribe date
+	 * @param refId
+	 * @return count
+	 */
+	public int getOrderNoByDate(long referralId,Date childSubscriptionDate);
+	
+	/**
+	 * get direct Referrals and all passups from token
+	 * @param refId
+	 * @return Referral
+	 */
+	public List getDirectReferralsAndPassupsByRefId(int refId);
+
+	/********************** amount **************************/
+
+	/**
+	 * add amount paid by user registration
+	 * @param amount
+	 * @return
+	 */
+	public Long addAmount(Amount amount);
+	
+	/**
+	 * getReferral user total Amount
+	 * @param refId
+	 * @return
+	 */
+	public String getReferralAmount(long refId);
+	
+	/**
+	 * get pass up parent total Referral Amount
+	 * @param refId
+	 * @return
+	 */
+	public String getPassupParentReferralAmount(long refId);
+
+	public String getReferralAmountFromDirectNonPassup(int refId);
+
+	public String getReferralAmountFromDirectPassup(int refId);
+	
+	public List<Referral> getInDirectReferralsByRefId(int refId);
+
+	public List<Referral> getPassupReferralsByRefId(int refId);
+
+	
+
+}

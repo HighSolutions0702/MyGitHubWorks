@@ -1,0 +1,489 @@
+package com.obs.model;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+/**
+ * 
+ * User Entity
+ * 
+ * @author Ram
+ *
+ */
+@Entity
+@Table(name="tbl_user")
+public class User implements Serializable{
+
+	/**
+	 * Default SerialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private int id;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String password;
+	private String phoneNo;
+	private String confirmationCode;
+	private String referralCode;
+	private Boolean confirmation;
+	private Boolean isActive;
+	private Boolean isDeleted;
+	private int refered_by;
+	private int deleted_by;
+	private Date created_On;
+	private Date deleted_On;
+	private Country country;
+	private int userType;
+	private long level_id;
+	private Date subscribe_On;
+	private Date expire_On;
+	private String token_youtube;
+	private String token_vimeo;
+	private String token_daily;
+	private String token_facebook;
+	private String token_twitter;
+	private String umcast_name;
+	private String subscription_id;
+	private String transaction_id;
+	private String address;
+	private String city;
+	private String state;
+	private String zipcode;
+
+	@Transient
+	private String referer_name;
+
+	@Column(name="DN_LEVEL_ID" , nullable = true )
+	public long getLevel_id() {
+		return level_id;
+	}
+
+	public void setLevel_id(long level_id) {
+		this.level_id = level_id;
+	}
+
+	/**
+	 * Get User Id
+	 * 
+	 * @return int - User Id
+	 */
+	@Id
+	@GeneratedValue( strategy = GenerationType.AUTO )
+	@Column(name="DN_ID" , nullable = false )
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * Set User Id
+	 * 
+	 * @param int - User Id
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the firstName
+	 */
+	@JsonIgnore
+	@Column(name="DC_FIRSTNAME", nullable = true)
+	public String getFirstName() {
+		return firstName;
+	}
+
+	/**
+	 * @param firstName the firstName to set
+	 */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	/**
+	 * @return the lastName
+	 */
+	@Column(name="DC_LASTNAME", nullable = true)
+	public String getLastName() {
+		return lastName;
+	}
+
+	/**
+	 * @param lastName the lastName to set
+	 */
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	/**
+	 * @return the email
+	 */
+	@Column(name="DC_EMAIL", unique = true, nullable = true)
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	/**
+	 * Get Password
+	 * 
+	 * @return String - Password
+	 */
+	@Column(name="DC_PASSWORD", nullable = true)
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/**
+	 * @return the isActive
+	 */
+	@Column(name="DB_ACTIVE", nullable = true)
+	public Boolean getIsActive() {
+		return isActive;
+	}	
+	/**
+	 * @param isActive the isActive to set
+	 */
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	/**
+	 * @return the isDeleted
+	 */
+	@Column(name="DB_DELETED", nullable = true)
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	/**
+	 * @param isDeleted the isDeleted to set
+	 */
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	/**
+	 * @return the created_by
+	 */
+	@Column(name="DN_REFERED_BY", nullable = true)
+
+	public int getRefered_by() {
+		return refered_by;
+	}
+
+	/**
+	 * @param created_by the created_by to set
+	 */
+	public void setRefered_by(int refered_by) {
+		this.refered_by = refered_by;
+	}
+
+	/**
+	 * @return the phoneNo 
+	 * 
+	 */
+	@Column(name="DC_PHONE", nullable = true)
+	public String getPhoneNo() {
+		return phoneNo;
+	}
+
+	/**
+	 * @param phoneNo the phoneNo to set
+	 */
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
+	}
+
+	/**
+	 * @return the deleted_by
+	 */
+	@Column(name="DN_DELETED_BY", nullable = true)
+	public int getDeleted_by() {
+		return deleted_by;
+	}
+
+	/**
+	 * @param deleted_by the deleted_by to set
+	 */
+	public void setDeleted_by(int deleted_by) {
+		this.deleted_by = deleted_by;
+	}
+
+	/**
+	 * @return the created_On
+	 */
+	@Column(name="DD_CREATED_ON", nullable = true)
+	public Date getCreated_On() {
+		return created_On;
+	}
+
+	/**
+	 * @param created_On the created_On to set
+	 */
+	public void setCreated_On(Date created_On) {
+		this.created_On = created_On;
+	}
+
+	/**
+	 * @return the deleted_On
+	 */
+	@Column(name="DD_DELETED_ON", nullable = true)
+	public Date getDeleted_On() {
+		return deleted_On;
+	}
+
+	/**
+	 * @param deleted_On the deleted_On to set
+	 */
+	public void setDeleted_On(Date deleted_On) {
+		this.deleted_On = deleted_On;
+	}
+
+
+	/**
+	 * 
+	 * @return the country
+	 */
+	@OneToOne ( targetEntity = Country.class, fetch = FetchType.EAGER )
+	@JoinColumn (name = "DN_COUNTRY_ID")
+	public Country getCountry() {
+		return country;
+	}
+	/**
+	 * 
+	 * @param country to set country value
+	 */
+	public void setCountry(Country country) {
+		this.country = country;
+	}
+
+	/**
+	 * @return the confirmationCode
+	 */
+	@Column(name="DC_CONFIRMATION_CODE", nullable = true)
+	public String getConfirmationCode() {
+		return confirmationCode;
+	}
+
+	/**
+	 * @param confirmationCode the confirmationUrl to set
+	 */
+	public void setConfirmationCode(String confirmationCode) {
+		this.confirmationCode = confirmationCode;
+	}
+
+	/**
+	 * @return the referralCode
+	 */
+	@Column(name="DC_REFERRAL_CODE", nullable = true)
+	public String getReferralCode() {
+		return referralCode;
+	}
+
+	/**
+	 * @param referralCode the referralCode to set
+	 */
+	public void setReferralCode(String referralCode) {
+		this.referralCode = referralCode;
+	}
+
+	/**
+	 * @return the confirmation
+	 */
+	@Column(name="DB_CONFIRMATION", nullable = true)
+	public Boolean getConfirmation() {
+		return confirmation;
+	}
+
+	/**
+	 * @param confirmation the confirmation to set
+	 */
+	public void setConfirmation(Boolean confirmation) {
+		this.confirmation = confirmation;
+	}
+	@Column(name="DN_USERTYPE", nullable = true)
+
+	public int getUserType() {
+		return userType;
+	}
+
+	public void setUserType(int userType) {
+		this.userType = userType;
+	}
+	@Column(name="DD_SUBSCRIBE_ON", nullable = true)
+	public Date getSubscribe_On() {
+		return subscribe_On;
+	}
+
+	public void setSubscribe_On(Date subscribe_On) {
+		this.subscribe_On = subscribe_On;
+	}
+	@Column(name="DD_EXPIRE_ON", nullable = true)
+	public Date getExpire_On() {
+		return expire_On;
+	}
+
+	public void setExpire_On(Date expire_On) {
+		this.expire_On = expire_On;
+	}
+	@Column(name="DC_YOUTUBE_TOKEN", nullable = true)
+	public String getToken_youtube() {
+		return token_youtube;
+	}
+
+	public void setToken_youtube(String token_youtube) {
+		this.token_youtube = token_youtube;
+	}
+
+	@Column(name="DC_VIMEO_TOKEN", nullable = true)
+	public String getToken_vimeo() {
+		return token_vimeo;
+	}
+
+	public void setToken_vimeo(String token_vimeo) {
+		this.token_vimeo = token_vimeo;
+	}
+
+	@Column(name="DC_DAILY_TOKEN", nullable = true)
+	public String getToken_daily() {
+		return token_daily;
+	}
+
+	public void setToken_daily(String token_daily) {
+		this.token_daily = token_daily;
+	}
+
+	@Column(name="DC_FACEBOOK_TOKEN", nullable = true)
+	public String getToken_facebook() {
+		return token_facebook;
+	}
+
+	public void setToken_facebook(String token_facebook) {
+		this.token_facebook = token_facebook;
+	}
+
+	@Column(name="DC_TWITTER_TOKEN", nullable = true)
+	public String getToken_twitter() {
+		return token_twitter;
+	}
+
+	public void setToken_twitter(String token_twitter) {
+		this.token_twitter = token_twitter;
+	}
+
+	@Column(name="DC_UMCAST_NAME", nullable = true)
+	public String getUmcast_name() {
+		return umcast_name;
+	}
+
+	public void setUmcast_name(String umcast_name) {
+		this.umcast_name = umcast_name;
+	}
+
+	/**
+	 * @return the subscription_id
+	 */
+	@Column(name="DC_SUBSCRIPTION_ID", nullable = true)
+	public String getSubscription_id() {
+		return subscription_id;
+	}
+
+	/**
+	 * @param subscription_id the subscription_id to set
+	 */
+	public void setSubscription_id(String subscription_id) {
+		this.subscription_id = subscription_id;
+	}
+
+	/**
+	 * @return the transaction_id
+	 */
+	@Column(name="DC_TRANSACTION_ID", nullable = true)
+	public String getTransaction_id() {
+		return transaction_id;
+	}
+
+	/**
+	 * @param transaction_id the transaction_id to set
+	 */
+	public void setTransaction_id(String transaction_id) {
+		this.transaction_id = transaction_id;
+	}
+
+	@Transient
+	public String getReferer_name() {
+		return referer_name;
+	}
+
+	public void setReferer_name(String referer_name) {
+		this.referer_name = referer_name;
+	}
+
+	@Column(name="DC_ADDRESS", nullable = true)
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	@Column(name="DC_CITY", nullable = true)
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	@Column(name="DC_STATE", nullable = true)
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	@Column(name="DC_ZIPCODE", nullable = true)
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
+	
+}

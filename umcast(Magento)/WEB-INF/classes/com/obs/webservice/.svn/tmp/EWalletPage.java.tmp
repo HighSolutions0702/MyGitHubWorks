@@ -1,0 +1,272 @@
+package com.obs.webservice;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
+
+import sun.security.util.Length;
+
+import com.obs.model.EWallet;
+
+public class EWalletPage {
+
+	//live
+	public final String EWALLETTREGISTERURL 			= getResourceBundle().getString("ewalletRegurl");
+	public final static String EWALLETMERCHANTID		= getResourceBundle().getString("ewalletMerchantId");
+	public final static String EWALLETMERCHANTPWD 		= getResourceBundle().getString("ewalletMerchantPwd");
+
+
+	// Bundle Name  
+	public static final String EWALLET = "com.obs.properties.ewallet";
+
+
+	/**
+	 * get AWS resource bundle 
+	 * @return
+	 */
+	private static ResourceBundle getResourceBundle() {
+		ResourceBundle bundle = null;
+		bundle = ResourceBundle.getBundle(EWALLET);
+		return bundle;
+	}
+	static Logger log = Logger.getLogger(
+			EWalletPage.class.getName());
+
+
+	public EWallet registerUser(int userId, String firstName,String lastName,String emailAdd,String phone,String address,String city,String state,String country,String zipcode) {
+		EWallet ewallet=new EWallet();
+		//boolean status = false; 
+		try{
+			//String url = EWALLETTREGISTERURL;
+			String uName=userId+"_"+emailAdd;
+
+			String userName=URLEncoder.encode(uName,"UTF-8");
+			String fName=URLEncoder.encode(firstName,"UTF-8");
+			String lName=URLEncoder.encode(lastName,"UTF-8");
+			String add1=URLEncoder.encode(address,"UTF-8");
+			String cityVal=URLEncoder.encode(city,"UTF-8");
+			String emailVal=URLEncoder.encode(emailAdd,"UTF-8");
+			String dob=URLEncoder.encode("1/1/1900","UTF-8"); 
+			String phoneNo=URLEncoder.encode(phone,"UTF-8");
+			String zipCode=URLEncoder.encode(zipcode,"UTF-8");
+
+			String data = "fn=eWallet_RegisterUser&MerchantGUID="+EWALLETMERCHANTID+"&MerchantPassword="+EWALLETMERCHANTPWD+"&UserName="+userName+"&FirstName="+fName+"&LastName="+lName+"&CompanyName=&Address1="+add1+"&Address2=&City="+cityVal+"&State=FL&ZipCode="+zipCode+"&Country2xFormat=US&PhoneNumber="+phoneNo+"&CellPhoneNumber=&EmailAddress="+emailVal+"&SSN=123-45-6789&CompanyTaxID=&GovernmentID=&MilitaryID=&PassportNumber=" +
+					"&DriversLicense=&DateOfBirth="+dob+"&WebsitePassword=&DefaultCurrency=USD";
+			String url = "https://testewallet.com/eWalletWS/ws_Adapter.aspx?"+data;
+			//	String body = getRegbody(firstName,lastName,email,phone,address,city,state,country,zipcode);
+			String output = getmethod(url);
+			System.out.println(output);
+			log.info("payment output"+output);
+			String responseValues=java.net.URLDecoder.decode(output, "UTF-8");
+			System.out.println(responseValues);
+
+			//String[] clearvalue = output.split("﻿");
+			//output = "<?xml version=\"1.0\" encoding=\"utf-8\"?><ARBCreateSubscriptionResponse xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\"><refId>3</refId><messages><resultCode>Error</resultCode><message><code>E00013</code><text>Credit Card Number is invalid.</text></message></messages></ARBCreateSubscriptionResponse>";
+			//System.out.println(clearvalue[1]);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ewallet;
+	}
+	private EWallet checkUserBal(int userId,String emailAddress){
+		EWallet ewallet=new EWallet();
+		String parameters=null;
+		try{
+			String userName=URLEncoder.encode("145_priya@obs.com","UTF-8");
+			parameters="fn=eWallet_GetCurrencyBalance&MerchantGUID="+EWALLETMERCHANTID+"&MerchantPassword="+EWALLETMERCHANTPWD+"&UserName="+userName+"&CurrencyCode=USD";
+			String url = "https://testewallet.com/eWalletWS/ws_Adapter.aspx?"+parameters;
+			String output = getmethod(url);
+			System.out.println(output);
+			log.info("payment output"+output);
+<<<<<<< .mine
+			String responseValues=java.net.URLDecoder.decode(output, "UTF-8");
+			System.out.println(responseValues);
+=======
+			ewallet.setBalance("100.00");
+			
+>>>>>>> .r564
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ewallet;
+	}
+
+	private EWallet payOutUser(int userId,String emailAddress) {
+		String urlParams=null;
+		try{
+			Date d=new Date();
+			String uName=userId+"_"+emailAddress;
+			String merchantId=String.valueOf(userId+d.getTime());
+			String userName=URLEncoder.encode(uName,"UTF-8");
+			String comments=URLEncoder.encode("PassupAmount","UTF-8");
+			String merchantRefId=URLEncoder.encode(merchantId,"UTF-8");
+			String partnerBatchId=URLEncoder.encode("test_load2","UTF-8");
+			urlParams="fn=eWallet_Load&MerchantGUID="+EWALLETMERCHANTID+"&MerchantPassword="+EWALLETMERCHANTPWD+"&PartnerBatchID="+partnerBatchId+"&PoolID="+"test"+"&arrAccounts=[UserName="+userName+"%26Amount=100.00%26Comments="+comments+"%26MerchantReferenceID="+merchantRefId+"]&CurrencyCode=USD";
+			String url = "https://testewallet.com/eWalletWS/ws_Adapter.aspx?"+urlParams;
+			String output = getmethod(url);
+			System.out.println(output);
+			log.info("payment output"+output);
+			/*	String responseValues=java.net.URLDecoder.decode(output, "UTF-8");
+			System.out.println(responseValues);*/
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static String getmethod(String urls1){
+		URL url;
+		HttpURLConnection conn;
+		BufferedReader rd;
+		String line;
+		String result = "";
+		try {
+			url = new URL(urls1);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			while ((line = rd.readLine()) != null) {
+				result += line;
+			}
+			rd.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+
+
+	/*public static void main(String[] args) {
+		String responseValues="";
+		//register user method
+		 try{
+			String userName=URLEncoder.encode("145_priya@obs.com","UTF-8");
+			String fName=URLEncoder.encode("priya","UTF-8");
+			String lName=URLEncoder.encode("lk","UTF-8");
+			String companyName=URLEncoder.encode("IP001","UTF-8");
+			String add1=URLEncoder.encode("2500 E Hallandale Beach Blvd","UTF-8");
+			String add2=URLEncoder.encode("Suite 800","UTF-8");
+			String cityVal=URLEncoder.encode("Hallandale Beach","UTF-8");
+			String emailVal=URLEncoder.encode("priya@obs.com","UTF-8");
+			String dob=URLEncoder.encode("9/18/1945","UTF-8");
+
+			String data = "fn=eWallet_RegisterUser&MerchantGUID="+EWALLETMERCHANTID+"&MerchantPassword="+EWALLETMERCHANTPWD+"&UserName="+userName+"&FirstName="+fName+"&LastName="+lName+"&CompanyName=&Address1="+add1+"&Address2="+add2 +
+					"&City="+cityVal+"&State=FL&ZipCode=33009&Country2xFormat=US&PhoneNumber=954-123-4567&CellPhoneNumber=&EmailAddress="+emailVal+"&SSN=123-45-6789&CompanyTaxID=&GovernmentID=&MilitaryID=&PassportNumber=" +
+					"&DriversLicense=&DateOfBirth="+dob+"&WebsitePassword=1111&DefaultCurrency=USD";
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		//	String data=new EWalletPage().checkUserBal();
+
+		//String data=new EWalletPage().payOutUser();
+		//	String url = "https://testewallet.com/eWalletWS/ws_Adapter.aspx?"+data;
+		//String result = new EWalletPage().getmethod(url, data);
+		try{
+			String[] respVal;
+			String value = "";
+			String testVal="";
+			List list = new ArrayList();
+			
+			String output="response=m_Code%3dNO_ERROR%26m_Text%3dOK%26LogTransactionID%3d0%26TransactionRefID%3d232720%26ACHTransactionID%3d0%26ProcessorTransactionRefNumber%3d%26CustomerFeeAmount%3d0%26CurrencyCode%3d";
+			value=output.substring(9,output.length());
+			System.out.println(value);
+			String responseCode=java.net.URLDecoder.decode(value, "UTF-8");
+			System.out.println(responseCode);
+			respVal=responseCode.split("&");
+			String temp = null;
+			for(int i=0;i<respVal.length;i++){
+				
+					String[] respVal1=respVal[i].split("=");
+					for(int j=0;respVal1.length>j;j++){
+						//System.out.println(respVal1.length);
+						if(j%2==0){
+							String values = respVal1[i].toString();
+							System.out.println("alues:"+values);
+							list.add(values);
+							
+							temp = temp+","+values;
+						}
+					}
+					System.out.println(temp);
+					//testVal=testVal+respVal1[1];
+					
+				}
+				else
+				{
+					String[] respVal2=respVal[i].split("=");
+					testVal=testVal+","+respVal2[1];
+					System.out.println(respVal2[1]);
+				}
+				//System.out.println(list.size());
+			}
+			//System.out.println(respVal[0]);
+			//System.out.println(testVal);
+			//String[] main=testVal.split("=") ;
+		//	System.out.println(respVal1[0]);
+			Map<String, List<String>> params = new HashMap<String, List<String>>();
+			String[] urlParts = output.split("=");
+			if (urlParts.length > 1) {
+				value = java.net.URLDecoder.decode(urlParts[1], "UTF-8");
+			}
+			String key =java.net.URLDecoder.decode(urlParts[0], "UTF-8");
+			List<String> values = params.get(key);
+			if (values == null) {
+				values = new ArrayList<String>();
+				params.put(key, values);
+			}
+				System.out.println(key);
+				System.out.println(value);
+			 
+			String query = urlParts[1];
+				for (String param : query.split("&")) {
+					respVal=param.split("=");
+
+					if (respVal.length > 1) {
+
+					}
+
+			//values.add(value);
+			//System.out.println(param);
+
+			String output="response=m_Code%3dNO_ERROR%26m_Text%3dOK%26LogTransactionID%3d0%26TransactionRefID%3d232720%26ACHTransactionID%3d0%26ProcessorTransactionRefNumber%3d%26CustomerFeeAmount%3d0%26CurrencyCode%3d";
+					//responseValues=java.net.URLDecoder.decode(output, "UTF-8");
+					//JSONObject json_answer = new JSONObject(responseValues);
+					//System.out.println(responseValues);
+					String[] urlValues=output.split("=");
+
+					System.out.println(urlValues);
+
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		//System.out.println(output);
+		//log.info("payment output"+output);
+
+
+	}
+*/
+}

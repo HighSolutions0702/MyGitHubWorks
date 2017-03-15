@@ -1,0 +1,142 @@
+package com.obs.servlets;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import com.obs.model.Login;
+import com.obs.model.User;
+import com.obs.service.LoginService;
+import com.obs.service.UserService;
+import com.obs.utils.CommonProperties;
+
+/**
+ * Servlet implementation class VimeoOAuth
+ */
+@WebServlet("/vimeoOAuth")
+public class VimeoOAuth extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	public final String VIMEO_REDIRECT_URI 		= CommonProperties.getBaseURL()+CommonProperties.getContextPath()+"vimeoOAuth";
+	public final String VIMEO_CLIENT_ID 		= CommonProperties.getVimeoOAuthClientId();
+	public final String VIMEO_SCOPE 			= CommonProperties.getVimeoOAuthScope();
+	public final String VIMEO_CLIENT_SECRET 	= CommonProperties.getVimeoOAuthClientSecret();  
+
+	public final String OAUTHURL 				= "https://vimeo.com/oauth/authorize";//"https://api.vimeo.com/oauth/authorize";
+	public final String OAUTHREQTOKENURL		= "https://vimeo.com/oauth/request_token";
+	public final String OAUTHACCTOKENURL		= "https://vimeo.com/oauth/access_token";//"https://api.vimeo.com/oauth/access_token";
+
+	public final String SETTINGS_PAGE			= CommonProperties.getBaseURL()+CommonProperties.getContextPath()+"user/umcast_settings.html";
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public VimeoOAuth() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String code = request.getParameter("code");
+		String state = request.getParameter("state");
+		System.out.println("code :"+code);
+		System.out.println("state :"+state);
+		//redirect to authenticate page
+		if(code == null || code.isEmpty()){
+			String param = "client_id="+VIMEO_CLIENT_ID+"&redirect_uri="+VIMEO_REDIRECT_URI+"&scope="+VIMEO_SCOPE+
+					"&response_type=code&state="+state ;
+			String path = OAUTHURL+"?"+param;
+			response.sendRedirect(path);
+		}else{
+			String refreshToken = getRefreshToken(code);
+			if((refreshToken!=null && !refreshToken.isEmpty()) && (state!=null && !state.isEmpty()))
+				saveRefreshToken(refreshToken,state);
+			response.sendRedirect(SETTINGS_PAGE);
+		}
+		//getAccessToken();
+	}
+
+	public String getRefreshToken(String code){
+		String refreshToken = null;
+		try {
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost httpPost = new HttpPost(OAUTHREQTOKENURL);
+			List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+			nvps.add(new BasicNameValuePair("code", code));
+			nvps.add(new BasicNameValuePair("client_id", VIMEO_CLIENT_ID));
+			nvps.add(new BasicNameValuePair("client_secret", VIMEO_CLIENT_SECRET));
+			nvps.add(new BasicNameValuePair("redirect_uri", VIMEO_REDIRECT_URI));
+			nvps.add(new BasicNameValuePair("grant_type", "authorization_code"));
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf-8"));
+			JSONObject value = getJSONObject(httpclient.execute(httpPost));
+			refreshToken = (String) value.get("refresh_token");
+			System.out.println(refreshToken);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return refreshToken;
+	}
+
+	public void saveRefreshToken(String refreshToken,String token){
+		UserService userService = new UserService();
+		LoginService loginService = new LoginService();
+		Login login = loginService.getLoginByToken(token);
+		User user = userService.getUserById(login.getUserId());
+		user.setToken_vimeo(refreshToken);
+		userService.updateUser(user);
+	}
+
+	public String getAccessToken(){
+		HttpClient httpclient = new DefaultHttpClient();
+		String stringifiedResponse = null;
+		try {
+			HttpPost httpPost = new HttpPost(OAUTHACCTOKENURL);
+			List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+			nvps.add(new BasicNameValuePair("client_id", VIMEO_CLIENT_ID));
+			nvps.add(new BasicNameValuePair("client_secret", VIMEO_CLIENT_SECRET));
+			nvps.add(new BasicNameValuePair("refresh_token", "1/78u98X_cXjqTP6XH-gt7zUbuLeRTv5DBvRRbbBLa-cs"));
+			nvps.add(new BasicNameValuePair("grant_type", "refresh_token"));
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf-8"));
+			HttpResponse res = null;
+			res = httpclient.execute(httpPost);
+			stringifiedResponse = EntityUtils.toString(res.getEntity());
+			System.out.println(stringifiedResponse);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return stringifiedResponse;
+	}
+
+	public JSONObject getJSONObject(HttpResponse res) throws Exception{
+		String stringifiedResponse = null;
+		stringifiedResponse = EntityUtils.toString(res.getEntity());
+		System.out.println(stringifiedResponse);
+		return (JSONObject) new JSONParser().parse(stringifiedResponse);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+	}
+
+}

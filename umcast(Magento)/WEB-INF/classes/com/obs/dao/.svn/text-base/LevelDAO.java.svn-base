@@ -1,0 +1,101 @@
+package com.obs.dao;
+
+import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Component;
+import com.obs.base.BaseObject;
+import com.obs.model.Level;
+
+
+public class LevelDAO implements ILevelDAO {
+	
+	/* (non-Javadoc)
+	 * @see com.obs.fms.dao.ISettingsDAO#addSettings(com.obs.fms.model.Settings)
+	 */
+	SessionFactory sessionFactory;
+
+	/**
+	 * @return the sessionFactory
+	 */
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	/**
+	 * @param sessionFactory the sessionFactory to set
+	 */
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	
+	@Override
+	public Long addLevel(Level level) {
+		Long id = 0L;
+		try{
+			id = (Long)sessionFactory.getCurrentSession().save(level);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return id;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.obs.fms.dao.ISettingsDAO#updateSettings(com.obs.fms.model.Level)
+	 */
+	@Override
+	public void updateLevel(Level level) {
+		try{
+			sessionFactory.getCurrentSession().update(level);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.obs.fms.dao.ISettingsDAO#deleteSettings(com.obs.fms.model.Level)
+	 */
+	@Override
+	public void deleteLevel(Level level){
+		try{
+			sessionFactory.getCurrentSession().delete(level);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public List<Level> getLevel() {
+		List<Level> list = null;
+		try{
+			String SQL = "from Level where isDeleted = 0";
+			list =sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	@Override
+	public Level getLevelByID(long id) {
+		List list = null;
+		try{
+			list = sessionFactory.getCurrentSession()
+					.createQuery("from Level where id=?")
+					.setParameter(0,id).list();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return (list!=null && list.size()>0)?(Level)list.get(0):null;
+	}
+
+}

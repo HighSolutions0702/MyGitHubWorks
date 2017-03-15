@@ -1,0 +1,210 @@
+package com.obs.email;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import com.obs.model.User;
+import com.obs.utils.CommonProperties;
+
+
+public class EmailManager {
+
+	//Logger Instantiated for Log Management
+	private static final Logger log					= Logger.getLogger(EmailManager.class );
+
+	protected static EmailConfiguration emailConfig = new EmailConfiguration();
+
+	static Thread emailThread;
+
+	public static boolean forgotPwd(String emailAddress,String firstname, String resetlink) {
+		final String emailAddressFinal = emailAddress;
+		final String firstnameFinal = firstname;
+		final String resetlinkFinal = resetlink;
+		emailThread = new Thread(){
+			@Override
+			public void run() {
+				try {
+					EmailConfiguration emailConfig = new EmailConfiguration();
+					EmailSender sender = new EmailSender();
+					String URL 	= CommonProperties.getBaseURL() + CommonProperties.getContextPath();
+					String logoURL 	= null;//CommonProperties.getBaseURL() +"/"+CommonProperties.getlogoURL();
+					String message = emailConfig.getForgotPasswordEmailMessage(emailAddressFinal,firstnameFinal,resetlinkFinal,URL,logoURL);
+					sender.sendFromCustomerService(emailAddressFinal, emailConfig.getForgotPasswordSubject(), message);
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.error("Error While sendding email at forgotPwd"+e);
+				}
+				finally{
+					emailThread.interrupt();
+					emailThread = null;
+				}
+			}
+		};
+		emailThread.start();
+		return true;
+	}
+
+	public static boolean forgotUsername(String emailAddress, String firstname,String lastName) {
+		final String emailAddressFinal = emailAddress;
+		final String firstnameFinal = firstname;
+		final String lastNameFinal = lastName;
+
+		emailThread = new Thread(){
+			@Override
+			public void run() {
+				try {
+					EmailConfiguration emailConfig = new EmailConfiguration();
+					EmailSender sender = new EmailSender();
+					String URL 	= CommonProperties.getBaseURL() + CommonProperties.getContextPath();
+					String message = emailConfig.getForgotUsernameEmailMessage(firstnameFinal, lastNameFinal, URL);
+					sender.sendFromCustomerService(emailAddressFinal, emailConfig.getForgotUsernameSubject(), message);
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.error("Error While sendding email at forgot Username : "+e);
+				}
+				finally{
+					emailThread.interrupt();
+					emailThread = null;
+				}
+			}
+		};
+		emailThread.start();
+		return true;
+	}
+
+
+	public static boolean newUser(String emailAddress, String firstname, String userName, String pwd, String confirmationUrl, String code) {
+		final String emailAddressFinal = emailAddress;
+		final String firstnameFinal = firstname;
+		final String userNameFinal = userName;
+		final String pwdFinal = pwd;
+		final String confirmationUrlFinal = confirmationUrl;
+		final String codeFinal = code;
+		emailThread = new Thread(){
+			@Override
+			public void run() {
+				try {
+					EmailConfiguration emailConfig = new EmailConfiguration();
+					EmailSender sender = new EmailSender();
+					String logoURL 	= CommonProperties.getBaseURL()+ CommonProperties.getContextPath()+CommonProperties.getLogoPath()+"UM_logo.png";
+					String URL 	= CommonProperties.getBaseURL() + CommonProperties.getContextPath();
+					String message = emailConfig.getNewUserMessage(firstnameFinal,userNameFinal,pwdFinal,confirmationUrlFinal, codeFinal,URL,logoURL);
+					sender.sendFromCustomerService(emailAddressFinal, emailConfig.getNewUserSubject(), message);
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.error("Error While sendding email at forgotPwd"+e);
+				}
+				finally{
+					emailThread.interrupt();
+					emailThread = null;
+				}
+			}
+		};
+		emailThread.start();
+		return true;
+	}
+
+
+	/**
+	 * sending email to the receiver address With Dynamic Subject. 
+	 * @param email
+	 * @param emailContent
+	 * @return
+	 */
+	public static boolean sendEmail(String email, String emailContent, String senderName,String Subject) {
+		final String emailAddressFinal = email;
+		final String emailContentFinal = emailContent;
+		final String senderNameFinal = senderName;
+		final String senderSubjectFinal = Subject;
+		emailThread = new Thread(){
+			@Override
+			public void run() {
+				try {
+					EmailSender sender = new EmailSender();
+					String URL 	= CommonProperties.getBaseURL()+ CommonProperties.getContextPath();
+					String logoURL 	=CommonProperties.getBaseURL()+ CommonProperties.getContextPath()+CommonProperties.getLogoPath()+"UM_logo.png";
+					String message = emailConfig.getGeneralEmailMessage(emailContentFinal,senderNameFinal,URL,logoURL);
+					sender.sendFromCustomerService(emailAddressFinal, senderSubjectFinal, message);
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.error("Error While sendding email at NotApproved"+e);
+				}
+				finally{
+					emailThread.interrupt();
+				}
+			}
+		};
+		emailThread.start();
+		return true;
+	}
+
+	/**
+	 * sending email to the receiver address With Dynamic Subject. 
+	 * @param email
+	 * @param emailContent
+	 * @return
+	 */
+	public static boolean sendEmail(List<User> users, String emailContent, String senderName,String Subject) {
+		final List<User> usersFinal = users;
+		final String emailContentFinal = emailContent;
+		final String senderNameFinal = senderName;
+		final String senderSubjectFinal = Subject;
+		emailThread = new Thread(){
+			@Override
+			public void run() {
+				System.out.print("\n Mail call");
+				try {
+					for (int i = 0; i < usersFinal.size(); i++) {
+						String email = usersFinal.get(i).getEmail();
+						if(email!=null){
+							System.out.print("\n Mail To"+email);
+							EmailSender sender = new EmailSender();
+							String URL 	= CommonProperties.getBaseURL()+ CommonProperties.getContextPath();
+							String logoURL 	= CommonProperties.getBaseURL()+ CommonProperties.getContextPath()+CommonProperties.getLogoPath()+"UM_logo.png";
+							String message = emailConfig.getGeneralEmailMessage(emailContentFinal,senderNameFinal,URL,logoURL);
+							sender.sendFromCustomerService(email, senderSubjectFinal, message);
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.error("Error While sendding email at NotApproved"+e);
+				}
+				finally{
+					emailThread.interrupt();
+				}
+			}
+		};
+		emailThread.start();
+		return true;
+	}
+	public static boolean feedBackEmail(String name,String email,String msg) {
+		final String nameFinal = name;
+		final String emailFinal = email;
+		final String msgFinal = msg;
+		emailThread = new Thread(){
+			@Override
+			public void run() {
+				try {
+					//EmailConfiguration emailConfig = new EmailConfiguration();
+					EmailSender sender = new EmailSender();
+					String URL 	=  CommonProperties.getBaseURL()+ CommonProperties.getContextPath();
+					String logoURL 	= CommonProperties.getBaseURL()+ CommonProperties.getContextPath()+CommonProperties.getLogoPath()+"UM_logo.png";
+					String message = emailConfig.getFeedBackEmailMessage(nameFinal,emailFinal,msgFinal,URL, logoURL);
+					sender.sendFromCustomerServiceWithFromAddress(emailFinal,emailConfig.getFeedbackEmailSubject(), message);
+				} catch (Exception e) {
+					e.printStackTrace();
+					log.error("Error While sendding email at NotApproved"+e);
+				}
+				finally{
+					emailThread.interrupt();
+					emailThread = null;
+				}
+			}
+		};
+		emailThread.start();
+		return true;
+	}
+	
+}
+

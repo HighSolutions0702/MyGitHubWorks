@@ -1,0 +1,144 @@
+package com.obs.service;
+
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
+
+import com.obs.dao.IReferralDAO;
+import com.obs.model.Amount;
+import com.obs.model.Referral;
+
+@Transactional(readOnly = true)
+public class ReferralService implements IReferralService{
+
+	IReferralDAO referralDAO;
+
+	/**
+	 * @return the referralDAO
+	 */
+	public IReferralDAO getReferralDAO() {
+		return referralDAO;
+	}
+
+	/**
+	 * @param referralDAO the referralDAO to set
+	 */
+	public void setReferralDAO(IReferralDAO referralDAO) {
+		this.referralDAO = referralDAO;
+	}
+
+	@Override
+	public Referral getReferralByReferralCode(String referralCode) {
+		return referralDAO.getReferralByReferralCode(referralCode);
+	}
+
+	@Override
+	public Referral getReferralById(long id) {
+		return referralDAO.getReferralById(id);
+	}
+
+	@Override
+	public Referral getReferralByUserId(int userId) {
+		return referralDAO.getReferralByUserId(userId);
+	}
+
+	@Transactional(readOnly = false)
+	@Override
+	public Long addReferral(Referral referral) {
+		return referralDAO.addReferral(referral);
+	}
+	
+	@Transactional(readOnly = false)
+	@Override
+	public void updteReferral(Referral referral) {
+		referralDAO.updteReferral(referral);
+	}
+	
+	@Override
+	public List<Referral> getDirectReferralByRefId(int refId) {
+		return referralDAO.getDirectReferralByRefId(refId);
+	}
+	
+	@Override
+	public List<Referral> getUnsubscribedDirectReferralByRefId(int refId) {
+		return referralDAO.getUnsubscribedDirectReferralByRefId(refId);
+	}
+
+	@Override
+	public List<Referral> getAllReferralsByRefId(int refId) {
+		return referralDAO.getAllReferralsByRefId(refId);
+	}
+
+	@Override
+	public String getDirectReferralCount(int refId) {
+		return referralDAO.getDirectReferralCount(refId);
+	}
+
+	@Override
+	public String getAllReferralCount(int refId) {
+		return referralDAO.getAllReferralCount(refId);
+	}
+
+	@Override
+	public int getRecentOrderNo(long referralId) {
+		return referralDAO.getRecentOrderNo(referralId);
+	}
+	
+	@Override
+	public int getOrderNoByDate(long referralId,Date childSubscriptionDate) {
+		return referralDAO.getOrderNoByDate(referralId,childSubscriptionDate);
+	}
+	
+	@Override
+	public List getDirectReferralsAndPassupsByRefId(int refId) {
+		return referralDAO.getDirectReferralsAndPassupsByRefId(refId);
+	}
+
+	/********************** amount **************************/
+	
+	@Transactional(readOnly = false)
+	@Override
+	public Long addAmount(Amount amount) {
+		return referralDAO.addAmount(amount);
+	}
+
+	@Override
+	public String getReferralAmount(long refId) {
+		return referralDAO.getReferralAmount(refId);
+	}
+	
+	@Override
+	public String getPassupParentReferralAmount(long refId){
+		return referralDAO.getPassupParentReferralAmount(refId);
+	}
+
+	@Override
+	public String getReferralAmountFromDirectNonPassup(int refId) {
+		return referralDAO.getReferralAmountFromDirectNonPassup(refId);
+	}
+
+	@Override
+	public String getReferralAmountFromDirectPassup(int refId) {
+		return referralDAO.getReferralAmountFromDirectPassup(refId);
+	}
+	@Override
+	public List<Referral> getInDirectReferralsByRefId(int refId) {
+		return referralDAO.getInDirectReferralsByRefId(refId);
+	}
+
+	@Override
+	public List<Referral> getPassupReferralsByRefId(int refId) {
+		return referralDAO.getPassupReferralsByRefId(refId);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public void removeReferral(Referral referral) {
+		referralDAO.deleteReferral(referral);
+		
+	}
+
+	
+
+}

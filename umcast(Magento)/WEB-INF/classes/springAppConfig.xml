@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:component-scan base-package="com.obs.webservice" />
+	<tx:annotation-driven transaction-manager="txManager" />
+	
+	<bean id="applicationContextProvder" class="com.obs.base.ApplicationContextProvider" />
+
+	<bean id="UserService" class="com.obs.service.UserService">
+		<property name="userDAO" ref="UserDAO" />
+		<property name="ewalletDAO" ref="EWalletDAO" />
+	</bean>
+	<bean id="VideoService" class="com.obs.service.VideoService">
+		<property name="videoDAO" ref="VideoDAO"></property>
+	</bean>
+	<bean id="TagService" class="com.obs.service.TagService">
+		<property name="tagsDAO" ref="TagsDAO"></property>
+	</bean>
+	<bean id="CommentService" class="com.obs.service.CommentService">
+		<property name="commentsDAO" ref="CommentsDAO"></property>
+	</bean>
+	<bean id="UserProfileService" class="com.obs.service.UserProfileService">
+		<property name="userProfileDAO" ref="UserProfileDAO"></property>
+	</bean>
+	<bean id="SettingsService" class="com.obs.service.SettingsService">
+		<property name="settingsDAO" ref="SettingsDAO"></property>
+		<property name="cmsDAO" ref="CMSDAO"></property>
+		<property name="cmsmenuDAO" ref="CMSMenuDAO"></property>
+		<property name="cmspageDAO" ref="CMSPageDAO"></property>
+		<property name="levelDAO" ref="LevelDAO"></property>
+	</bean>
+	<bean id="ReferralService" class="com.obs.service.ReferralService">
+		<property name="referralDAO" ref="ReferralDAO"></property>
+	</bean>
+	<bean id="LoginService" class="com.obs.service.LoginService">
+		<property name="loginDAO" ref="LoginDAO"></property>
+	</bean>
+	
+	<!-- DAO Declaration -->
+	<bean id="AmountDAO" class="com.obs.dao.AmountDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="CMSDAO" class="com.obs.dao.CMSDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="CMSMenuDAO" class="com.obs.dao.CMSMenuDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="CMSPageDAO" class="com.obs.dao.CMSPageDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="CommentsDAO" class="com.obs.dao.CommentsDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="UserDAO" class="com.obs.dao.UserDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="VideoDAO" class="com.obs.dao.VideoDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="TagsDAO" class="com.obs.dao.TagsDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="UserProfileDAO" class="com.obs.dao.UserProfileDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="SettingsDAO" class="com.obs.dao.SettingsDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="ReferralDAO" class="com.obs.dao.ReferralDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="LoginDAO" class="com.obs.dao.LoginDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="LevelDAO" class="com.obs.dao.LevelDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="EWalletDAO" class="com.obs.dao.EWalletDAO">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+
+	<!-- Data Source Declaration -->
+	<bean id="DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+
+		<property name="jdbcUrl"
+			value="jdbc:mysql://localhost:3306/unstoppablemarketers" />
+		<property name="user" value="root" />
+		<property name="password" value="root" />
+	<!-- 	<property name="user" value="umhelp" />
+		<property name="password" value="db@dm1n" /> -->
+
+		<!--<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/unstoppablemarketers" 
+			/> <property name="user" value="root" /> <property name="password" value="db@dm1n" 
+			/> -->
+
+		<property name="maxPoolSize" value="10" />
+		<property name="maxStatements" value="0" />
+		<property name="minPoolSize" value="5" />
+	</bean>
+
+	<!-- Session Factory Declaration -->
+	<bean id="SessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="DataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.obs.model.User</value>
+				<value>com.obs.model.Video</value>
+				<value>com.obs.model.Country</value>
+				<value>com.obs.model.Login</value>
+				<value>com.obs.model.Category</value>
+				<value>com.obs.model.Level</value>
+				<value>com.obs.model.Settings</value>
+				<value>com.obs.model.UserProfileImages</value>
+				<value>com.obs.model.Comments</value>
+				<value>com.obs.model.Referral</value>
+				<value>com.obs.model.Amount</value>
+				<value>com.obs.model.CMS</value>
+				<value>com.obs.model.Tags</value>
+				<value>com.obs.model.CMSMenu</value>
+				<value>com.obs.model.CMSPage</value>
+				<value>com.obs.model.EWallet</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.id.new_generator_mappings">true</prop>
+				<prop key="hibernate.format_sql">false</prop>
+				<prop key="use_sql_comments">true</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
+			</props>
+		</property>
+	</bean>
+
+
+	<!-- Transaction Manager is defined -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+
+</beans>

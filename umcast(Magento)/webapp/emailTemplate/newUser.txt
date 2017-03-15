@@ -1,0 +1,85 @@
+
+<table width="100%" border="0" style="background-image:url(http://184.106.189.143:8080/usm/email/grey_wash_wall.png); padding:0px; margin:0px;">
+  <tr>
+    <td>
+						<table width="100%" border="0" style=" height:120px; background-image:url(http://184.106.189.143:8080/usm/email/header_bg.jpg);" >
+						  <tr>
+							<td>
+								<table width="600" border="0" align="center">
+											<tr>
+												<td>
+												<img src="http://184.106.189.143:8080/usm/email/UM_main_logo.png"> </td>
+												</td>
+											</tr>
+								</table>
+						  </tr>
+						</table>
+						
+						
+	<table width="600" border="0" align="center">
+				<tr>
+					<td>
+
+					</td>
+				</tr>
+					  <tr >
+						<td align="center"><h1 style="font-family:Verdana; font-weight:200; font-size:22px; color:#000000;">Welcome to the <span style="color:#000000;">Unstoppable Marketers</span> </h1></td>
+					  </tr>
+					  
+						<tr height="1px">
+							<td bgcolor="#000000" style="height: 1px;"></td>
+						</tr> 
+					  <tr>
+						<td>&nbsp;</td>
+					  </tr>
+					  <tr>
+						<td><p style="font-family:Verdana; font-weight:200; font-size:14px; color:#000000; ">We are excited to have you as a part of the Unstoppable Marketers Pre-Launch and want to make sure that you requested to be with us. <br><br>
+
+Your Username is : ${username}<br/>
+Your Password is : ${pwd}<br/><br/>
+
+								Please verify your email address before you can login and start business with your account.</p></td>
+					  </tr>					  
+					  <tr>
+						<td>
+							<table width="600" border="1" cellpadding="5">
+							  <tr>
+								<td width="227"><p style="font-family:Verdana; font-weight:200; font-size:14px; color:#000000; ">Please confirm your email address by clicking this link</p></td>
+								<td width="357"><p style="font-family:Verdana; font-weight:200; font-size:14px;  color:#FDCB1A;"><a href="${confirmationUrl}">CLICK HERE</a></P></td>
+							  </tr>
+							</table>
+							</td>
+					  </tr>  
+
+					  <tr>
+						<td>&nbsp;</td>
+					  </tr>
+						<tr>
+						<td>
+								 <table width="600" border="0">
+								  <tr>
+									<td>
+											<p style="font-family:Verdana; font-weight:200; font-size:14px; color:#000000; ">${confirmationUrl}<br>
+											<br>
+											
+											If in case you are not redirected to our verification page, you can manually copy this link and paste it in your web browser.<br>
+											<br>
+											
+											Or<br>
+											<br>
+											
+											Use this confirmation code to enter in the box of Referral Signup wizard: <span style="font-family:Verdana; font-weight:200; font-size:14px;  color:#FDCB1A;">${code}</span></p>    
+									</td>
+								  </tr>
+								</table>
+						</td>
+					  </tr>					  
+			  <tr>
+				<td>&nbsp;</td>
+			  </tr>
+	</table>
+
+	
+    </td>
+  </tr>
+</table>	

@@ -1,0 +1,324 @@
+package com.obs.webservice;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.ResourceBundle;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
+import com.obs.model.Country;
+import com.obs.model.User;
+import com.obs.service.IUserService;
+
+public class PaymentPage {
+
+	//live
+	public final String PAYMENTURL 					 = getResourceBundle().getString("paymenturl");
+	public final String PAYMENTLOGIN 				= getResourceBundle().getString("paymentlogin");
+	public final String PAYMENTTRASKEY 				= getResourceBundle().getString("paymentkey");
+
+
+	// Bundle Name  
+	public static final String PAYMENT = "com.obs.properties.payment";
+
+
+	/**
+	 * get AWS resource bundle 
+	 * @return
+	 */
+	private static ResourceBundle getResourceBundle() {
+		ResourceBundle bundle = null;
+		bundle = ResourceBundle.getBundle(PAYMENT);
+		return bundle;
+	}
+
+	IUserService userService = new UserServiceHelper().getUserService();
+	private static Logger log = LoggerFactory.getLogger(PaymentPage.class);
+
+
+	public boolean makePayment(String userId,Date startDate,String amount,String cardno,String cardexpDate,String fname,String lname,String email, String phone, String address, String city, String state, String countryObj, String zipcode){
+		boolean status = false; 
+		String url = PAYMENTURL;
+		String countryName=null;
+		/*Country country=userService.getCountryNameById(Long.valueOf(countryObj));
+		if(country!=null){
+			countryName=country.getCountryName();
+		}*/
+		/*String userId = "4";
+		String startDate = "2014-08-13";
+		String amount = "47";
+		String cardno = "4111111111111111";
+		String cardexpDate = "2017-09";
+		String fname = "rampasa";
+		String lname = "ravi1";*/
+		if(userId!=null){
+			startDate.setMonth(startDate.getMonth()+1);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String sdate = sdf.format(startDate);
+
+			String body = getbody(userId,sdate,amount,cardno,cardexpDate,fname,lname,email,phone,address,city,state,countryName,zipcode);
+			String output = http_post_access(url,body);
+			System.out.println(output);
+			log.info("payment output"+output);
+
+			String[] clearvalue = output.split("﻿");
+			//output = "<?xml version=\"1.0\" encoding=\"utf-8\"?><ARBCreateSubscriptionResponse xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\"><refId>3</refId><messages><resultCode>Error</resultCode><message><code>E00013</code><text>Credit Card Number is invalid.</text></message></messages></ARBCreateSubscriptionResponse>";
+			System.out.println(clearvalue[1]);
+			log.info("payment status xml"+clearvalue[1]);
+			status = getStatusFromXmlResult(clearvalue[1],userId);
+
+			log.info("payment status"+status);
+		}
+		return status;
+	}
+
+	public boolean makeAIMPayment(String userId,String amount,String cardno,String cardexpDate,String cardcvv,String fname,String lname){
+		boolean status = false; 
+		String url = PAYMENTURL;
+
+		if(userId!=null){
+			String body = getAIMbody(userId,amount,cardno,cardexpDate,cardcvv,fname,lname);
+			String output = http_post_access(url,body);
+			System.out.println(output);
+			log.info("payment output"+output);
+
+			String[] clearvalue = output.split("﻿");
+			//output = "<?xml version=\"1.0\" encoding=\"utf-8\"?><ARBCreateSubscriptionResponse xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\"><refId>3</refId><messages><resultCode>Error</resultCode><message><code>E00013</code><text>Credit Card Number is invalid.</text></message></messages></ARBCreateSubscriptionResponse>";
+			System.out.println(clearvalue[1]);
+			log.info("payment status xml"+clearvalue[1]);
+			status = getAIMStatusFromXmlResult(clearvalue[1],userId);
+			System.out.println(status);
+			log.info("payment status"+status);
+		}
+		return status;
+	}
+
+
+	private boolean getAIMStatusFromXmlResult(String output,String userId){
+		boolean status = false;
+		try{
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(new InputSource(new StringReader(output)));
+			doc.getDocumentElement().normalize();
+			NodeList nList = doc.getElementsByTagName("createTransactionResponse");
+			for (int temp = 0; temp < nList.getLength(); temp++) {
+				Node nNode = nList.item(temp);
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) nNode;
+					String resultCode = eElement.getElementsByTagName("resultCode").item(0).getTextContent();
+					if("Error".equals(resultCode)){
+						status = false;
+					}
+					else if("Ok".equals(resultCode)){
+						String transId = eElement.getElementsByTagName("transId").item(0).getTextContent();
+						System.out.println(transId);
+						User user = userService.getUserById(Integer.valueOf(userId));
+						user.setTransaction_id(transId);
+						userService.updateUser(user);
+						status = true;
+					}
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return status;
+	}
+
+
+	private boolean getStatusFromXmlResult(String output,String userId){
+		boolean status = false;
+		try{
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(new InputSource(new StringReader(output)));
+			doc.getDocumentElement().normalize();
+			NodeList nList = doc.getElementsByTagName("ARBCreateSubscriptionResponse");
+			for (int temp = 0; temp < nList.getLength(); temp++) {
+				Node nNode = nList.item(temp);
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) nNode;
+					String resultCode = eElement.getElementsByTagName("resultCode").item(0).getTextContent();
+					if("Error".equals(resultCode)){
+						status = false;
+					}
+					else if("Ok".equals(resultCode)){
+						String subscription_id = eElement.getElementsByTagName("subscriptionId").item(0).getTextContent();
+						System.out.println(subscription_id);
+						User user = userService.getUserById(Integer.valueOf(userId));
+						user.setSubscription_id(subscription_id);
+						userService.updateUser(user);
+						status = true;
+					}
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return status;
+	}
+
+	private String getbody(String userId,String startDate,String amount,String cardno,String cardexpDate,String fname,String lname,String email, String phone, String address, String city, String state, String country, String zipcode){
+		String content =
+				"<?xml version=\"1.0\" encoding=\"utf-8\"?>"+
+						"<ARBCreateSubscriptionRequest xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\">" +
+						"<merchantAuthentication>"+
+						"<name>" + PAYMENTLOGIN + "</name>"+
+						"<transactionKey>" + PAYMENTTRASKEY + "</transactionKey>"+
+						"</merchantAuthentication>"+
+						"<refId>" + userId + "</refId>"+
+
+						"<subscription>"+
+						"<name>" + "subscription" + "</name>"+
+						"<paymentSchedule>"+
+						"<interval>"+
+						"<length>"+ "1" +"</length>"+
+						"<unit>"+ "months" +"</unit>"+
+						"</interval>"+
+
+						"<startDate>" + startDate + "</startDate>"+
+						"<totalOccurrences>9999</totalOccurrences>"+
+						"<trialOccurrences>"+ 0 + "</trialOccurrences>"+
+						"</paymentSchedule>"+
+						"<amount>"+ amount +"</amount>"+
+						"<trialAmount>" + 0 + "</trialAmount>"+
+						"<payment>"+
+						"<creditCard>"+
+						"<cardNumber>" + cardno + "</cardNumber>"+
+						"<expirationDate>" + cardexpDate + "</expirationDate>"+
+						"</creditCard>"+
+						"</payment>"+
+						
+						"<customer>"+
+						"<id>"+ userId + "</id>"+
+						"<email>"+ email + "</email>"+
+						"<phoneNumber>" + phone + "</phoneNumber>"+
+						"</customer>"+
+
+						"<billTo>"+
+						"<firstName>"+ fname + "</firstName>"+
+						"<lastName>" + lname + "</lastName>"+
+						"<address>" + address + "</address>"+
+						"<city>" + city + "</city>"+
+						"<state>" + state + "</state>"+
+						"<zip>" + zipcode + "</zip>"+
+						//"<country>" + country + "</country>"+
+						"</billTo>"+
+
+						"<shipTo>"+
+						"<firstName>"+ fname + "</firstName>"+
+						"<lastName>" + lname + "</lastName>"+
+						"<address>" + address + "</address>"+
+						"<city>" + city + "</city>"+
+						"<state>" + state + "</state>"+
+						"<zip>" + zipcode + "</zip>"+
+						"<country>" + country + "</country>"+
+						"</shipTo>"+
+
+						"</subscription>"+
+						"</ARBCreateSubscriptionRequest>";
+		return content;
+	}
+
+
+	private String getAIMbody(String userId,String amount,String cardno,String cardexpDate,String cardcvv,String fname,String lname){
+		String content =
+				"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+						"<createTransactionRequest xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\">" +
+						"<merchantAuthentication>" +
+						"<name>" + PAYMENTLOGIN + "</name>" +
+						"<transactionKey>" + PAYMENTTRASKEY + "</transactionKey>" +
+						"</merchantAuthentication>" +
+						"<refId>" + userId + "</refId>" +
+						"<transactionRequest>" +
+						"<transactionType>authOnlyTransaction</transactionType>" +
+						"<amount>"+ amount +"</amount>" +
+						"<payment>" +
+						"<creditCard>" +
+						"<cardNumber>" + cardno + "</cardNumber>" +
+						"<expirationDate>" + cardexpDate + "</expirationDate>" +
+						"<cardCode>" + cardcvv + "</cardCode>" +
+						"</creditCard>" +
+						"</payment>" +
+						" </transactionRequest></createTransactionRequest>";
+
+		return content;
+	}
+
+
+	private static String http_post_access(String url,String body){
+		String response=null;
+		HttpURLConnection login_request=null;
+		//JSONObject json = getJson_token();
+		try {
+			URL login_url = new URL(url);
+			login_request = (HttpURLConnection) login_url.openConnection();
+			login_request.setRequestMethod("POST");
+			login_request.setAllowUserInteraction(false); // you may not ask the user
+			login_request.setDoInput(true);
+			login_request.setDoOutput(true);
+			login_request.setUseCaches(false);
+			// the Content-type should be default, but we set it anyway
+			login_request.setRequestProperty("Content-Type","text/xml");
+
+			OutputStream out = new BufferedOutputStream(login_request.getOutputStream());
+			out.write(body.getBytes());
+			out.close();
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(login_request.getInputStream()));
+			String currentLine 	= "";
+			response="";
+			while((currentLine = in.readLine()) != null)
+				response += currentLine + "\n";
+			in.close();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(login_request!=null)
+				login_request.disconnect();
+		}
+		return response;
+	}
+
+	public JSONObject getJSONObject(HttpResponse res) throws Exception{
+		String stringifiedResponse = null;
+		stringifiedResponse = EntityUtils.toString(res.getEntity());
+		return (JSONObject) new JSONParser().parse(stringifiedResponse);
+	}
+
+/*	public static void main(String[] args) {
+		new PaymentPage().makeAIMPayment("100","45.15","5424000000000015","122015","123","fname","lname");
+		new PaymentPage().makePayment("100",new Date(),"45.15","5424000000000015","122015","fname","lname","email","phoneNumber","address","city","state","country","zipcode");
+	}*/
+}

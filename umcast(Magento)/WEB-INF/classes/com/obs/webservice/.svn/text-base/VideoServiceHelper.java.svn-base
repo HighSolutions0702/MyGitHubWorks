@@ -1,0 +1,494 @@
+package com.obs.webservice;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.commons.io.FilenameUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.springframework.stereotype.Component;
+
+import com.obs.aws.ManageAWSVideos;
+import com.obs.base.BaseObject;
+import com.obs.model.Category;
+import com.obs.model.Country;
+import com.obs.model.User;
+import com.obs.model.Video;
+import com.obs.service.IVideoService;
+import com.obs.service.VideoService;
+import com.obs.utils.CommonProperties;
+import com.obs.utils.IoUtils;
+import com.obs.utils.StringUtility;
+import com.obs.webservice.messages.CategoriesMessage;
+import com.obs.webservice.messages.CountriesMessage;
+import com.obs.webservice.messages.ResponseStatus;
+import com.obs.webservice.messages.ResponseStatusCode;
+import com.obs.webservice.messages.ThumnailMessage;
+import com.obs.webservice.messages.UserMessage;
+import com.obs.webservice.messages.VideoMessage;
+import com.obs.webservice.messages.VideosMessage;
+
+public class VideoServiceHelper extends BaseObject {
+
+	private IVideoService videoService = getVideoService();
+	
+	LoginServiceHelper loginServiceHelper = new LoginServiceHelper();
+
+	IoUtils ioUtils = IoUtils.getInstance();
+	StringUtility stringUtility = StringUtility.getInstance();
+
+	public final String AWS_URL= ManageAWSVideos.awsUrl+"/"+ManageAWSVideos.bucketname+"/";
+	public final String THUMBNAIL = "thumbnail";
+
+	/**
+	 * Singleton Instance
+	 */
+	/*private static VideoServiceHelper myInstance = null;
+	public static VideoServiceHelper getInstance()
+	{
+		if(myInstance == null)
+			myInstance = new VideoServiceHelper();
+		return myInstance;
+	}*/
+	public JSONArray getJSONArray(InputStream is) throws Exception{
+		String result = ioUtils.getStringFromInputStream(is);
+		return (JSONArray) new JSONParser().parse(result);
+	}
+
+
+	/**
+	 * save Video
+	 * @param is
+	 * @return
+	 */
+	public VideoMessage saveVideo(InputStream is,String token) {
+		ResponseStatus status = null;
+		String result = null;
+		Video video = new Video();
+		try{
+			JSONObject value = stringUtility.getJSONObject(is);
+			boolean flag = loginServiceHelper.checkToken(token);
+			if(!flag){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+				return new VideoMessage(status, video);
+			}
+			int userId = loginServiceHelper.getUserByToken(token);
+			if(userId>0){
+				if(((String) value.get("displayName")!=null)&&((String) value.get("videoDesc")!=null)&&((String) value.get("videoCategory")!=null)&&(!((String) value.get("videoCategory")).isEmpty()))
+				{
+					video.setVideoName((String) value.get("displayName"));
+					video.setVideoDescription((String) value.get("videoDesc"));
+					JSONArray videoTagContent = (JSONArray) value.get("tagsDetails");
+					String tagNames="";
+					for(int i=0;i<videoTagContent.size();i++)
+					{
+						JSONObject tagValue=null;
+						if(i==0)
+						{
+							tagValue = (JSONObject)new JSONParser().parse(videoTagContent.get(i).toString());
+							tagNames=tagNames+(String)tagValue.get("text");
+						}
+						else
+						{
+							tagValue = (JSONObject)new JSONParser().parse(videoTagContent.get(i).toString());
+							tagNames=tagNames+","+(String)tagValue.get("text");
+						}
+					}
+					video.setVideoTag(tagNames);
+					Category cat = new Category();
+					cat.setCategoryId(Integer.valueOf((String) value.get("videoCategory")));
+					video.setVideoCategory(cat);
+					video.setVideoVisible(Integer.valueOf((String) value.get("videoVisible")));
+
+					User owner = new User();
+					owner.setId(userId);
+					video.setOwner(owner);
+					video.setIsDeleted(false);
+					video.setUploaded_Date(new Date());
+					String thumbImgFile=null;
+					String thumbUrl=((String)value.get("thumbnailImage")!=null?(String)value.get("thumbnailImage"):null);
+					if(thumbUrl!=null){
+						thumbImgFile = FilenameUtils.getName(thumbUrl);
+					}
+					/*	if(thumbImgFile.equals("upload_sign.png"))
+					{
+						thumbImgFile=null;
+					}*/
+					//upload thumbnail in AWS bucket
+					try{
+						if(thumbImgFile!=null){
+							File thumbfile= new File(CommonProperties.getBasePath()+CommonProperties.getTempFilePath()+userId+"/"+THUMBNAIL);
+							File thumbfiles=new File(thumbfile+"/"+thumbImgFile);
+							if(thumbfiles!=null ){
+								FileInputStream       input   = new FileInputStream(thumbfiles);
+								new ManageAWSVideos().createFiles(ManageAWSVideos.bucketname,THUMBNAIL+"/"+thumbImgFile, userId+"/"+video.getVideoCategory().getCategoryId(), input);
+								//set poster URL
+								video.setPosterUrl(AWS_URL+userId+"/"+video.getVideoCategory().getCategoryId()+"/"+THUMBNAIL+"/"+thumbImgFile);
+								//remove temp files
+								ioUtils.deleteDirectory(thumbfile);
+							}
+						}
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+						System.out.println(e.getMessage());	
+					}
+					//upload video in AWS bucket
+					File file= new File(CommonProperties.getBasePath()+CommonProperties.getTempFilePath()+userId);
+					File[] files= file.listFiles();
+					if(files!=null && files.length>0){
+						for(int i=0;i<files.length;i++){
+							String fileType=FilenameUtils.getExtension(files[i].getName());
+							if((!(files[i].isDirectory()))&&(fileType!="db")){
+								FileInputStream       input   = new FileInputStream(files[i]);
+								result = new ManageAWSVideos().createFiles(ManageAWSVideos.bucketname,files[i].getName(), userId+"/"+video.getVideoCategory().getCategoryId(), input);
+								if(result!=null){
+									//set video URL
+									video.setVideoUrl(AWS_URL+userId+"/"+video.getVideoCategory().getCategoryId()+"/"+files[i].getName());
+									Integer videoId = videoService.addVideo(video);
+									video.setVideoId(videoId);
+									if(video.getVideoVisible()==1){
+										//dailymotion upload
+										try{
+											VideoShareOAuthServiceHelper.getInstance().uploadDailyMotionVideo(userId,files[i],video.getVideoId(),video.getVideoName(),video.getVideoDescription(),video.getVideoCategory().getCategoryId());
+										}
+										catch(Exception e)
+										{
+											e.printStackTrace();
+											System.out.println(e.getMessage());	
+										}
+									}
+								}
+								//remove temp files
+								//ioUtils.deleteDirectory(file);
+								break;
+							}
+						}
+
+
+					}
+				}
+				else
+				{
+					status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "VALUE_REQUIRED");
+				}
+			}
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new VideoMessage(status, video);
+	}
+
+	public VideosMessage getVideosByOwner(String token){
+		ResponseStatus status = null;
+		List<Video> videos = new ArrayList<Video>();
+		boolean flag = loginServiceHelper.checkToken(token);
+		if(!flag){
+			status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+			return new VideosMessage(status, videos);
+		}
+		int userId = loginServiceHelper.getUserByToken(token);
+		if(userId>0){
+			videos = videoService.getVideosByUser(userId);
+		}
+		return new VideosMessage(status, videos);
+	}
+	public VideosMessage getVideos(String val) {
+		ResponseStatus status = null;
+		List<Video> videosList =videoService.getAllVideos(val);
+		status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		return  new VideosMessage(status, videosList);
+	}
+
+
+	public VideosMessage getVideosInfo(Integer videoVal) {
+		ResponseStatus status = null;
+		List<Video> videosList =videoService.getVideoInfoById(videoVal);
+		status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		return  new VideosMessage(status, videosList);
+	}
+
+
+	public VideosMessage getVideosDetails(Integer videoVal) {
+		ResponseStatus status = null;
+		Video videoDetails=videoService.getVideoById(videoVal);
+		List<Video> videoInfoList=videoService.getVideoInfoByDetails(videoDetails);
+		status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		return  new VideosMessage(status, videoInfoList);
+	}
+
+
+	public VideosMessage getRelatedVideos(Integer videoVal) {
+		ResponseStatus status = null;
+		Video videoDetails=videoService.getVideoById(videoVal);
+		List<Video> relatedVideoList=videoService.getRelatedVideos(videoDetails);
+		status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		return  new VideosMessage(status, relatedVideoList);
+	}
+
+
+	public VideosMessage getMyVideos(String token) {
+		ResponseStatus status = null;
+		List<Video> usersVideosList = new ArrayList<Video>();
+		boolean flag = loginServiceHelper.checkToken(token);
+		if(!flag){
+			status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+			return new VideosMessage(status, usersVideosList);
+		}
+		int userId = loginServiceHelper.getUserByToken(token);
+		if(userId>0){
+			usersVideosList = videoService.getVideosByUser(userId);
+			if(usersVideosList!=null && usersVideosList.size()>0)
+			{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else
+			{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "NORECORD");
+				return new VideosMessage(status, null);
+			}
+		}
+
+		return new VideosMessage(status, usersVideosList);
+	}
+
+
+	public ThumnailMessage getThumbnailFromTemp(String token) {
+		ResponseStatus status = null;
+		List<String> thumnailList = new ArrayList<String>();
+
+		int userId = loginServiceHelper.getUserByToken(token);
+		if(userId>0){
+			File thumbfile= new File(CommonProperties.getBasePath()+CommonProperties.getTempFilePath()+userId+"/"+THUMBNAIL);
+			File[] thumbfiles= thumbfile.listFiles();
+			if(thumbfiles!=null && thumbfiles.length>0){
+				for (int i = 0; i < thumbfiles.length; i++) {
+					thumnailList.add(CommonProperties.getBaseURL()+CommonProperties.getTempFilePath()+userId+"/"+THUMBNAIL+"/"+thumbfiles[i].getName());
+				}
+			}
+		}
+		status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		return new ThumnailMessage(status, thumnailList);
+	}
+
+
+	public VideoMessage getLoginUserVideos(String token) {
+		ResponseStatus status = null;
+		Video userVideo=null;
+		boolean flag = loginServiceHelper.checkToken(token);
+		if(!flag){
+			status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+			return new VideoMessage(status, userVideo);
+		}
+		int userId = loginServiceHelper.getUserByToken(token);
+		if(userId>0){
+			userVideo =videoService.getLoginUserVideo(userId);
+			if(userVideo!=null){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "NORECORD");
+				return new VideoMessage(status, null);
+			}
+		}
+		else{
+			status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+			return new VideoMessage(status, null);
+		}
+		return  new VideoMessage(status, userVideo);
+	}
+
+
+	public VideosMessage getUsersVideos(String token) {
+		ResponseStatus status = null;
+		List<Video> loginUserVideos = new ArrayList<Video>();
+		boolean flag = loginServiceHelper.checkToken(token);
+		if(!flag){
+			status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+			return new VideosMessage(status, loginUserVideos);
+		}
+		int userId = loginServiceHelper.getUserByToken(token);
+		if(userId>0){
+			loginUserVideos = videoService.getVideosByUser(userId);
+			if(loginUserVideos!= null && loginUserVideos.size()>0){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+				return new VideosMessage(status, loginUserVideos);
+			}
+			else
+			{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "NORECORD");
+				return new VideosMessage(status, loginUserVideos);
+			}
+		}
+		return new VideosMessage(status, loginUserVideos);
+	}
+	public VideosMessage getlatestVideos() {
+		ResponseStatus status = null;
+		List<Video> videosList =videoService.getlatestVideos();
+		status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		return  new VideosMessage(status, videosList);
+	}
+	public VideosMessage searchItems(String searchVal) {
+		ResponseStatus status = null;
+		List<Video> videosList=null;
+		try{
+			if(searchVal!=null){
+				videosList =videoService.getSearchItems(searchVal);
+
+				if(videosList!=null && videosList.size()>0)
+				{
+					status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+				}
+				else
+				{
+					status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "NORECORD");
+					return new VideosMessage(status, videosList);
+				}
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new VideosMessage(status, videosList);
+	}
+	public VideoMessage getVideoDetByUser(int editedVideoId, String tokenVal) {
+		ResponseStatus status = null;
+		Video videoInfo=null;
+		boolean flag = loginServiceHelper.checkToken(tokenVal);
+		if(!flag){
+			status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+			return new VideoMessage(status, videoInfo);
+		}
+		int userId = loginServiceHelper.getUserByToken(tokenVal);
+		if(userId>0){
+			videoInfo =videoService.getVideoById(editedVideoId);
+			if(videoInfo!=null){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "NORECORD");
+				return new VideoMessage(status, null);
+			}
+		}
+		else{
+			status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+			return new VideoMessage(status, null);
+		}
+		return  new VideoMessage(status, videoInfo);
+	}
+	public CategoriesMessage getCategories() {
+		ResponseStatus status = null;
+		List<Category> categoryList =videoService.getCategories();
+		return new CategoriesMessage(status, categoryList);
+	}
+	public VideoMessage updateVideoByUser(InputStream is, int editedVideoId,
+			String tokenVal) {
+		ResponseStatus status = null;
+		Video userVideo=null;
+		String videoName=null;
+		String videoDescription=null;
+		Category categoryObj=null;
+		try{
+			if(tokenVal != null && !(tokenVal).isEmpty()){
+				boolean flag = loginServiceHelper.checkToken(tokenVal);
+				if(!flag){
+					status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+					return new VideoMessage(status, userVideo);
+				}
+				//int userId = loginServiceHelper.getUserByToken(token);
+				userVideo =videoService.getVideoById(editedVideoId);
+				JSONObject value = stringUtility.getJSONObject(is);
+				JSONArray videoTagContent = (JSONArray) value.get("tags");
+				JSONObject categoryJsonObj = (JSONObject) value.get("videoCategory");
+				videoName=(String) value.get("videoName");
+				videoDescription=(String) value.get("videoDescription");
+				if(videoName!=null && !(videoName.isEmpty()) && videoDescription!=null && !(videoDescription.isEmpty())&& categoryJsonObj!=null){
+					userVideo.setVideoName(videoName);
+					userVideo.setVideoDescription(videoDescription);
+
+					String tagNames="";
+					for(int i=0;i<videoTagContent.size();i++)
+					{
+						JSONObject tagValue=null;
+						if(i==0)
+						{
+							tagValue = (JSONObject)new JSONParser().parse(videoTagContent.get(i).toString());
+							tagNames=tagNames+(String)tagValue.get("text");
+						}
+						else
+						{
+							tagValue = (JSONObject)new JSONParser().parse(videoTagContent.get(i).toString());
+							tagNames=tagNames+","+(String)tagValue.get("text");
+						}
+					}
+					userVideo.setVideoTag(tagNames);
+				}
+				else
+				{
+					status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "Value required");
+					return new VideoMessage(status, null);
+				}
+
+				categoryObj=videoService.getVideoCategoryById(Integer.valueOf((String) categoryJsonObj.get("categoryId")));
+				userVideo.setVideoCategory(categoryObj);
+				videoService.updateVideo(userVideo);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");	
+				return new VideoMessage(status, null);
+			}
+			return new VideoMessage(status, userVideo);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new VideoMessage(status, null);
+		}
+	}
+	public VideoMessage deleteVideoJson(InputStream is) {
+		ResponseStatus status = null;
+		Video videos=null;
+		try{
+			JSONObject value =stringUtility.getJSONObject(is);
+			//check duplicate
+			videos = videoService.getVideoById(Integer.valueOf((String) value.get("videoId")));
+			if(videos !=null){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+				videos.setIsDeleted(true);
+				videoService.updateVideo(videos);
+
+			} else {
+				status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "NO RECORD");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new VideoMessage(status, videos);
+	}
+
+	public VideosMessage getVideosByVideoCategory(String catVal) {
+		ResponseStatus status = null;
+		List<Video> videosList =videoService.getAllVideosByCategory(catVal);
+		status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		return  new VideosMessage(status, videosList);
+	}
+
+}

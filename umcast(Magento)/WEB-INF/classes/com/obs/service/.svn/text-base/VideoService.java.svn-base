@@ -1,0 +1,140 @@
+package com.obs.service;
+
+import java.util.List;
+
+import org.hibernate.id.enhanced.OptimizerFactory.InitialValueAwareOptimizer;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.obs.dao.IVideoDAO;
+import com.obs.dao.VideoDAO;
+import com.obs.model.Category;
+import com.obs.model.Video;
+/**
+ * 
+ * @author cini priya devi_l
+ *
+ */
+@Transactional(readOnly = true)
+public class VideoService implements IVideoService{
+	IVideoDAO videoDAO;
+
+
+	public IVideoDAO getVideoDAO() {
+		return videoDAO;
+	}
+
+
+	public void setVideoDAO(IVideoDAO videoDAO) {
+		this.videoDAO = videoDAO;
+	}
+
+
+	/**
+	 * Get Video List
+	 * 
+	 */
+	@Override
+	public List<Video> getVideosByUser(long userId) {
+		return getVideoDAO().getVideosByUser(userId);
+	}
+	
+	/**
+	 * Add Video
+	 * 
+	 * @param  Video video
+	 */
+	@Transactional(readOnly = false)
+	@Override
+	public Integer addVideo(Video video) {
+		return getVideoDAO().addVideo(video);
+	}
+
+	/**
+	 * Delete Video
+	 * 
+	 * @param  Video video
+	 */
+	@Transactional(readOnly = false)
+	@Override
+	public void deleteVideo(Video video) {
+		getVideoDAO().deleteVideo(video);
+	}
+
+	/**
+	 * Update Video
+	 * 
+	 * @param  Video video
+	 */
+	@Transactional(readOnly = false)
+	@Override
+	public void updateVideo(Video video) {
+		getVideoDAO().updateVideo(video);
+	}
+
+	@Override
+	public List<Video> getAllVideos(String val) {
+		return getVideoDAO().getAllVideos(val);
+	}
+
+
+	@Override
+	public List<Video> getVideoInfoById(Integer videoVal) {
+		return getVideoDAO().getVideoInfoById(videoVal);
+	}
+
+
+	@Override
+	public Video getVideoById(Integer videoVal) {
+		return getVideoDAO().getVideoById(videoVal);
+	}
+
+
+	@Override
+	public List<Video> getVideoInfoByDetails(Video videoDetails) {
+		return getVideoDAO().getVideoInfoByDetails(videoDetails);
+	}
+
+
+	@Override
+	public List<Video> getRelatedVideos(Video video) {
+		return getVideoDAO().getRelatedVideos(video);
+	}
+
+
+	@Override
+	public Video getLoginUserVideo(int userId) {
+		return getVideoDAO().getLoginUserVideo(userId);
+	}
+
+
+	@Override
+	public List<Video> getlatestVideos() {
+		// TODO Auto-generated method stub
+		return getVideoDAO().getLatestVideos();
+	}
+
+
+	@Override
+	public List<Video> getSearchItems(String searchVal) {
+		return getVideoDAO().getSearchItems(searchVal);
+	}
+
+
+	@Override
+	public List<Category> getCategories() {
+		return getVideoDAO().getCategories();
+	}
+
+
+	@Override
+	public Category getVideoCategoryById(int catId) {
+		return getVideoDAO().getVideoCategoryById(catId);
+	}
+
+
+	@Override
+	public List<Video> getAllVideosByCategory(String catVal) {
+		return  getVideoDAO().getAllVideosByCategory(catVal);
+	}
+}

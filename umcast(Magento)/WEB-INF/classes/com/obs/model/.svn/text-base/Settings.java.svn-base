@@ -1,0 +1,156 @@
+package com.obs.model;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+
+
+
+/**
+ * @author Ramesh
+ *
+ */
+@Entity
+@Table(name="tbl_settings")
+public class Settings implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue( strategy = GenerationType.AUTO )
+	@Column(name="DN_ID" , nullable = false )
+	private long id;
+	/**
+	 * @return the LEVEL_id
+	 */
+	@OneToOne ( targetEntity = Level.class, fetch = FetchType.EAGER )
+	@JoinColumn (name = "DN_LEVEL_ID")
+	private Level level_id;
+	
+	@Column(name="DN_UPDATED_BY" , nullable = true)
+	private User updated_by;
+	
+	@Column(name="DD_UPDATED_ON", nullable = true)
+	private Date updated_on; 
+	
+	@Column(name="DB_REFERRALLINK", nullable = true)
+	private Boolean referralLink;
+	
+	@Column(name="DB_UPLOAD", nullable = true)
+	private Boolean upload;
+	
+	@Column(name="DB_VIDEO_MANAGER", nullable = true)
+	private Boolean videoManager;
+	
+	@Column(name="DB_ONLINE_MARKETING_TOOLS", nullable = true)
+	private Boolean onlineMarketingTools;
+	
+	@Column(name="DB_ONLINE_MARKETING_TRAINING", nullable = true)
+	private Boolean onlineMarketingTraining;
+
+	@Column(name="DB_UM_MARKETING_MATERIALS", nullable = true)
+	private Boolean umMarketingMaterials;
+	
+	@Column(name="DB_DELETED", nullable = true)
+	private Boolean isDeleted;
+	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public Level getLevel_id() {
+		return level_id;
+	}
+
+	public void setLevel_id(Level level_id) {
+		this.level_id = level_id;
+	}
+
+	public User getUpdated_by() {
+		return updated_by;
+	}
+
+	public void setUpdated_by(User updated_by) {
+		this.updated_by = updated_by;
+	}
+
+	public Date getUpdated_on() {
+		return updated_on;
+	}
+
+	public void setUpdated_on(Date updated_on) {
+		this.updated_on = updated_on;
+	}
+
+
+	public Boolean getUpload() {
+		return upload;
+	}
+
+	public void setUpload(Boolean upload) {
+		this.upload = upload;
+	}
+
+	public Boolean getVideoManager() {
+		return videoManager;
+	}
+
+	public void setVideoManager(Boolean videoManager) {
+		this.videoManager = videoManager;
+	}
+
+	public Boolean getOnlineMarketingTools() {
+		return onlineMarketingTools;
+	}
+
+	public void setOnlineMarketingTools(Boolean onlineMarketingTools) {
+		this.onlineMarketingTools = onlineMarketingTools;
+	}
+
+	public Boolean getUmMarketingMaterials() {
+		return umMarketingMaterials;
+	}
+
+	public void setUmMarketingMaterials(Boolean umMarketingMaterials) {
+		this.umMarketingMaterials = umMarketingMaterials;
+	}
+	public Boolean getOnlineMarketingTraining() {
+		return onlineMarketingTraining;
+	}
+
+	public void setOnlineMarketingTraining(Boolean onlineMarketingTraining) {
+		this.onlineMarketingTraining = onlineMarketingTraining;
+	}
+
+	public Boolean getReferralLink() {
+		return referralLink;
+	}
+
+	public void setReferralLink(Boolean referralLink) {
+		this.referralLink = referralLink;
+	}
+	
+
+}

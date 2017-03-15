@@ -1,0 +1,13 @@
+package com.obs.service;
+
+import java.util.List;
+
+import com.obs.model.Comments;
+
+public interface ICommentService {
+
+	public void addNewComment(Comments commentsObj);
+
+	public List<Comments> getAllComments(Integer videoId);
+
+}

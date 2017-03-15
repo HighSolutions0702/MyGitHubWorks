@@ -1,0 +1,119 @@
+package com.obs.webservice;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import org.json.simple.JSONObject;
+
+import com.obs.base.BaseObject;
+import com.obs.model.Comments;
+import com.obs.model.UserProfileImages;
+import com.obs.service.CommentService;
+import com.obs.service.ICommentService;
+import com.obs.service.IUserProfileService;
+import com.obs.service.UserProfileService;
+import com.obs.utils.CommonProperties;
+import com.obs.utils.StringUtility;
+import com.obs.webservice.messages.CommentMessage;
+import com.obs.webservice.messages.CommentsMessage;
+import com.obs.webservice.messages.ResponseStatus;
+import com.obs.webservice.messages.ResponseStatusCode;
+
+public class UserCommentServiceHelper extends BaseObject {
+
+	private ICommentService commentService = getCommentService();
+	private IUserProfileService userProfileService = getUserProfileService();
+	
+	LoginServiceHelper loginServiceHelper = new LoginServiceHelper();
+
+	StringUtility stringUtility = StringUtility.getInstance();
+
+	/*private static UserCommentServiceHelper myInstance = null;
+	public static UserCommentServiceHelper getInstance()
+	{
+		if(myInstance == null)
+			myInstance = new UserCommentServiceHelper();
+		return myInstance;
+	}*/
+	public CommentMessage saveUserComments(InputStream is, String token, int cmtVideoId) {
+		ResponseStatus status = null;
+		Comments commentsObj=new Comments();
+		try{
+			JSONObject value = stringUtility.getJSONObject(is);
+			boolean flag = loginServiceHelper.checkToken(token);
+			if(!flag){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+				return new CommentMessage(status, commentsObj);
+			}
+			int userId = loginServiceHelper.getUserByToken(token);
+			if(userId >0){
+				commentsObj.setCmtUserId(userId);
+				commentsObj.setCmtVideoId(cmtVideoId);
+				commentsObj.setIsDeleted(false);
+				commentsObj.setCommented_Date(new Date());
+				commentsObj.setComments((String) value.get("comments"));
+				commentService.addNewComment(commentsObj);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return  new CommentMessage(status, commentsObj);
+	}
+	public CommentsMessage getUsersComments(Integer token) {
+		ResponseStatus status = null;
+		List<Comments> commentsList = null;
+		List<Comments> usersCommentsList=new ArrayList<Comments>();
+		try{
+			UserProfileImages usersProfileObj=new UserProfileImages();
+			if(token>0){
+				commentsList = commentService.getAllComments(Integer.valueOf(token));
+				if(commentsList!=null && commentsList.size()>0)
+				{
+					System.out.println(commentsList.size());
+					for(int i=0;i<commentsList.size();i++){
+						Comments cmtsObj=new Comments();
+						usersProfileObj=userProfileService.getUserProfileById(commentsList.get(i).getCmtUserId());
+						if(usersProfileObj!=null){
+							cmtsObj.setUserProfImageUrl(CommonProperties.getBaseURL()+"files"+"/"+"usm"+"/"+"images"+"/"+commentsList.get(i).getCmtUserId()+"/"+usersProfileObj.getProfileImage());
+						}
+						else
+						{
+							cmtsObj.setUserProfImageUrl(CommonProperties.getBaseURL()+CommonProperties.getContextPath()+"images"+"/"+"default-avatar.png");
+						}
+						cmtsObj.setCommentsId(commentsList.get(i).getCommentsId());
+						cmtsObj.setCmtUserId(commentsList.get(i).getCmtUserId());
+						cmtsObj.setCmtVideoId(commentsList.get(i).getCmtVideoId());
+						cmtsObj.setComments(commentsList.get(i).getComments());
+						cmtsObj.setCommented_Date(commentsList.get(i).getCommented_Date());
+						usersCommentsList.add(cmtsObj);
+						//Collections.reverse(usersCommentsList);
+					}
+					status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+
+				}
+				else
+				{
+					status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "No Record");
+					return new CommentsMessage(status, null);
+				}
+			}
+			return new CommentsMessage(status, usersCommentsList);
+
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new CommentsMessage(status, null);
+		}
+	}
+
+}

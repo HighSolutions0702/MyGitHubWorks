@@ -1,0 +1,36 @@
+package com.obs.webservice.messages;
+
+import java.util.Collection;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.Video;
+
+
+@XmlRootElement(name="videos")
+public class VideosMessage {
+
+
+	@XmlElement(name="status")
+	public ResponseStatus status;
+
+	private Collection<Video> entities;
+
+	public VideosMessage() {
+		super();
+	}
+
+	public VideosMessage(ResponseStatus status,Collection<Video> entities){
+		super();
+		this.status=status;
+		this.entities = entities;
+	}
+
+	@XmlElement(name="videos")
+	public Collection<Video> getVideosEntities() {
+		return entities;
+	}
+
+
+}

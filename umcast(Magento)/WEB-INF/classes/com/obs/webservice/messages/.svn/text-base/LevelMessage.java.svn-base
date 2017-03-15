@@ -1,0 +1,38 @@
+package com.obs.webservice.messages;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.Level;
+
+
+@XmlRootElement(name="level")
+public class LevelMessage {
+	@XmlElement(name="status")
+	public ResponseStatus status;
+	private Level _entity = new Level();
+	@XmlElement(name="level")
+	public Level getEntity(){
+		return _entity;
+	}
+
+	public void setEntity(Level entity){
+		this._entity = entity;
+	}
+
+	public LevelMessage(){
+		super();
+	}
+
+	public LevelMessage(Level entity){
+		super();
+		setEntity(entity);
+	}
+	
+	public LevelMessage(ResponseStatus status, Level  entity){
+		super();
+		this.status=status;
+		this._entity = entity;
+	}
+	
+}

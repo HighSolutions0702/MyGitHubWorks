@@ -1,0 +1,47 @@
+<!--nav-->
+<div class="col-lg-12 col-xs-12 p-0 f_l">
+    <div class="cnt_section">
+        <nav class="nav-bar">
+            <div class="col-lg-1 col-xs-1 nav-bar_bg_l p-0"></div>
+            <div class="col-lg-10 col-xs-10 nav-bar_bg p-0">
+                <!-- Static navbar -->
+                <div class="navbar navbar-default" role="navigation">
+                    <div id="menu">
+                        <ul class="menu">
+                            <li ng-class="{ active: isActive('index.html') }" class="parent"><a
+                                    href="index.html"><span>Home</span></a>
+                            </li>
+                            <li ng-class="{ active: isActive('channel.html') }" class="parent"><a
+                                    href="channel.html"><span>UM Cast </span></a></li>
+                            <li ng-class="{ active: isActive('about_us.html') }" class="parent"><a
+                                    href="about_us.html"><span>About Us</span></a></li>
+                            <li class="parent"><a href="markets/business_opportunity.html"><span>Business
+                              Opportunity</span></a></li>
+                            <li class="parent"><a href="markets/products.html"><span>Products</span></a></li>
+                            <li class="parent"><a href="contact_us.html"><span>Contact Us</span></a></li>
+                            <!--<li class="dropdown" ng-repeat="cmsMenu in cmsMenuDetails"
+                                           ng-show="cmsMenuLength &gt; 0"><a href="#"
+                                           class="dropdown-toggle" data-toggle="dropdown"
+                                           ng-show="cmsMenuLength &gt; 0" ng-click="listSubMenus(cmsMenu)">{{cmsMenu.name}}
+                                               <b class="caret" ng-show="cmsMenuLength &gt; 0"></b>
+                                       </a>
+                                           <ul class="dropdown-menu" ng-show="cmsSubMenusLength > 0">
+                                               <li ng-repeat="cmsSubMenus in cmsSubMenuDetails"
+                                                   ng-show="cmsSubMenusLength &gt; 0"><a href="#"
+                                                   ng-click="listSubMenus(cmsSubMenus)">{{cmsSubMenus.name}}</a>
+                                                   <div align="center" ng-show="cmsSubMenus!=null">
+                                                       <ul >
+                                                           <li ng-repeat="cmsChildMenus in cmsSubMenuDetails"><a href="#" >-{{cmsChildMenus.name}}</a></li>
+                                                       </ul>
+                                                   </div>
+                                               </li>
+                                           </ul></li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-1 col-xs-1 nav-bar_bg_r p-0"></div>
+        </nav>
+    </div>
+</div>
+<!--end nav-->

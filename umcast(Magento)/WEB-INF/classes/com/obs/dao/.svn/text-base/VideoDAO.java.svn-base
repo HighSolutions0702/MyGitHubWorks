@@ -1,0 +1,269 @@
+package com.obs.dao;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
+import com.obs.base.BaseObject;
+import com.obs.model.CMSMenu;
+import com.obs.model.Category;
+import com.obs.model.Country;
+import com.obs.model.User;
+import com.obs.model.Video;
+
+public class VideoDAO implements IVideoDAO{
+
+	SessionFactory sessionFactory;
+
+	/**
+	 * @return the sessionFactory
+	 */
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	/**
+	 * @param sessionFactory the sessionFactory to set
+	 */
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+
+	/**
+	 * Add Video
+	 * 
+	 * @param  Video video
+	 */
+	@Override
+	public Integer addVideo(Video video) {
+		Integer id = -1;
+		try{
+			id = (Integer)sessionFactory.getCurrentSession().save(video);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return id;
+	}
+
+	/**
+	 * Delete Video
+	 * 
+	 * @param  Video video
+	 */
+	@Override
+	public void deleteVideo(Video video) {
+		try{
+			sessionFactory.getCurrentSession().delete(video);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Update Video
+	 * 
+	 * @param  Video video
+	 */
+	@Override
+	public void updateVideo(Video video) {
+		try{
+			sessionFactory.getCurrentSession().update(video);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 
+	 * Get Video List
+	 * 
+	 * @return List - Video list
+	 */
+	@Override
+	public List<Video> getVideosByUser(long userId) {
+		List<Video> list = new ArrayList<Video>();
+		try{
+			String SQL = "from Video WHERE isDeleted = 0 AND owner.id="+userId +"order by videoId desc" ;
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Video> getAllVideos(String val) {
+		List<Video> list = null;
+		try{
+			String SQL = "from Video WHERE isDeleted = 0 and videoCategory="+ val +"order by videoId desc";
+			Query query  = sessionFactory.getCurrentSession().createQuery(SQL);
+			query.setMaxResults(5);
+			return query.list();
+
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Video> getVideoInfoById(Integer videoVal) {
+		List<Video> list = null;
+		try{
+			String SQL = "from Video WHERE isDeleted = 0 and videoId="+ videoVal ;
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public Video getVideoById(Integer id) {
+		List list = null;
+		try{
+			list =sessionFactory.getCurrentSession()
+					.createQuery("from Video WHERE videoId=? and isDeleted = 0")
+					.setParameter(0,id).list();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return list!=null?(Video)list.get(0):null;
+	}
+
+	@Override
+	public List<Video> getVideoInfoByDetails(Video video) {
+		List<Video> list = null;
+		try{
+			String SQL = "from Video WHERE isDeleted = 0 and videoId != "+ video.getVideoId()+ " and owner = "+video.getOwner().getId()+"and owner.isDeleted = 0" ;
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Video> getRelatedVideos(Video video) {
+		List<Video> list = null;
+		try{
+			String SQL = "from Video WHERE isDeleted = 0 and videoId != "+ video.getVideoId()+ " and videoCategory = "+ video.getVideoCategory().getCategoryId() + " and owner != "+video.getOwner().getId() ;
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public Video getLoginUserVideo(int userId) {
+		List list = null;
+		try{
+			list = sessionFactory.getCurrentSession()
+					.createQuery("from Video WHERE owner.id=? and owner.isDeleted = 0 and isDeleted = 0 order by videoId desc")
+					.setParameter(0,userId).list();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return (list!=null && list.size()>0)?(Video)list.get(0):null;
+	}
+
+	@Override
+	public List<Video> getLatestVideos() {
+		List<Video> list = null;
+		try{
+			String SQL = "from Video WHERE isDeleted = 0 order by videoId desc" ;
+			Query query  =sessionFactory.getCurrentSession().createQuery(SQL);
+			query.setMaxResults(4);
+			return query.list();
+
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Video> getSearchItems(String searchVal) {
+		List<Video> list = null;
+		try{
+			String SQL = "from Video WHERE isDeleted = 0 and videoName LIKE '%"+searchVal+"%'" ;
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Category> getCategories() {
+		List<Category> list = null;
+		try{
+			String SQL = "from Category ";
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public Category getVideoCategoryById(int catId) {
+		List list = null;
+		try{
+			list = sessionFactory.getCurrentSession()
+					.createQuery("from Category where categoryId=?")
+					.setParameter(0,catId).list();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return (list!=null && list.size()>0)?(Category)list.get(0):null;
+	}
+
+	@Override
+	public List<Video> getAllVideosByCategory(String catVal) {
+		List<Video> list = null;
+		try{
+			String SQL = "from Video WHERE isDeleted = 0 and videoCategory="+ catVal ;
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	
+}

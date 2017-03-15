@@ -1,0 +1,108 @@
+package com.obs.servlets;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.obs.model.Login;
+import com.obs.model.User;
+import com.obs.service.LoginService;
+import com.obs.service.UserService;
+import com.obs.utils.CommonProperties;
+
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
+
+/**
+ * Servlet implementation class TwitterOAuth
+ */
+@WebServlet("/twitterOAuth")
+public class TwitterOAuth extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	public final String APP_KEY = "eHTAhx9l5wR1CT8jWPICM5VoO";
+	public final String APP_SECRET = "eUqO07mykxKprZljjGKMwsS8XulR1SGqHVMqkfD8p0k20eDkJM";
+	public final String RETURNURL = "http://umcast.com/umcast/twitterOAuth";
+
+	public final String SETTINGS_PAGE	= CommonProperties.getBaseURL()+CommonProperties.getContextPath()+"user/umcast_settings.html";
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public TwitterOAuth() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		try{
+			String oauth_token 		= request.getParameter("oauth_token");
+			String oauth_verifier 	= request.getParameter("oauth_verifier");
+			String state = request.getParameter("state");
+			AccessToken accessToken = null;
+			TwitterFactory factory = new TwitterFactory();
+			Twitter twitter = factory.getInstance();
+
+			if((oauth_token == null || oauth_token.isEmpty()) && (oauth_verifier == null || oauth_verifier.isEmpty())){
+				// The factory instance is re-useable and thread safe.
+				twitter.setOAuthConsumer(APP_KEY, APP_SECRET);
+				RequestToken requestToken = twitter.getOAuthRequestToken(RETURNURL+"?state="+state);
+				System.out.println(requestToken.getToken());
+				System.out.println(requestToken.getTokenSecret());
+
+				if (null == accessToken) {
+					response.sendRedirect(requestToken.getAuthorizationURL());
+				}
+			}
+			else{
+				twitter.setOAuthConsumer(APP_KEY, APP_SECRET);
+				accessToken = new AccessToken(oauth_token, oauth_verifier);
+				twitter.setOAuthAccessToken(accessToken);
+				String oauth_token_merge = oauth_token+"&&&"+oauth_verifier;
+				saveOAuthToken(oauth_token_merge,state);
+				try{
+					Status status = twitter.updateStatus("hello world");
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+				response.sendRedirect(SETTINGS_PAGE);
+
+			}
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+	}
+
+	public void saveOAuthToken(String refreshToken,String token){
+		UserService userService = new UserService();
+		LoginService loginService = new LoginService();
+		Login login = loginService.getLoginByToken(token);
+		User user = userService.getUserById(login.getUserId());
+		user.setToken_twitter(refreshToken);
+		userService.updateUser(user);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+	}
+
+}
+
+
+

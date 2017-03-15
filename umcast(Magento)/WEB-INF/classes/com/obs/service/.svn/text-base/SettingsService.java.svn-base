@@ -1,0 +1,268 @@
+package com.obs.service;
+
+import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
+
+import com.obs.dao.CMSDAO;
+import com.obs.dao.CMSMenuDAO;
+import com.obs.dao.CMSPageDAO;
+import com.obs.dao.ICMSDAO;
+import com.obs.dao.ICMSMenuDAO;
+import com.obs.dao.ICMSPageDAO;
+import com.obs.dao.ILevelDAO;
+import com.obs.dao.ISettingsDAO;
+import com.obs.dao.LevelDAO;
+import com.obs.dao.SettingsDAO;
+import com.obs.model.CMS;
+import com.obs.model.CMSMenu;
+import com.obs.model.CMSPage;
+import com.obs.model.Level;
+import com.obs.model.Settings;
+
+/**
+ * 
+ * @author rameshbabu_s
+ *
+ */
+@Transactional(readOnly = true)
+
+public class SettingsService implements ISettingsService{
+	
+ISettingsDAO settingsDAO ;
+ICMSDAO cmsDAO;	
+ILevelDAO levelDAO;
+ICMSPageDAO cmspageDAO;
+ICMSMenuDAO cmsmenuDAO;
+
+public ICMSPageDAO getCmspageDAO() {
+	return cmspageDAO;
+}
+
+public void setCmspageDAO(ICMSPageDAO cmspageDAO) {
+	this.cmspageDAO = cmspageDAO;
+}
+
+public ICMSMenuDAO getCmsmenuDAO() {
+	return cmsmenuDAO;
+}
+
+public void setCmsmenuDAO(ICMSMenuDAO cmsmenuDAO) {
+	this.cmsmenuDAO = cmsmenuDAO;
+}
+
+	/**
+	 * @return the settingsDAO
+	 */
+	public ISettingsDAO getSettingsDAO() {
+		return settingsDAO;
+	}
+
+	/**
+	 * @param settingsDAO the settingsDAO to set
+	 */
+	public void setSettingsDAO(ISettingsDAO settingsDAO) {
+		this.settingsDAO = settingsDAO;
+	}
+	/**
+	 * 
+	 * @return the CMS DAO
+	 */
+	public ICMSDAO getCmsDAO() {
+		return cmsDAO;
+	}
+	public ILevelDAO getLevelDAO() {
+		return levelDAO;
+	}
+
+	public void setLevelDAO(ILevelDAO levelDAO) {
+		this.levelDAO = levelDAO;
+	}
+
+	/**
+	 * 
+	 * @param cmsDAO
+	 */
+	public void setCmsDAO(ICMSDAO cmsDAO) {
+		this.cmsDAO = cmsDAO;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.obs.fms.service.ISettingsService#addSettings(com.obs.fms.model.Settings)
+	 */
+	@Override
+	@Transactional(readOnly = false)
+	public void addSettings(Settings settings) {
+		 getSettingsDAO().addSetting(settings);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.obs.fms.service.ISettingsService#updateSettings(com.obs.fms.model.Settings)
+	 */
+	@Override
+	@Transactional(readOnly = false)
+	public void updateSettings(Settings settings) {
+		getSettingsDAO().updateSettings(settings);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.obs.fms.service.ISettingsService#deleteSettings(com.obs.fms.model.Settings)
+	 */
+	@Override
+	@Transactional(readOnly = false)
+	public void deleteSettings(Settings settings) {
+		getSettingsDAO().deleteSettings(settings);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.obs.fms.service.ISettingsService#getSettingsById(long)
+	 */
+	@Override
+	public Settings getSettingsById(long id) {
+		return getSettingsDAO().getSettingsById(id);
+	}
+	/* (non-Javadoc)
+	 * @see com.obs.fms.service.ISettingsService#getSettingsByLevelId(long)
+	 */
+	@Override
+	public Settings getSettingsByLevelId(long id) {
+		return getSettingsDAO().getSettingsByLevelId(id);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.obs.fms.service.ISettingsService#getSettings()
+	 */
+	@Override
+	public List<Settings> getSettings() {
+		return getSettingsDAO().getSettings();
+	}
+
+	@Override
+	public Boolean roleHasPermission(String menuValue, long id) {
+		return getSettingsDAO().roleHasPermission(menuValue, id);
+	}
+
+	@Override
+	public List<CMS> getCMSContents() {
+		// TODO Auto-generated method stub
+		return getCmsDAO().getCMS();
+	}
+
+	@Override
+	public CMS getCMSContentById(long id) {
+		// TODO Auto-generated method stub
+		return getCmsDAO().getCMSByID(id);
+	}
+
+	@Override
+	public void updateCms(CMS cms) {
+		// TODO Auto-generated method stub
+		getCmsDAO().updateCMS(cms);
+		
+	}
+
+	@Override
+	public List<Level> getLevelContents() {
+		// TODO Auto-generated method stub
+		return getLevelDAO().getLevel();
+	}
+
+	@Override
+	public Level getLevelContentById(long id) {
+		// TODO Auto-generated method stub
+		return getLevelDAO().getLevelByID(id);
+	}
+	@Override
+	@Transactional(readOnly = false)
+	public void updateLevel(Level level) {
+		// TODO Auto-generated method stub
+		getLevelDAO().updateLevel(level);
+		
+	}
+	@Override
+	@Transactional(readOnly = false)
+	public void updateNewLevel(Level level) {
+		// TODO Auto-generated method stub
+		getLevelDAO().addLevel(level);
+		
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public Long addCMSMenu(CMSMenu cmsmenu) {
+		return getCmsmenuDAO().addCMSMenu(cmsmenu);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public void addCMSPage(CMSPage content) {
+		// TODO Auto-generated method stub
+		getCmspageDAO().addCMSPage(content);
+		
+	}
+
+	@Override
+	public List<CMSMenu> getCMSMenus() {
+		// TODO Auto-generated method stub
+		return getCmsmenuDAO().getCMSMenu();
+	}
+	@Override
+	public List<CMSMenu> getCMSMenusOfGuest() {
+		// TODO Auto-generated method stub
+		return getCmsmenuDAO().getCMSMenusOfGuest();
+	}
+	@Override
+	public List<CMSMenu> getCMSMenusOfMember() {
+		// TODO Auto-generated method stub
+		return getCmsmenuDAO().getCMSMenusOfMember();
+	}
+	@Override
+	public CMSMenu getCMSMenuById(long id) {
+		// TODO Auto-generated method stub
+		return getCmsmenuDAO().getCMSMenuByID(id);
+	}
+
+	@Override
+	public List<CMSPage> getCMSPages() {
+		// TODO Auto-generated method stub
+		return getCmspageDAO().getCMSPage();
+	}
+
+	@Override
+	public CMSPage getCMSPageById(long id) {
+		// TODO Auto-generated method stub
+		return getCmspageDAO().getCMSPageByID(id);
+	}
+	@Override
+	@Transactional(readOnly = false)
+	public void updatePage(CMSPage cmspage) {
+		// TODO Auto-generated method stub
+		getCmspageDAO().updateCMSPage(cmspage);
+		
+	}
+	@Override
+	@Transactional(readOnly = false)
+	public void updateMenu(CMSMenu cmsmenu) {
+		// TODO Auto-generated method stub
+		getCmsmenuDAO().updateCMSMenu(cmsmenu);
+		
+	}
+
+	@Override
+	public List<CMSPage> getCMSPagesByMenu(Integer menuId) {
+		// TODO Auto-generated method stub
+		return getCmspageDAO().getCMSPagesByMenu(menuId);
+	}
+
+	@Override
+	public List<CMSMenu> getSubMenusByParentMenu(long menuId) {
+		return getCmsmenuDAO().getSubMenusByParentMenu(menuId);
+	}
+
+	@Override
+	public List<CMSMenu> getCMSMemberSubMenuByMenu(long menuId) {
+		return getCmsmenuDAO().getCMSMemberSubMenuByMenu(menuId);
+	}
+
+}

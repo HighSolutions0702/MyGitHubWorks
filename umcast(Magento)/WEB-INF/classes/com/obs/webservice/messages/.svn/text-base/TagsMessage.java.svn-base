@@ -1,0 +1,32 @@
+package com.obs.webservice.messages;
+
+import java.util.Collection;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.Tags;
+
+@XmlRootElement(name="tags")
+public class TagsMessage {
+	@XmlElement(name="status")
+	public ResponseStatus status;
+
+	private Collection<Tags> entities;
+
+	public TagsMessage(){
+		super();
+	}
+
+	public TagsMessage(ResponseStatus status, Collection<Tags>  entities){
+		super();
+		this.status=status;
+		this.entities = entities;
+	}
+
+	@XmlElement(name="tags")
+	public Collection<Tags> getTagsEntities() {
+		return entities;
+	}
+
+}

@@ -1,0 +1,179 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/unstoppablemarketers/!svn/ver/369/usm/src/com/obs/webservice/messages
+END
+LevelsMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/unstoppablemarketers/!svn/ver/273/usm/src/com/obs/webservice/messages/LevelsMessage.java
+END
+CMSMenusMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/unstoppablemarketers/!svn/ver/307/usm/src/com/obs/webservice/messages/CMSMenusMessage.java
+END
+ResponseStatus.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/unstoppablemarketers/!svn/ver/20/usm/src/com/obs/webservice/messages/ResponseStatus.java
+END
+TagsMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/unstoppablemarketers/!svn/ver/292/usm/src/com/obs/webservice/messages/TagsMessage.java
+END
+ProfileMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/unstoppablemarketers/!svn/ver/209/usm/src/com/obs/webservice/messages/ProfileMessage.java
+END
+SettingsMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/unstoppablemarketers/!svn/ver/230/usm/src/com/obs/webservice/messages/SettingsMessage.java
+END
+UsersMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/unstoppablemarketers/!svn/ver/20/usm/src/com/obs/webservice/messages/UsersMessage.java
+END
+CommentMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/unstoppablemarketers/!svn/ver/233/usm/src/com/obs/webservice/messages/CommentMessage.java
+END
+CMSPagesMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/unstoppablemarketers/!svn/ver/307/usm/src/com/obs/webservice/messages/CMSPagesMessage.java
+END
+AmountMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/unstoppablemarketers/!svn/ver/300/usm/src/com/obs/webservice/messages/AmountMessage.java
+END
+CountryMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/unstoppablemarketers/!svn/ver/159/usm/src/com/obs/webservice/messages/CountryMessage.java
+END
+CMSsMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/unstoppablemarketers/!svn/ver/252/usm/src/com/obs/webservice/messages/CMSsMessage.java
+END
+VideoMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/unstoppablemarketers/!svn/ver/162/usm/src/com/obs/webservice/messages/VideoMessage.java
+END
+LevelMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/unstoppablemarketers/!svn/ver/273/usm/src/com/obs/webservice/messages/LevelMessage.java
+END
+CMSMenuMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/unstoppablemarketers/!svn/ver/307/usm/src/com/obs/webservice/messages/CMSMenuMessage.java
+END
+TagMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/unstoppablemarketers/!svn/ver/292/usm/src/com/obs/webservice/messages/TagMessage.java
+END
+CountriesMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/unstoppablemarketers/!svn/ver/159/usm/src/com/obs/webservice/messages/CountriesMessage.java
+END
+SettingMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/unstoppablemarketers/!svn/ver/238/usm/src/com/obs/webservice/messages/SettingMessage.java
+END
+UserMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/unstoppablemarketers/!svn/ver/233/usm/src/com/obs/webservice/messages/UserMessage.java
+END
+CMSPageMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/unstoppablemarketers/!svn/ver/307/usm/src/com/obs/webservice/messages/CMSPageMessage.java
+END
+TokenMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/unstoppablemarketers/!svn/ver/159/usm/src/com/obs/webservice/messages/TokenMessage.java
+END
+ThumnailMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/unstoppablemarketers/!svn/ver/207/usm/src/com/obs/webservice/messages/ThumnailMessage.java
+END
+CMSMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/unstoppablemarketers/!svn/ver/252/usm/src/com/obs/webservice/messages/CMSMessage.java
+END
+ReferralsMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/unstoppablemarketers/!svn/ver/236/usm/src/com/obs/webservice/messages/ReferralsMessage.java
+END
+CommentsMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/unstoppablemarketers/!svn/ver/233/usm/src/com/obs/webservice/messages/CommentsMessage.java
+END
+CategoriesMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/unstoppablemarketers/!svn/ver/369/usm/src/com/obs/webservice/messages/CategoriesMessage.java
+END
+CountMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/unstoppablemarketers/!svn/ver/159/usm/src/com/obs/webservice/messages/CountMessage.java
+END
+ResponseStatusCode.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/unstoppablemarketers/!svn/ver/242/usm/src/com/obs/webservice/messages/ResponseStatusCode.java
+END
+VideosMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/unstoppablemarketers/!svn/ver/20/usm/src/com/obs/webservice/messages/VideosMessage.java
+END

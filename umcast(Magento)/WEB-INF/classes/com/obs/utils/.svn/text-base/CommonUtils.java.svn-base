@@ -1,0 +1,101 @@
+package com.obs.utils;
+
+import java.io.Serializable;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.text.DecimalFormat;
+
+import org.apache.commons.lang.StringUtils;
+
+
+import org.apache.log4j.Logger;
+
+/**
+ *  
+ * @author Ram
+ * Generic functionalities
+ */
+public class CommonUtils implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Logger Instantiated for Log Management
+	 */
+	private static final Logger log					= Logger.getLogger(CommonUtils.class);
+
+
+	/**
+	 * singleton instance
+	 */
+	private static CommonUtils myInstance = null;
+	public static CommonUtils getInstance()
+	{
+		if(myInstance == null)
+			myInstance = new CommonUtils();
+		return myInstance;
+	}
+
+	/**
+	 * generate random pwd
+	 * pwd contains first 4 digit of input string with 4 random numbers
+	 * @param username
+	 * @return generated Pwd
+	 */
+	public String generatePwd(String username)
+	{
+		String unameSub = username.substring(0, username.length()>4?3:username.length());
+		return unameSub+String.valueOf ((int)(Math.random ()*10000));
+	}
+
+	/**
+	 * encrypting MD5 hash method
+	 * @param pwd
+	 * @return encrypted text
+	 */
+	public String generateEncryptedPwd(String pwd){
+		try {
+			MessageDigest md5;
+			md5 = MessageDigest.getInstance ( "MD5" );
+			md5.update ( pwd.getBytes () );
+			BigInteger hash = new BigInteger ( 1, md5.digest () );
+			return hash.toString ( 16 ) ;
+		} catch (Throwable e) {
+			log.error("Error While generateEncryptedPwd:"+e);
+			return null;
+		}
+	}
+
+	/**
+	 * round to 2 decimals
+	 * @param double
+	 * @return String
+	 */
+	public String roundTwoDecimals(double d) {
+		//to round of the double value
+		long l = Math.round(d);
+		d = Long.valueOf(l).doubleValue();
+		//end to round
+		DecimalFormat twoDForm = new DecimalFormat("#.##");
+		return twoDForm.format(d);
+	}
+
+	/**
+	 * check value is not empty
+	 * @param value
+	 * @return boolean
+	 */
+	public boolean isNotEmpty(String value) {
+		if(value != null) value = value.trim();
+		return StringUtils.isNotEmpty(value);
+	}
+
+	public  long getRandomNumber(){
+		return (long)(Math.random()*1000);
+	}
+
+}

@@ -1,0 +1,33 @@
+package com.obs.webservice.messages;
+
+import java.util.Collection;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.Country;
+
+@XmlRootElement(name="countries")
+public class CountriesMessage {
+
+	@XmlElement(name="status")
+	public ResponseStatus status;
+
+	private Collection<Country> entities;
+
+	public CountriesMessage() {
+		super();	
+		}
+
+	public CountriesMessage(ResponseStatus status, Collection<Country>  entities){
+		super();
+		this.status=status;
+		this.entities = entities;
+	}
+
+	@XmlElement(name="countries")
+	public Collection<Country> getUsersEntities() {
+		return entities;
+	}
+
+}

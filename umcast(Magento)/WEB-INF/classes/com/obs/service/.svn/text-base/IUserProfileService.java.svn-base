@@ -1,0 +1,13 @@
+package com.obs.service;
+
+import com.obs.model.UserProfileImages;
+
+public interface IUserProfileService {
+
+	public void addProfileImage(UserProfileImages userProfileObj);
+
+	public UserProfileImages getUserProfileById(int userId);
+
+	public void updateUserProfile(UserProfileImages userProfileObj);
+
+}

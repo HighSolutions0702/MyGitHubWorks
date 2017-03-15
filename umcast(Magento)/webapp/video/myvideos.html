@@ -1,0 +1,127 @@
+<html ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+    <title>Unstoppable Marketers</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0"/>
+    <link rel="shortcut icon" href="/unstoppablemarketers/images/favicon.png"/>
+    <link rel="stylesheet" href="../css/bootstrap.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="../css/plugins.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="../css/style_on.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="../css/style_aligh.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="../css/style_media.css" type="text/css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="../css/style_tooltip.css"/>
+    <link rel="stylesheet" href="../font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.8/angular-cookies.min.js"></script>
+    <script type="text/javascript" src="/umcast/angular/controllers/videoEditController.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/custom.css"/>
+    <style type="text/css">
+        .alert-danger {
+            border-color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap" ng-controller="videoEditController">
+    <header>
+        <ng-include src="'../userheader.html'"></ng-include>
+    </header>
+    <section>
+        <div class="col-lg-12 col-xs-12 p-0 f_l">
+            <div class="cnt_section">
+                <a name="page_start"> </a>
+
+                <div class="col-lg-12  col-xs-12 p-0 m-t-20">
+                    <div class="silver_pannel" style="overflow: hidden; min-width: 1200px">
+                        <div class="row m-0">
+                            <div class="bold_l">
+                                <img src="../images/bold.png"/>
+                            </div>
+                            <div class="bold_r">
+                                <img src="../images/bold.png"/>
+                            </div>
+                        </div>
+                        <!--row-->
+                        <div class="row m-0 panel_title">
+                            <h1>Members Main Back Office</h1>
+                        </div>
+                        <!--row-->
+                        <div class="row m-0 m-t-10">
+                            <ng-include src="'../user/menus.html'"></ng-include>
+                            <div class="col-lg-9 col-sm-6 col-xs-12  back_off_cnt p-0">
+                                <!--Recommended-->
+                                <div class="row  panel_inner_title">
+                                    <h1>My Videos</h1>
+                                </div>
+                                <!--row-->
+                                <div class="col-lg-12 p-t-10">
+                                    <div ng-show="checkVideos">{{msg}}</div>
+                                    <div class="col-lg-3 p-5 rec_vid_width" ng-repeat="videos in userVideos">
+                                        <div class="video_pan">
+                                            <div class="row video_frame resp_img">
+                                                <img ng-src="{{videos.posterUrl}}"/>
+                                            </div>
+                                            <div class="row m-0">
+                                                <div class="video_title_sml">
+                                                    <h2>{{videos.videoName}}</h2>
+
+                                                    <h1>by {{videos.owner.firstName}}</h1>
+                                                </div>
+                                                <div class="video_statistics_sml">
+                                                    <div class="row m-0"></div>
+                                                    <div class="row m-0 p-t-5">
+                                                        <i class="fa fa-calendar-o"></i>
+                                                        {{videos.uploaded_Date|date:'yyyy-MM-dd
+                                                        hh:mm:ss a'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--7-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--row-->
+                                <!--End Recommended-->
+                            </div>
+                            <!--9-->
+                        </div>
+                        <!--row-->
+                        <div class="row m-0">
+                            <div class="bold_l">
+                                <img src="../images/bold.png"/>
+                            </div>
+                            <div class="bold_r">
+                                <img src="../images/bold.png"/>
+                            </div>
+                        </div>
+                        <!--row-->
+                    </div>
+                    <!--silver_pannel-->
+                </div>
+                <!--12-->
+                <!--End Recent Videos-->
+            </div>
+            <!--main_cnt_section-->
+        </div>
+        <!--12-->
+    </section>
+    <ng-include src="'../footer.html'"></ng-include>
+</div>
+<!--wrap-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<!-- jQuery tooltip needed -->
+<script src="js/jquery.jscrollpane.min.js"></script>
+<script src="js/jquery.bookblock.js"></script>
+<script src="js/page.js"></script>
+<script>
+    $(function () {
+
+        Page.init();
+
+    });
+</script>
+</body>
+</html>

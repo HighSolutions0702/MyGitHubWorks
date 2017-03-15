@@ -1,0 +1,38 @@
+package com.obs.webservice.messages;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.Amount;
+
+
+@XmlRootElement(name="amount")
+public class AmountMessage {
+	@XmlElement(name="status")
+	public ResponseStatus status;
+	private Amount _entity = new Amount();
+	@XmlElement(name="amount")
+	public Amount getEntity(){
+		return _entity;
+	}
+
+	public void setEntity(Amount entity){
+		this._entity = entity;
+	}
+
+	public AmountMessage(){
+		super();
+	}
+
+	public AmountMessage(Amount entity){
+		super();
+		setEntity(entity);
+	}
+	
+	public AmountMessage(ResponseStatus status, Amount  entity){
+		super();
+		this.status=status;
+		this._entity = entity;
+	}
+	
+}

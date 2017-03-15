@@ -1,0 +1,115 @@
+package com.obs.webservice;
+
+import java.io.InputStream;
+import java.util.Date;
+import java.util.List;
+
+import org.json.simple.JSONObject;
+
+import com.obs.base.BaseObject;
+import com.obs.model.CMS;
+import com.obs.model.Comments;
+import com.obs.model.Tags;
+import com.obs.model.User;
+import com.obs.model.Video;
+import com.obs.service.CommentService;
+import com.obs.service.ICommentService;
+import com.obs.service.ITagService;
+import com.obs.service.TagService;
+import com.obs.utils.StringUtility;
+import com.obs.webservice.messages.CMSMessage;
+import com.obs.webservice.messages.ResponseStatus;
+import com.obs.webservice.messages.ResponseStatusCode;
+import com.obs.webservice.messages.TagMessage;
+import com.obs.webservice.messages.TagsMessage;
+import com.obs.webservice.messages.UsersMessage;
+import com.obs.webservice.messages.VideosMessage;
+
+public class TagServiceHelper extends BaseObject {
+	private ITagService tagService = getTagService();
+	
+	/*private static TagServiceHelper myInstance = null;
+	public static TagServiceHelper getInstance()
+	{
+		if(myInstance == null)
+			myInstance = new TagServiceHelper();
+		return myInstance;
+	}*/
+	StringUtility stringUtility = StringUtility.getInstance();
+
+	public TagMessage addTagsJson(InputStream is) {
+		ResponseStatus status = null;
+		Tags tagsObj=new Tags();
+		String tagVal=null;
+		try{
+			JSONObject value = stringUtility.getJSONObject(is);
+			tagVal=(String) value.get("tagName");
+			System.out.println(tagVal);
+			if((tagVal!=null) && !(tagVal.isEmpty()))
+			{
+				tagsObj.setIsDeleted(false);
+				tagsObj.setTagName((String) value.get("tagName"));
+				tagService.addNewTag(tagsObj);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else
+			{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "REQUIRED");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return  new TagMessage(status, tagsObj);
+
+	}
+
+	public TagsMessage getTags() {
+		ResponseStatus status = null;
+		try{
+			List<Tags> tagList = tagService.getTags();
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new TagsMessage(status, tagList);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new TagsMessage(status, null);
+		}
+	}
+
+	public TagMessage getTagById(Integer token) {
+		ResponseStatus status = null;
+		Tags tagDetails =tagService.getTagById(token);
+		status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		return  new TagMessage(status, tagDetails);
+	}
+
+	public TagMessage updateTagsJson(InputStream is, Integer token) {
+		ResponseStatus status = null;
+		Tags tagsObj=null;
+		try{
+			JSONObject value = stringUtility.getJSONObject(is);
+			tagsObj =tagService.getTagById(token);
+			if(tagsObj!=null){
+				tagsObj.setTagName((String) value.get("tagName"));
+				tagService.updateTags(tagsObj);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else
+			{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return  new TagMessage(status, tagsObj);
+	}
+
+}

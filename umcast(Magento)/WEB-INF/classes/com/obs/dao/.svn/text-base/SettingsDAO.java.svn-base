@@ -1,0 +1,148 @@
+package com.obs.dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Component;
+import com.obs.base.BaseObject;
+import com.obs.model.Settings;
+
+
+/**
+ * 
+ * User DAO
+ * 
+ * @author Ram
+ *
+ */
+@Component
+public class SettingsDAO implements ISettingsDAO{
+
+	/* (non-Javadoc)
+	 * @see com.obs.fms.dao.ISettingsDAO#addSettings(com.obs.fms.model.Settings)
+	 */
+	
+	SessionFactory sessionFactory;
+
+	/**
+	 * @return the sessionFactory
+	 */
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	/**
+	 * @param sessionFactory the sessionFactory to set
+	 */
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	
+	@Override
+	public Long addSetting(Settings setting) {
+		Long id = 0L;
+		try{
+			id = (Long)sessionFactory.getCurrentSession().save(setting);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return id;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.obs.fms.dao.ISettingsDAO#updateSettings(com.obs.fms.model.Settings)
+	 */
+	@Override
+	public void updateSettings(Settings settings) {
+		try{
+			sessionFactory.getCurrentSession().update(settings);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.obs.fms.dao.ISettingsDAO#deleteSettings(com.obs.fms.model.Settings)
+	 */
+	@Override
+	public void deleteSettings(Settings settings) {
+		try{
+			sessionFactory.getCurrentSession().delete(settings);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.obs.fms.dao.ISettingsDAO#getSettingsById(long)
+	 */
+	@Override
+	public Settings getSettingsById(long id) {
+		List<Settings> list = null;
+		try{
+			list = sessionFactory.getCurrentSession()
+					.createQuery("from Settings where id=?")
+					.setParameter(0,id).list();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return (list!=null && list.size()>0)?(Settings)list.get(0):null;
+	
+	}
+	/* (non-Javadoc)
+	 * @see com.obs.fms.dao.ISettingsDAO#getSettingsById(long)
+	 */
+	@Override
+	public Settings getSettingsByLevelId(long id) {
+		List<Settings> list = null;
+		try{
+			list = sessionFactory.getCurrentSession()
+					.createQuery("from Settings m where m.level_id.levelId=?")
+					.setParameter(0,id).list();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return (list!=null && list.size()>0)?(Settings)list.get(0):null;
+	
+	}
+
+	/* (non-Javadoc)
+	 * @see com.obs.fms.dao.ISettingsDAO#getSettings()
+	 */
+	@Override
+	public List<Settings> getSettings() {
+		List<Settings> list = null;
+		try{
+			String SQL = "from Settings where isDeleted=0";
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public Boolean roleHasPermission(String menuValue, long id) {
+		
+		return false;
+	}
+
+	@Override
+	public void addSettings(Settings settings) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

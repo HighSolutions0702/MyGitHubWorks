@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/unstoppablemarketers/!svn/ver/608/usm/src/com/obs/webservice
+END
+UserServiceHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/unstoppablemarketers/!svn/ver/608/usm/src/com/obs/webservice/UserServiceHelper.java
+END
+UserProfileServiceHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/unstoppablemarketers/!svn/ver/532/usm/src/com/obs/webservice/UserProfileServiceHelper.java
+END
+ReferralServiceHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/unstoppablemarketers/!svn/ver/567/usm/src/com/obs/webservice/ReferralServiceHandler.java
+END
+UserCommentServiceHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/unstoppablemarketers/!svn/ver/532/usm/src/com/obs/webservice/UserCommentServiceHelper.java
+END
+ReferralServiceHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/unstoppablemarketers/!svn/ver/567/usm/src/com/obs/webservice/ReferralServiceHelper.java
+END
+VideoServiceHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/unstoppablemarketers/!svn/ver/532/usm/src/com/obs/webservice/VideoServiceHelper.java
+END
+LoginServiceHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/unstoppablemarketers/!svn/ver/553/usm/src/com/obs/webservice/LoginServiceHelper.java
+END
+VideoShareOAuthServiceHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/unstoppablemarketers/!svn/ver/532/usm/src/com/obs/webservice/VideoShareOAuthServiceHandler.java
+END
+PaymentPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/unstoppablemarketers/!svn/ver/599/usm/src/com/obs/webservice/PaymentPage.java
+END
+EWalletPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/unstoppablemarketers/!svn/ver/581/usm/src/com/obs/webservice/EWalletPage.java
+END
+VideoShareOAuthServiceHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/unstoppablemarketers/!svn/ver/527/usm/src/com/obs/webservice/VideoShareOAuthServiceHelper.java
+END
+TagServiceHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/unstoppablemarketers/!svn/ver/532/usm/src/com/obs/webservice/TagServiceHelper.java
+END
+ServiceHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/unstoppablemarketers/!svn/ver/608/usm/src/com/obs/webservice/ServiceHandler.java
+END

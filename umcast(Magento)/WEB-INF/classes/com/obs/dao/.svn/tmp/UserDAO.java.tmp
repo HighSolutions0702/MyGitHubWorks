@@ -1,0 +1,362 @@
+package com.obs.dao;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.Session;
+import org.springframework.stereotype.Component;
+
+import com.obs.base.BaseObject;
+import com.obs.model.Country;
+import com.obs.model.User;
+
+/**
+ * 
+ * User DAO
+ * 
+ * @author Ram
+ *
+ */
+@Component
+public class UserDAO extends BaseObject implements IUserDAO {
+
+	/**
+	 * Add User
+	 * 
+	 * @param  User user
+	 */
+	@Override
+	public Integer addUser(User user) {
+		Session session = getCurrentSession();
+		Integer id = -1;
+		try{
+			session.beginTransaction();
+			id = (Integer)session.save(user);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		return id;
+	}
+
+	/**
+	 * Delete User
+	 * 
+	 * @param  User user
+	 */
+	@Override
+	public void deleteUser(User user) {
+		Session session = getCurrentSession();
+		try{
+			session.beginTransaction();
+			session.delete(user);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+
+	}
+
+	/**
+	 * Update User
+	 * 
+	 * @param  User user
+	 */
+	@Override
+	public void updateUser(User user) {
+		Session session = getCurrentSession();
+		try{
+			session.beginTransaction();
+			session.update(user);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+	}
+
+	/**
+	 * Get User
+	 * 
+	 * @param  int User Id
+	 * @return User 
+	 */
+	@Override
+	public User getUserById(int id) {
+		List list = null;
+		Session session = getCurrentSession();
+		try{
+			session.beginTransaction();
+			list = session
+					.createQuery("from User where id=? and isDeleted = 0")
+					.setParameter(0,id).list();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		return list!=null?(User)list.get(0):null;
+	}
+
+	/**
+	 * Get User List
+	 * 
+	 * @return List - User list
+	 */
+	@Override
+	public List<User> getUsers() {
+		Session session = getCurrentSession();
+		List<User> list = null;
+		try{
+			String SQL = "from User as m WHERE isDeleted = 0 AND isActive = 1 and userType=2";
+			session.beginTransaction();
+			list = session.createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		return list;
+	}
+	/**
+	 * 
+	 */
+	@Override
+	public User loginUser(String email, String password) {
+		Session session = getCurrentSession();
+		List<User> list = null;
+		try{
+			session.beginTransaction();
+			list = session.createQuery("from User where email=? and password=? and isDeleted = 0 and isActive=1 ")
+					.setParameter(0, email)
+					.setParameter(1, password).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		return !list.isEmpty()?(User)list.get(0):null;
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public User getUserByEmail(String email) {
+		Session session = getCurrentSession();
+		List<User> userList = null;
+		try{
+			session.beginTransaction();
+			userList = session.createQuery("from User where email=? and isDeleted=0 ").setParameter(0, email).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		if (userList.size() > 0 ) {
+			return userList.get(0);
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<Country> getCountries() {
+		Session session = getCurrentSession();
+		List<Country> list = null;
+		try{
+			String SQL = "from Country ";
+			session.beginTransaction();
+			list = session.createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		return list;
+	}
+
+	/**
+	 * check user by email confirmation code
+	 * @param confirmationCode
+	 * @return user
+	 */
+	@Override
+	public User getUserByConfirmationCode(String confirmationCode){
+		Session session = getCurrentSession();
+		List<User> userList = null;
+		try{
+			session.beginTransaction();
+			userList = session.createQuery("from User where confirmationCode=? and isDeleted=0 ").setParameter(0, confirmationCode).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		if (userList!=null && userList.size() > 0 ) {
+			return userList.get(0);
+		}
+		return null;
+	}
+
+	/**
+	 * check user by referral code
+	 * @param referralCode
+	 * @return user
+	 */
+	@Override
+	public User getUserByReferralCode(String referralCode){
+		Session session = getCurrentSession();
+		List<User> userList = null;
+		try{
+			session.beginTransaction();
+			userList = session.createQuery("from User where referralCode=? and isDeleted=0 ").setParameter(0, referralCode).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		if (userList!=null && userList.size() > 0 ) {
+			return userList.get(0);
+		}
+		return null;
+	}
+
+	/**
+	 * get users from referred by Id
+	 * @param userId
+	 * @return
+	 */
+	@Override
+	public List<User> getUsersFromReferredById(int userId){
+		Session session = getCurrentSession();
+		List<User> list = null;
+		try{
+			String SQL = "from User as m WHERE isDeleted = 0 AND refered_by = "+userId;
+			session.beginTransaction();
+			list = session.createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		return list;
+	}
+
+	@Override
+	public String getUsersCount() {
+		Session session = getCurrentSession();
+		List userCount = new ArrayList<>();
+		try{
+			String SQL = "Select count (*) from User as m WHERE isDeleted = 0 AND isActive = 1 and userType=2";
+			session.beginTransaction();
+			userCount = session.createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		if (userCount.size() > 0 ) {
+			return String.valueOf(userCount.get(0));
+		}
+		return null;
+	}
+
+	@Override
+	public User getUserByUMCastName(String um_Cast_Name) {
+		Session session = getCurrentSession();
+		List<User> userList = null;
+		try{
+			session.beginTransaction();
+			userList = session.createQuery("from User where umcast_name=? and isDeleted=0 ").setParameter(0, um_Cast_Name).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		if (userList.size() > 0 ) {
+			return userList.get(0);
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<User> getSubscribedUsers() {
+		Session session = getCurrentSession();
+		List<User> list = null;
+		try{
+			String SQL = "from User WHERE isDeleted = 0 AND isActive = 1 and userType=2 and subscribe_On != null";
+			session.beginTransaction();
+			list = session.createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		return list;
+	}
+	@Override
+	public User getUserByToken(String token) {
+		Session session = getCurrentSession();
+		List<User> refNameList = null;
+		try{
+			session.beginTransaction();
+			refNameList = session.createQuery("from User where referralCode=? and isDeleted=0 ").setParameter(0, token).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally{
+			session.getTransaction().commit();
+		}
+		if (refNameList!=null && refNameList.size() > 0 ) {
+			return refNameList.get(0);
+		}
+		return null;
+	}
+}

@@ -1,0 +1,12 @@
+package com.obs.webservice.messages;
+
+public class ResponseStatusCode {
+	
+	public static final int STATUS_OK 				= 200;
+	public static final int STATUS_UNAUTHORIZED 	= 401;
+	public static final int STATUS_CONFLICT 		= 409;
+	public static final int STATUS_INTERNAL_ERROR 	= 500;
+	public static final int STATUS_REQUIRED 		= 204;
+	public static final int STATUS_NOTMATCHED 		= 205;
+	public static final int STATUS_NORECORD 		= 206;
+}

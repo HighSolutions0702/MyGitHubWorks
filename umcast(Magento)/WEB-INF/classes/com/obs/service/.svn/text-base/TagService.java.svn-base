@@ -1,0 +1,43 @@
+package com.obs.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.obs.dao.ITagsDAO;
+import com.obs.dao.TagsDAO;
+import com.obs.model.Tags;
+
+
+@Transactional(readOnly = true)
+public class TagService implements ITagService {
+	ITagsDAO tagsDAO;
+
+	public ITagsDAO getTagsDAO() {
+		return tagsDAO;
+	}
+	public void setTagsDAO(ITagsDAO tagsDAO) {
+		this.tagsDAO = tagsDAO;
+	}
+
+	@Transactional(readOnly = false)
+	@Override
+	public void addNewTag(Tags tags) {
+		getTagsDAO().addNewTag(tags);
+	}
+	@Override
+	public List<Tags> getTags() {
+		return getTagsDAO().getTags();
+	}
+	@Override
+	public Tags getTagById(Integer tagId) {
+		return getTagsDAO().getTagById(tagId);
+	}
+	@Transactional(readOnly = false)
+	@Override
+	public void updateTags(Tags tagsObj) {
+		getTagsDAO().updateTags(tagsObj);
+	}
+
+}

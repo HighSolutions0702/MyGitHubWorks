@@ -1,0 +1,341 @@
+package com.obs.dao;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.hibernate.SessionFactory;
+
+import com.obs.model.Amount;
+import com.obs.model.Referral;
+
+public class ReferralDAO  implements IReferralDAO {
+
+	SessionFactory sessionFactory;
+
+	/**
+	 * @return the sessionFactory
+	 */
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	/**
+	 * @param sessionFactory the sessionFactory to set
+	 */
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	@Override
+	public Referral getReferralByReferralCode(String referralCode) {
+		List<Referral> referralList = null;
+		try{
+			referralList = sessionFactory.getCurrentSession().createQuery("from Referral where referralCode=?").setParameter(0, referralCode).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (referralList!=null && referralList.size() > 0 ) {
+			return referralList.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public Referral getReferralById(long id) {
+		List<Referral> referralList = null;
+		try{
+			referralList = sessionFactory.getCurrentSession().createQuery("from Referral where id=?").setParameter(0, id).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (referralList!=null && referralList.size() > 0 ) {
+			return referralList.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public Referral getReferralByUserId(int userId) {
+		List<Referral> referralList = null;
+		try{
+			referralList =sessionFactory.getCurrentSession().createQuery("from Referral where user.id=?").setParameter(0, userId).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (referralList!=null && referralList.size() > 0 ) {
+			return referralList.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public Long addReferral(Referral referral) {
+		Long id = -1L;
+		try{
+			id = (Long)sessionFactory.getCurrentSession().save(referral);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return id;
+	}
+
+	@Override
+	public void updteReferral(Referral referral) {
+		Long id = -1L;
+		try{
+			sessionFactory.getCurrentSession().saveOrUpdate(referral);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public List<Referral> getDirectReferralByRefId(int refId) {
+
+		List<Referral> list = null;
+		try{
+			String SQL = "from Referral as m WHERE m.current_parent_id > 0 and m.referred_by_id = "+refId+" and m.user.isDeleted = 0 order by m.user.subscribe_On";
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Referral> getUnsubscribedDirectReferralByRefId(int refId) {
+
+		List<Referral> list = null;
+		try{
+			String SQL = "from Referral as m WHERE m.current_parent_id = 0 and m.referred_by_id = "+refId+" and m.user.isDeleted = 0";
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public String getDirectReferralCount(int refId) {
+		List referralCount = new ArrayList<>();
+		try{
+			String SQL = "Select count (*) from Referral as m WHERE referred_by_id="+refId+" and m.user.isDeleted = 0";
+			referralCount = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (referralCount!=null && referralCount.size() > 0 ) {
+			return String.valueOf(referralCount.get(0));
+		}
+		return null;
+	}
+
+	@Override
+	public List<Referral> getAllReferralsByRefId(int refId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getAllReferralCount(int refId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getRecentOrderNo(long referralId) {
+		int orderNo = 0;
+		List referralCount = new ArrayList<>();
+		try{
+			String SQL = "SELECT COUNT(ref.`DN_ORDER`) FROM `tbl_referral` as ref join tbl_user as usr on (usr.DN_ID = ref.DN_USER_ID ) WHERE ( ref.`DN_REFERRED_BY_ID`="+referralId+" OR ref.`DN_CURRENT_PARENT_ID` = "+referralId+" OR FIND_IN_SET( "+referralId+" , ref.DC_PARENTS) ) and usr.DB_DELETED = 0";
+			referralCount = sessionFactory.getCurrentSession().createSQLQuery(SQL).list();
+			if (referralCount!=null && referralCount.size() > 0 ) {
+				orderNo = String.valueOf(referralCount.get(0))!=null?Integer.parseInt(String.valueOf(referralCount.get(0))):0;
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return orderNo;
+	}
+
+	@Override
+	public int getOrderNoByDate(long referralId,Date childSubscriptionDate) {
+		int orderNo = 0;
+		List referralCount = new ArrayList<>();
+		try{
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String csd = df.format(childSubscriptionDate);
+			String SQL = "SELECT COUNT(ref.`DN_ORDER`) FROM `tbl_referral` as ref join tbl_user as usr on (usr.DN_ID = ref.DN_USER_ID ) WHERE ( ref.`DN_REFERRED_BY_ID`="+referralId+" OR ref.`DN_CURRENT_PARENT_ID` = "+referralId+" OR FIND_IN_SET( "+referralId+" , ref.DC_PARENTS) ) and usr.DB_DELETED = 0 and usr.DD_SUBSCRIBE_ON < '"+csd+"'";
+			//String SQL = "SELECT COUNT(`DN_ORDER`) FROM `tbl_referral` WHERE ( `DN_REFERRED_BY_ID`="+referralId+" OR `DN_CURRENT_PARENT_ID` = "+referralId+" OR FIND_IN_SET( "+referralId+" , DC_PARENTS) ) ";
+			referralCount = sessionFactory.getCurrentSession().createSQLQuery(SQL).list();
+			if (referralCount!=null && referralCount.size() > 0 ) {
+				orderNo = String.valueOf(referralCount.get(0))!=null?Integer.parseInt(String.valueOf(referralCount.get(0))):0;
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return orderNo;
+	}
+
+	@Override
+	public List getDirectReferralsAndPassupsByRefId(int refId) {
+		List<Referral> list = null;
+		try{
+			String SQL = "SELECT * FROM `tbl_referral` as ref join tbl_user as usr on (usr.DN_ID = ref.DN_USER_ID ) WHERE ( (ref.`DN_REFERRED_BY_ID`="+refId+" OR ref.`DN_CURRENT_PARENT_ID` = "+refId+" OR FIND_IN_SET( "+refId+" , ref.DC_PARENTS) )  AND ref.`DN_CURRENT_PARENT_ID` > 0  and usr.DB_DELETED = 0) ";
+			list = sessionFactory.getCurrentSession().createSQLQuery(SQL).addEntity(Referral.class).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+
+	/********************** amount **************************/
+
+	@Override
+	public Long addAmount(Amount amount) {
+		Long id = -1L;
+		try{
+			id = (Long)sessionFactory.getCurrentSession().save(amount);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return id;
+	}
+
+	@Override
+	public String getReferralAmount(long refId) {
+		List referralAmount = new ArrayList<>();
+		try{
+			String SQL = "Select SUM (referral_share) from Amount as m WHERE referred_by_id="+refId+ " and user.isDeleted = 0";
+			referralAmount = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (referralAmount!=null && referralAmount.size() > 0 ) {
+			return String.valueOf(referralAmount.get(0));
+		}
+		return null;
+	}
+
+	@Override
+	public String getPassupParentReferralAmount(long refId) {
+		List referralAmount = new ArrayList<>();
+		try{
+			String SQL = "Select SUM (parent_share) from Amount as m WHERE parent_id="+refId+" and user.isDeleted = 0";
+			referralAmount = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (referralAmount!=null && referralAmount.size() > 0 ) {
+			return String.valueOf(referralAmount.get(0));
+		}
+		return null;
+	}
+
+	@Override
+	public String getReferralAmountFromDirectNonPassup(int refId) {
+		List referralAmount = new ArrayList<>();
+		try{
+			String SQL = "Select SUM (referral_share) from Amount as m WHERE ((parent_id = null) or (parent_id = referred_by_id)) and referred_by_id="+refId+" and user.isDeleted = 0";
+			referralAmount = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (referralAmount!=null && referralAmount.size() > 0 ) {
+			return String.valueOf(referralAmount.get(0));
+		}
+		return null;
+	}
+
+	@Override
+	public String getReferralAmountFromDirectPassup(int refId) {
+		List referralAmount = new ArrayList<>();
+		try{
+			String SQL = "Select SUM (referral_share) from Amount as m WHERE (parent_id != referred_by_id) and referred_by_id="+refId+" and user.isDeleted = 0";
+			referralAmount = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (referralAmount!=null && referralAmount.size() > 0 ) {
+			return String.valueOf(referralAmount.get(0));
+		}
+		return null;
+	}
+
+	@Override
+	public List<Referral> getInDirectReferralsByRefId(int refId) {
+		List<Referral> list = null;
+		try{
+			String SQL = "SELECT * FROM `tbl_referral` as ref join tbl_user as usr on (ref.DN_USER_ID = usr.DN_ID)  WHERE ( ref.`DN_REFERRED_BY_ID`!="+refId+" AND ref.`DN_CURRENT_PARENT_ID` != "+refId+" AND FIND_IN_SET( "+refId+" , ref.DC_PARENTS) ) AND ref.`DN_CURRENT_PARENT_ID` > 0 and usr.DB_DELETED = 0 order by usr.DD_SUBSCRIBE_ON";
+			list = sessionFactory.getCurrentSession().createSQLQuery(SQL).addEntity(Referral.class).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Referral> getPassupReferralsByRefId(int refId) {
+		List<Referral> list = null;
+		try{
+			String SQL = "SELECT * FROM `tbl_referral` as ref join tbl_user as usr on (ref.DN_USER_ID = usr.DN_ID) WHERE ref.`DN_CURRENT_PARENT_ID` > 0 AND  ref.`DN_REFERRED_BY_ID`!="+refId+" AND ref.`DN_CURRENT_PARENT_ID` = "+refId+" and usr.DB_DELETED = 0 order by usr.DD_SUBSCRIBE_ON";
+			list = sessionFactory.getCurrentSession().createSQLQuery(SQL).addEntity(Referral.class).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+	/**
+	 * delete referal
+	 */
+	@Override
+	public void deleteReferral(Referral referral) {
+		try{
+			sessionFactory.getCurrentSession().delete(referral);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+}

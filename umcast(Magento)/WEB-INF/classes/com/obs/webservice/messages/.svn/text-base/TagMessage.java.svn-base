@@ -1,0 +1,37 @@
+package com.obs.webservice.messages;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.CMS;
+import com.obs.model.Tags;
+
+@XmlRootElement(name="tag")
+public class TagMessage {
+	@XmlElement(name="status")
+	public ResponseStatus status;
+	private Tags _entity = new Tags();
+	@XmlElement(name="tag")
+	public Tags getEntity(){
+		return _entity;
+	}
+
+	public void setEntity(Tags entity){
+		this._entity = entity;
+	}
+
+	public TagMessage(){
+		super();
+	}
+
+	public TagMessage(Tags entity){
+		super();
+		setEntity(entity);
+	}
+	
+	public TagMessage(ResponseStatus status, Tags entity){
+		super();
+		this.status=status;
+		this._entity = entity;
+	}
+}

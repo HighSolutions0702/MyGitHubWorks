@@ -1,0 +1,122 @@
+package com.obs.webservice;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.springframework.stereotype.Component;
+
+import com.obs.model.User;
+import com.obs.model.Video;
+import com.obs.webservice.messages.CountMessage;
+import com.obs.webservice.messages.ResponseStatus;
+import com.obs.webservice.messages.ResponseStatusCode;
+import com.obs.webservice.messages.UserMessage;
+import com.obs.webservice.messages.VideoMessage;
+
+
+/**
+ * @author Ram
+ *
+ */
+@Path("/share/")
+public class VideoShareOAuthServiceHandler {
+
+	public final String YOUTUBE_REDIRECT_URI = "http://localhost:8080/unstoppablemarketers/resources/share/receiveAuthorizationCodeYoutubeOAuth";
+	public final String YOUTUBE_CLIENT_ID = "37385053698-4lh6609jc9ceplfd4g4hh32p7q30desr.apps.googleusercontent.com";
+	public final String YOUTUBE_SCOPE = "https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload";
+	public final String YOUTUBE_CLIENT_SECRET 	= "hhjvSxc96EHLNJJaGf2ZOwnz";
+
+	public final String VIMEO_REDIRECT_URI = "";
+	public final String VIMEO_CLIENT_ID = "a3bd3ff82b320e5d2cba6dd99a10fd89a6d375e9";
+	public final String VIMEO_SCOPE = "";
+
+	VideoShareOAuthServiceHelper videoShareOAuthServiceHelper = VideoShareOAuthServiceHelper.getInstance();
+	LoginServiceHelper loginServiceHelper 				= new LoginServiceHelper();
+	ReferralServiceHelper referralServiceHelper 		= new ReferralServiceHelper();
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getAccessTokenYoutube")
+	public CountMessage getAccessTokenYoutubeJson(@Context HttpServletRequest req) {
+		String refreshToken = null;
+		ResponseStatus status = null;
+		String accessToken=null;
+		String token = null;
+		try {
+			token = req.getParameter("token");
+			boolean flag = loginServiceHelper.checkToken(token);
+			if(!flag){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+				return new CountMessage(status, null);
+			}
+			refreshToken = loginServiceHelper.getUserReferenceByToken(token);
+			if(refreshToken!=null){
+				accessToken = videoShareOAuthServiceHelper.getGoogleAccessToken(refreshToken);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+
+			}else {
+				status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "NORECORD");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new CountMessage(status, accessToken);
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getAccessTokenVimeo")
+	public Response getAccessTokenVimeoJson(@Context HttpServletRequest req) {
+		String oauth_token = "";
+		HttpClient httpclient = new DefaultHttpClient();
+		try {
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getXspinnerValue")
+	public VideoMessage getXspinnerValueJson(@Context HttpServletRequest req) {
+		String value1 = "";
+		String value2 = "";
+		Video video = new Video();
+		String keyPosition = "";
+		ResponseStatus status = null;
+		try {
+			value1 = req.getParameter("title");
+			value2 = req.getParameter("desc");
+			keyPosition = req.getParameter("keyPosition");
+			video = videoShareOAuthServiceHelper.getXspinnerForNameAndDesc(value1,value2,(keyPosition!=null && !keyPosition.isEmpty())?Integer.valueOf(keyPosition):1,"");
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		} catch (Exception e) {
+			e.printStackTrace();
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new VideoMessage(status, video);
+	}
+
+}

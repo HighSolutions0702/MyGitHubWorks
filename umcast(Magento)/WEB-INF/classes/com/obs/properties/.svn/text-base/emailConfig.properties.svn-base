@@ -1,0 +1,41 @@
+#smtpHost = secure.emailsrvr.com
+#smtpPort = 465
+#smtpUser = ramprasath.raja@optisolbusiness.com
+#smtpPassword = Optisol_87
+#isAuth = YES
+
+#mandrillapp
+smtpHost = smtp.mandrillapp.com
+smtpPort = 587
+smtpUser = gdijordan@gmail.com
+smtpPassword = 1p9A6_9ApNw5Yve5o10Rrg
+isAuth = YES
+#server 
+#feedBackEmail=support@unstoppablemarketers.com
+#local 
+feedBackEmail=cinipriya.l@optisolbusiness.com
+## Template path
+
+userServiceEmailAddress = Unstoppable Marketers<admin@unstoppablemarketers.com>
+
+forgotPassword.fileName = emailTemplate/forgotPassword.txt
+
+forgotUsername.fileName = emailTemplate/forgotUsername.txt
+
+newUser.fileName = emailTemplate/newUser.txt
+
+feedBackEmail.fileName=emailTemplate/feedback.txt
+
+## Subject
+
+forgotPassword.subject  = Email Service: Your Unstoppable Marketers password
+
+forgotUsername.subject =  Email Service: Your Unstoppable Marketers Username
+
+newUser.subject =  Welcome to the Unstoppable Marketers
+
+generalEmail.fileName = emailTemplate/simpleEmail.txt
+
+generalEmail.subject = Snapdoggy Email Service
+
+feedBack.subject=You have received a feedback

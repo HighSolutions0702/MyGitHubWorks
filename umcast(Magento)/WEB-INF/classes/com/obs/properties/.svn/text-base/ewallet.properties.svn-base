@@ -1,0 +1,16 @@
+#live payment
+#paymenturl=https://api.authorize.net/xml/v1/request.api
+#paymentlogin=62uhvJ7We5
+#paymentkey=6p95R69LXpj93CBb
+#testwallet
+ewalletRegurl = https://testewallet.com/eWalletWS/ws_Adapter.aspx
+ewalletMerchantId = f20b9741-163e-4f29-9c00-559d75f15492
+#ewalletMerchantUsername=TManager613
+ewalletMerchantPwd = tkHtdSk2Zt
+
+
+#payoutwallet
+#ewalletRegurl = https://testewallet.com/eWalletWS/ws_Adapter.aspx
+#ewalletMerchantId = 9xEk24PM
+#ewalletMerchantPwd = 32A9dY63s36eKFTM
+#ewalletMerchantUsername=

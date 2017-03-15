@@ -1,0 +1,194 @@
+package com.obs.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.obs.dao.AmountDAO;
+import com.obs.dao.IAmountDAO;
+import com.obs.dao.IUserDAO;
+import com.obs.dao.UserDAO;
+import com.obs.model.Amount;
+import com.obs.model.Country;
+import com.obs.model.User;
+
+
+/**
+ * 
+ * User Service
+ * 
+ * @author Jeevanantham
+ *
+ */
+@Service
+@Transactional(readOnly = true)
+public class UserService implements IUserService {
+
+	IUserDAO userDAO = new UserDAO();
+	IAmountDAO amountDAO = new AmountDAO();
+
+	/**
+	 * Get User DAO
+	 * 
+	 * @return IUserDAO - User DAO
+	 */
+	public IUserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	/**
+	 * Set User DAO
+	 * 
+	 * @param IUserDAO - User DAO
+	 */
+	public void setUserDAO(IUserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
+	/**
+	 * Add User
+	 * 
+	 * @param  User user
+	 */
+	@Transactional(readOnly = false)
+	@Override
+	public Integer addUser(User user) {
+		return getUserDAO().addUser(user);
+	}
+
+	/**
+	 * Delete User
+	 * 
+	 * @param  User user
+	 */
+	@Transactional(readOnly = false)
+	@Override
+	public void deleteUser(User user) {
+		getUserDAO().deleteUser(user);
+	}
+
+	/**
+	 * Update User
+	 * 
+	 * @param  User user
+	 */
+	@Transactional(readOnly = false)
+	@Override
+	public void updateUser(User user) {
+		getUserDAO().updateUser(user);
+	}
+
+	/**
+	 * Get User
+	 * 
+	 * @param  int User Id
+	 */
+	@Override
+	public User getUserById(int id) {
+		return getUserDAO().getUserById(id);
+	}
+
+	/**
+	 * Get User List
+	 * 
+	 */
+	@Override
+	public List<User> getUsers() {	
+		return getUserDAO().getUsers();
+	}
+
+	/**
+	 * Login User
+	 */
+	@Override
+	public User loginUser(String email, String password) {
+		return getUserDAO().loginUser(email, password);
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public User getUserByEmail(String email) {
+		return getUserDAO().getUserByEmail(email);
+	}
+
+	@Override
+	public List<Country> getCountries() {
+		return getUserDAO().getCountries();
+	}
+
+	/**
+	 * get User By Confirmation Code
+	 */
+	@Override
+	public User getUserByConfirmationCode(String confirmationCode){
+		return getUserDAO().getUserByConfirmationCode(confirmationCode);
+	}
+
+	/**
+	 * get User By Confirmation Code
+	 */
+	@Override
+	public User getUserByReferralCode(String referralCode){
+		return getUserDAO().getUserByReferralCode(referralCode);
+	}
+
+	/**
+	 * get users from referred by Id
+	 * @param userId
+	 * @return
+	 */
+	@Override
+	public List<User> getUsersFromReferredById(int userId){
+		return getUserDAO().getUsersFromReferredById(userId);
+	}
+
+	public IAmountDAO getAmountDAO() {
+		return amountDAO;
+	}
+
+	public void setAmountDAO(IAmountDAO amountDAO) {
+		this.amountDAO = amountDAO;
+	}
+
+	@Override
+	public String getUsersCount() {
+		return getUserDAO().getUsersCount();
+	}
+	/**
+	 * Get User
+	 * 
+	 * @param  int User Id
+	 */
+	@Override
+	public Amount getAmountById(int id) {
+		return getAmountDAO().getAmountByUserID(id);
+	}
+
+	@Override
+	public void setPayment(Amount amount) {
+		getAmountDAO().updateAmount(amount);
+
+	}
+	public void removePayment(Amount amount) {
+		getAmountDAO().deleteAmount(amount);
+
+	}
+
+	@Override
+	public User getUserByUMCastName(String um_Cast_Name) {
+		return getUserDAO().getUserByUMCastName(um_Cast_Name);
+	}
+
+	@Override
+	public List<User> getSubscribedUsers() {
+		return getUserDAO().getSubscribedUsers();
+	}
+	@Override
+	public User getUserByToken(String token) {
+		return getUserDAO().getUserByToken(token);
+	}
+
+}

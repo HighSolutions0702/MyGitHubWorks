@@ -1,0 +1,68 @@
+package com.obs.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import java.io.Serializable;
+
+/**
+ * 
+ * @author rameshbabu_s
+ *
+ */
+@Entity
+@Table(name="tbl_cms")
+public class CMS implements Serializable{
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue( strategy = GenerationType.AUTO )
+	@Column(name="DN_ID" , nullable = false )
+	private long id;
+	
+	@Column(name="DC_TITLE", nullable = true)
+	private String title;
+	
+	@Column(name="DC_DECRIPTION", nullable = true)
+	private String description;
+	
+	@Column(name="DB_DELETED", nullable = true)
+	private Boolean isDeleted;
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+}

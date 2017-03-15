@@ -1,0 +1,60 @@
+package com.obs.servlets;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.obs.model.User;
+import com.obs.service.IUserService;
+import com.obs.service.UserService;
+import com.obs.utils.CommonProperties;
+import com.obs.webservice.UserServiceHelper;
+
+/**
+ * Servlet implementation class CheckEmail
+ */
+@WebServlet("/check")
+public class CheckEmail extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	IUserService userService = new UserServiceHelper().getUserService();
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public CheckEmail() {
+		super();
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String code = request.getParameter("code");
+		if(code!=null){
+			User user = userService.getUserByConfirmationCode(code);
+			if(user!=null){
+				user.setConfirmation(true);
+				userService.updateUser(user);
+			}
+			response.sendRedirect("/"+CommonProperties.getContextPath()+"emailconfirmation.html");
+		}
+	}
+
+
+}

@@ -1,0 +1,41 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.obs.webservice.messages;
+
+/**
+ *
+ * @author ram
+ */
+
+import java.util.Collection;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import com.obs.model.User;
+
+
+@XmlRootElement(name="users")
+public class UsersMessage {
+	@XmlElement(name="status")
+	public ResponseStatus status;
+
+	private Collection<User> entities;
+
+	public UsersMessage(){
+		super();
+	}
+
+	public UsersMessage(ResponseStatus status, Collection<User>  entities){
+		super();
+		this.status=status;
+		this.entities = entities;
+	}
+
+	@XmlElement(name="users")
+	public Collection<User> getUsersEntities() {
+		return entities;
+	}
+
+}

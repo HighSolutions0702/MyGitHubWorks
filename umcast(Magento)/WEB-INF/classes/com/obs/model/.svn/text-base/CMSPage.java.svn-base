@@ -1,0 +1,95 @@
+package com.obs.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import java.io.Serializable;
+
+/**
+ * 
+ * @author rameshbabu_s
+ *
+ */
+@Entity
+@Table(name="tbl_cmspage")
+public class CMSPage implements Serializable{
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue( strategy = GenerationType.AUTO )
+	@Column(name="DN_ID" , nullable = false )
+	private long id;
+	
+	@Column(name="DC_TITLE", nullable = true)
+	private String title;
+	
+	@Column(name="DC_DECRIPTION", nullable = true)
+	private String description;
+	
+	@Column(name="DB_DELETED", nullable = true)
+	private Boolean isDeleted;
+	
+	@Column(name="DB_ACTIVE", nullable = true)
+	private Boolean isActive;
+	
+	@OneToOne ( targetEntity = CMSMenu.class, fetch = FetchType.EAGER )
+	@JoinColumn (name = "DN_MENU")
+	private CMSMenu menu_id;
+	
+	
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public CMSMenu getMenu_id() {
+		return menu_id;
+	}
+
+	public void setMenu_id(CMSMenu menu_id) {
+		this.menu_id = menu_id;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+}

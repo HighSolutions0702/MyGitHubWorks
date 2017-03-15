@@ -1,0 +1,121 @@
+package com.obs.service;
+
+import java.util.List;
+
+import com.obs.model.CMS;
+import com.obs.model.CMSMenu;
+import com.obs.model.CMSPage;
+import com.obs.model.Level;
+import com.obs.model.Settings;
+
+public interface ISettingsService {
+	/**
+	 * Add Settings
+	 * 
+	 * @param  Settings settings
+	 */
+	public void addSettings(Settings settings);
+
+	/**
+	 * Update Settings
+	 * 
+	 * @param  Settings settings
+	 */
+	public void updateSettings(Settings settings);
+
+	/**
+	 * Delete Settings
+	 * 
+	 * @param  Settings settings
+	 */
+	public void deleteSettings(Settings settings);
+
+	/**
+	 * Get Settings
+	 * 
+	 * @param  int Settings Id
+	 */
+	public Settings getSettingsById(long id);
+	/**
+	 * Get Settings
+	 * 
+	 * @param  int Settings Id
+	 */
+	public Settings getSettingsByLevelId(long id);
+
+	/**
+	 * Get Settings List
+	 * 
+	 */
+	public List<Settings> getSettings();
+
+	/**
+	 * 
+	 * @param menuId
+	 * @param id
+	 * @return
+	 */
+	public Boolean roleHasPermission(String menuValue, long id);
+	
+	/**
+	 * Get Settings List
+	 * 
+	 */
+	public List<CMS> getCMSContents();
+
+	public CMS getCMSContentById(long id);
+	/**
+	 * Update CMS
+	 * 
+	 * @param  CMS 
+	 */
+	public void updateCms(CMS cms);
+
+	/**
+	 * get all level details
+	 */
+	public List<Level> getLevelContents();
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Level getLevelContentById(long id);
+    /**
+     * 
+     * @param update level
+     */
+	void updateLevel(Level level);
+    /**
+     * 
+     * @param add level
+     */
+	void updateNewLevel(Level level);
+
+	public Long addCMSMenu(CMSMenu menu);
+
+	public void addCMSPage(CMSPage content);
+
+	List<CMSMenu> getCMSMenus();
+	
+	List<CMSPage> getCMSPages();
+
+	CMSMenu getCMSMenuById(long id);
+	
+	CMSPage getCMSPageById(long id);
+
+	void updatePage(CMSPage cmspage);
+
+	void updateMenu(CMSMenu cmsmenu);
+
+	public List<CMSPage> getCMSPagesByMenu(Integer menuId);
+
+	List<CMSMenu> getCMSMenusOfGuest();
+
+	List<CMSMenu> getCMSMenusOfMember();
+
+	public List<CMSMenu> getSubMenusByParentMenu(long menuId);
+
+	public List<CMSMenu> getCMSMemberSubMenuByMenu(long menuId);
+
+}

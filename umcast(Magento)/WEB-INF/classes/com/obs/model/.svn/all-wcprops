@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/unstoppablemarketers/!svn/ver/574/usm/src/com/obs/model
+END
+Settings.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/unstoppablemarketers/!svn/ver/284/usm/src/com/obs/model/Settings.java
+END
+Referral.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/unstoppablemarketers/!svn/ver/245/usm/src/com/obs/model/Referral.java
+END
+Amount.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/unstoppablemarketers/!svn/ver/268/usm/src/com/obs/model/Amount.java
+END
+Country.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/unstoppablemarketers/!svn/ver/159/usm/src/com/obs/model/Country.java
+END
+Video.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/unstoppablemarketers/!svn/ver/452/usm/src/com/obs/model/Video.java
+END
+CMSMenu.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/unstoppablemarketers/!svn/ver/328/usm/src/com/obs/model/CMSMenu.java
+END
+Level.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/unstoppablemarketers/!svn/ver/362/usm/src/com/obs/model/Level.java
+END
+Login.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/unstoppablemarketers/!svn/ver/159/usm/src/com/obs/model/Login.java
+END
+Category.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/unstoppablemarketers/!svn/ver/167/usm/src/com/obs/model/Category.java
+END
+User.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/unstoppablemarketers/!svn/ver/514/usm/src/com/obs/model/User.java
+END
+CMSPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/unstoppablemarketers/!svn/ver/307/usm/src/com/obs/model/CMSPage.java
+END
+CMS.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/unstoppablemarketers/!svn/ver/252/usm/src/com/obs/model/CMS.java
+END
+Comments.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/unstoppablemarketers/!svn/ver/233/usm/src/com/obs/model/Comments.java
+END
+UserProfileImages.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/unstoppablemarketers/!svn/ver/209/usm/src/com/obs/model/UserProfileImages.java
+END
+EWallet.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/unstoppablemarketers/!svn/ver/574/usm/src/com/obs/model/EWallet.java
+END
+Tags.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/unstoppablemarketers/!svn/ver/292/usm/src/com/obs/model/Tags.java
+END

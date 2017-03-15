@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/unstoppablemarketers/!svn/ver/574/usm/src/com/obs/service
+END
+UserService.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/unstoppablemarketers/!svn/ver/574/usm/src/com/obs/service/UserService.java
+END
+IVideoService.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/unstoppablemarketers/!svn/ver/409/usm/src/com/obs/service/IVideoService.java
+END
+ILoginService.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/unstoppablemarketers/!svn/ver/159/usm/src/com/obs/service/ILoginService.java
+END
+ITagService.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/unstoppablemarketers/!svn/ver/292/usm/src/com/obs/service/ITagService.java
+END
+IUserService.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/unstoppablemarketers/!svn/ver/563/usm/src/com/obs/service/IUserService.java
+END
+UserProfileService.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/unstoppablemarketers/!svn/ver/527/usm/src/com/obs/service/UserProfileService.java
+END
+SettingsService.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/unstoppablemarketers/!svn/ver/527/usm/src/com/obs/service/SettingsService.java
+END
+CommentService.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/unstoppablemarketers/!svn/ver/527/usm/src/com/obs/service/CommentService.java
+END
+ReferralService.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/unstoppablemarketers/!svn/ver/569/usm/src/com/obs/service/ReferralService.java
+END
+VideoService.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/unstoppablemarketers/!svn/ver/527/usm/src/com/obs/service/VideoService.java
+END
+LoginService.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/unstoppablemarketers/!svn/ver/527/usm/src/com/obs/service/LoginService.java
+END
+IUserProfileService.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/unstoppablemarketers/!svn/ver/209/usm/src/com/obs/service/IUserProfileService.java
+END
+ISettingsService.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/unstoppablemarketers/!svn/ver/332/usm/src/com/obs/service/ISettingsService.java
+END
+ICommentService.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/unstoppablemarketers/!svn/ver/233/usm/src/com/obs/service/ICommentService.java
+END
+IReferralService.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/unstoppablemarketers/!svn/ver/569/usm/src/com/obs/service/IReferralService.java
+END
+TagService.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/unstoppablemarketers/!svn/ver/527/usm/src/com/obs/service/TagService.java
+END

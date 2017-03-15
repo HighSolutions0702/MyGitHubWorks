@@ -1,0 +1,162 @@
+package com.obs.email;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import org.apache.commons.lang.StringUtils;
+
+import com.obs.utils.CommonProperties;
+import com.obs.utils.IoUtils;
+
+public class EmailConfiguration {
+	private static ResourceBundle config = getResourceBundle();
+
+	private static final String BUNDLENAME = "com.obs.properties.emailConfig";
+
+	private static ResourceBundle getResourceBundle() {
+		ResourceBundle bundle = null;
+		bundle = ResourceBundle.getBundle(BUNDLENAME);
+		return bundle;
+	}
+
+	private static String getString(String key) {
+		return config.getString(key);
+	}
+
+	public boolean isAuth() {
+		String isAuthStr = getString("isAuth");
+
+		if("YES".equalsIgnoreCase(isAuthStr)) 
+			return true;
+
+		return false;
+	}
+
+	public String smtpHost() {
+		return getString("smtpHost");
+	}
+
+	public int smtpPort() {
+		String strPort = getString("smtpPort");
+		return Integer.valueOf(strPort).intValue();
+	}
+
+	public String smtpUser() {
+		return getString("smtpUser");
+	}
+
+	public String smtpPassword() {
+		return getString("smtpPassword");
+	}
+
+
+	public String getUserServiceEmailAddress() {
+		return getString("userServiceEmailAddress");
+	}
+
+	public String getFeedBackEmailAddress(){
+		return getString("feedBackEmail");
+	}
+	//------------------------------------------------------------------
+
+	public String getForgotPasswordSubject() {
+		return getString("forgotPassword.subject");
+	}
+	
+	public String getForgotUsernameSubject() {
+		return getString("forgotUsername.subject");
+	}
+	
+	public String getNewUserSubject() {
+		return getString("newUser.subject");
+	}
+	
+	public String getFeedbackEmailSubject() {
+		return getString("feedBack.subject");
+	}
+
+	public String getForgotPasswordEmailMessage(String emailAddress,String firstname,String resetlink,String URL,String logoUrl) throws Exception {
+		HashMap<String,String> map = new HashMap<String,String>();
+		map.put("${username}", emailAddress);
+		map.put("${firstname}", firstname);
+		map.put("${resetlink}", resetlink);
+		map.put("${url}", URL);
+		map.put("${logoUrl}", logoUrl);
+		String messageFile = config.getString("forgotPassword.fileName");
+		return readFile(messageFile, map);
+	}
+
+	public String getForgotUsernameEmailMessage(String firstname,String email,String url) throws Exception {
+		HashMap<String,String> map = new HashMap<String,String>();
+		map.put("${username}", email);
+		map.put("${firstname}", firstname);
+ 		map.put("${url}", url);
+		String messageFile = config.getString("forgotUsername.fileName");
+		return readFile(messageFile, map);
+	}
+	
+	public String getNewUserMessage(String firstname, String userName, String pwd, String confirmationUrl, String code,String url, String logoUrl) throws Exception {
+		HashMap<String,String> map = new HashMap<String,String>();
+		map.put("${username}", userName);
+		map.put("${pwd}", pwd);
+		map.put("${firstname}", firstname);
+		map.put("${confirmationUrl}", confirmationUrl);
+		map.put("${code}", code);
+ 		map.put("${url}", url);
+ 		map.put("${logoUrl}", logoUrl);
+		String messageFile = config.getString("newUser.fileName");
+		return readFile(messageFile, map);
+	}
+	
+	public String getGeneralEmailMessage(String emailContent,String senderName, String URL, String logoUrl) throws Exception {
+
+		HashMap<String,String> map = new HashMap<String,String>();
+		map.put("${message}", emailContent);
+		map.put("${sender}", senderName);
+		map.put("${url}", URL);
+		map.put("${logoUrl}", logoUrl);
+		String messageFile = config.getString("generalEmail.fileName");
+		return readFile(messageFile, map);
+	}
+	public String getFeedBackEmailMessage(String name,String email,String msg,String URL,String logoUrl) throws Exception {
+
+		HashMap<String,String> map = new HashMap<String,String>();
+		map.put("${name}", name);
+		map.put("${email}", email);
+		map.put("${msg}", msg);
+		map.put("${url}", URL);
+		map.put("${logoUrl}", logoUrl);
+		String messageFile = config.getString("feedBackEmail.fileName");
+		return readFile(messageFile, map);
+	}
+	//------------------------------------------------------------------
+
+	private String readFile(String messageFile, String token, String tokenValue) throws Exception {
+		HashMap<String,String> tokens = new HashMap<String,String>();
+		tokens.put(token, tokenValue);
+		return readFile(messageFile, tokens);
+	}
+
+	private String readFile(String messageFile, Map tokens) throws Exception {
+		String filePath = CommonProperties.getBasePath()+CommonProperties.getContextPath()+messageFile;
+		try {
+			String message = new IoUtils().read(filePath);
+			return replaceTokens(message, tokens);
+		} catch (IOException e) {
+			System.out.println( "error message -"+ e.getMessage());
+			throw new Exception("Serious Error. Error reading " + filePath, e);
+		}
+	}
+
+	private String replaceTokens(String message, Map tokens) {
+		for (Iterator iterator = tokens.keySet().iterator(); iterator.hasNext();) {
+			String token = (String) iterator.next();
+			message = StringUtils.replace(message, token, (String)tokens.get(token));
+		}
+		return message;
+	}
+
+}

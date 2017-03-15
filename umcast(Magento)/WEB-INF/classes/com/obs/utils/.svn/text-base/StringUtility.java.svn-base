@@ -1,0 +1,73 @@
+
+package com.obs.utils;
+
+import java.io.InputStream;
+
+import org.apache.commons.lang.StringUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+/**
+ * @author stephen
+ *
+ */
+public class StringUtility {
+
+	/**
+	 * singleton instance
+	 */
+	private static StringUtility myInstance = null;
+	public static StringUtility getInstance()
+	{
+		if(myInstance == null)
+			myInstance = new StringUtility();
+		return myInstance;
+	}
+
+	/**
+	 * check string is not empty
+	 * @param value
+	 * @return boolean
+	 */
+	public boolean isNotEmpty(String value) {
+		if(value != null) value = value.trim();
+		return StringUtils.isNotEmpty(value);
+	}
+
+	/**
+	 * check string contains
+	 * @param str1
+	 * @param str2
+	 * @return boolean
+	 */
+	public boolean contains(String str1, String str2) {
+		if(str1 == null ) str1 = "";
+		if(str2 == null ) str2 = "";
+		return StringUtils.contains(str1, str2);
+	}
+
+	/**
+	 * check string is Numeric
+	 * @param str1
+	 * @return boolean
+	 */
+	public boolean isNumeric(String value) {
+		if(value != null) {
+			value = value.trim();
+			if(StringUtils.isNotEmpty(value))
+				return StringUtils.isNumeric(value);
+		}
+		return false;
+	}
+	
+	/**
+	 * convert InputStream to JSONObject
+	 * @param is
+	 * @return JSONObject
+	 * @throws Exception
+	 */
+	public JSONObject getJSONObject(InputStream is) throws Exception{
+		String result = IoUtils.getInstance().getStringFromInputStream(is);
+		return (JSONObject) new JSONParser().parse(result);
+	}
+}

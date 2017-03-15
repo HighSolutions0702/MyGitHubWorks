@@ -1,0 +1,372 @@
+/**
+ * Rest services handler
+ * 
+ */
+package com.obs.webservice;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
+
+import org.springframework.stereotype.Component;
+
+import com.obs.webservice.messages.CountMessage;
+import com.obs.webservice.messages.CountriesMessage;
+import com.obs.webservice.messages.TokenMessage;
+import com.obs.webservice.messages.UserMessage;
+import com.obs.webservice.messages.UsersMessage;
+import com.obs.webservice.messages.VideoMessage;
+import com.obs.webservice.messages.VideosMessage;
+
+/**
+ * @author Ram
+ *
+ */
+@Path("/rest/")
+@Component
+public class ServiceHandler {
+
+	@Context
+	private UriInfo context;
+	@Context
+	static HttpServletRequest request;
+	@Context
+	HttpServletResponse response;
+	//Controller for User object
+	String contextPath;
+
+	UserServiceHelper userServiceHelper = UserServiceHelper.getInstance();
+	VideoServiceHelper videoServiceHelper = VideoServiceHelper.getInstance();
+
+
+	/**
+	 * Register user is calling for JSON  request
+	 * @method : post
+	 * @param req
+	 * @return JSON response contains status message
+	 */
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/register")
+	public UsersMessage registerJson(@Context HttpServletRequest req) {
+		InputStream is = null;
+		try {
+			is = req.getInputStream();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return  userServiceHelper.registerUser(is);
+	}
+
+
+	/**
+	 * Get users list is calling for JSON request
+	 * @method : post
+	 * @return JSON response contains status message and users
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getUsers")
+	public UsersMessage getUsersJson() {
+		return userServiceHelper.getUsers();
+	}
+
+
+	/**
+	 * login user is calling for JSON  request
+	 * @method : post
+	 * @param req
+	 * @return JSON response contains status message
+	 */
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/login")
+	public TokenMessage loginJson(@Context HttpServletRequest req) {
+		InputStream is = null;
+		try {
+			is = req.getInputStream();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return  userServiceHelper.loginUser(is);
+	}
+
+	/**
+	 * login user is calling for JSON  request
+	 * @method : post
+	 * @param req
+	 * @return JSON response contains status message
+	 */
+	@POST
+	//@Consumes(MediaType.APPLICATION_JSON)
+	//@Produces(MediaType.APPLICATION_JSON)
+	@Path("/videoUpload")
+	public VideoMessage videoUpload(@Context HttpServletRequest req) {
+		InputStream is = null;
+		String token = null;
+		try {
+			is = req.getInputStream();
+			token = req.getParameter("token");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return  videoServiceHelper.saveVideo(is,token);
+	}
+
+
+	/**
+	 * Get users list is calling for JSON request
+	 * @method : post
+	 * @return JSON response contains status message and users
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getVideosByOwner")
+	public VideosMessage getVideosByOwnerJson(@Context HttpServletRequest req) {
+		String token = null;
+		try {
+			token = req.getParameter("token");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return videoServiceHelper.getVideosByOwner(token);
+	}
+
+
+	/**
+	 * Get country list is calling for JSON request
+	 * @method : get
+	 * @return JSON response contains status message and users
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getCountries")
+	public CountriesMessage getCountriesJson() {
+		return userServiceHelper.getCountries();
+	}
+
+	/**
+	 * Get referred user list is calling for JSON request
+	 * @method : get
+	 * @return JSON response contains status message and users
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getMyReferrals")
+	public UsersMessage getMyReferralsJson(@Context HttpServletRequest req) {
+		String token = null;
+		try {
+			token = req.getParameter("token");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userServiceHelper.getMyReferrals(token);
+	}
+
+	/**
+	 * Get referred user list is calling for JSON request
+	 * @method : get
+	 * @return JSON response contains status message and users
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getUserProfile")
+	public UserMessage getUserProfileJson(@Context HttpServletRequest req) {
+		String token = null;
+		try {
+			token = req.getParameter("token");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userServiceHelper.getUserProfile(token);
+	}
+	/**
+	 * forgot password user is calling for JSON  request
+	 * @method : post
+	 * @param req
+	 * @return JSON response contains status message
+	 */
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/forgotPassword")
+	public TokenMessage forgotPasswordJson(@Context HttpServletRequest req) {
+		InputStream is = null;
+		try {
+			is = req.getInputStream();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return  userServiceHelper.forgotPasswordUser(is);
+	}
+	/**
+	 * reset password user is calling for JSON  request
+	 * @method : post
+	 * @param req
+	 * @return JSON response contains status message
+	 */
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/resetPassword")
+	public TokenMessage resetPasswordJson(@Context HttpServletRequest req) {
+		InputStream is = null;
+		try {
+			is = req.getInputStream();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return  userServiceHelper.resetPasswordUser(is);
+	}
+
+	/**
+	 * update user is calling for JSON  request
+	 * @method : post
+	 * @param req
+	 * @return JSON response contains status message
+	 */
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/updateUser")
+	public UserMessage updateUserJson(@Context HttpServletRequest req) {
+		String token = null;
+		InputStream is = null;
+		try {
+			token = req.getParameter("token");
+			is = req.getInputStream();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  userServiceHelper.updateUser(token,is);
+	}
+	/**
+	 * change password user is calling for JSON  request
+	 * @method : post
+	 * @param req
+	 * @return JSON response contains status message
+	 */
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/changePassword")
+	public UserMessage changePasswordJson(@Context HttpServletRequest req) {
+		String token = null;
+		InputStream is = null;
+		try {
+			token = req.getParameter("token");
+			is = req.getInputStream();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  userServiceHelper.changePasswordUser(token,is);
+	}
+	/**
+	 * Get country list is calling for JSON request
+	 * @method : get
+	 * @return JSON response contains status message and users
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getAllUsers")
+	public UsersMessage getAllUsersJson() {
+		return userServiceHelper.getUsers();
+	}
+	/**
+	 * Get users count is calling for JSON request
+	 * @method : post
+	 * @return JSON response contains status message and users
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getUsersCount")
+	public CountMessage getUsersCountJson() {
+		return userServiceHelper.getUsersCount();
+	}
+	/**
+	 * login user is calling for JSON  request
+	 * @method : post
+	 * @param req
+	 * @return JSON response contains status message
+	 */
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/adminLogin")
+	public TokenMessage adminLoginJson(@Context HttpServletRequest req) {
+		InputStream is = null;
+		try {
+			is = req.getInputStream();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return  userServiceHelper.adminLoginUser(is);
+	}
+	/**
+	 * get all videos in umchannel page
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getSportVideos")
+	public VideosMessage getVideosJson(@Context HttpServletRequest req) {
+		String sprtVal=null;
+		try{
+			sprtVal=req.getParameter("categSprtId");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return videoServiceHelper.getVideos(sprtVal);
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getEduVideos")
+	public VideosMessage getEduVideosJson(@Context HttpServletRequest req) {
+		String eduVal=null;
+		try{
+			eduVal=req.getParameter("categEduId");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return videoServiceHelper.getVideos(eduVal);
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getMoviesVideos")
+	public VideosMessage getMoviesVideosJson(@Context HttpServletRequest req) {
+		String movVal=null;
+		try{
+			movVal=req.getParameter("categMovId");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return videoServiceHelper.getVideos(movVal);
+	}
+
+}

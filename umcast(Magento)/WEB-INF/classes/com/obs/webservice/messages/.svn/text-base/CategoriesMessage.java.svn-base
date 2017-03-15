@@ -1,0 +1,33 @@
+package com.obs.webservice.messages;
+
+import java.util.Collection;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.Category;
+
+@XmlRootElement(name="categories")
+public class CategoriesMessage {
+
+	@XmlElement(name="status")
+	public ResponseStatus status;
+
+	private Collection<Category> entities;
+
+	public CategoriesMessage() {
+		super();	
+		}
+
+	public CategoriesMessage(ResponseStatus status, Collection<Category>  entities){
+		super();
+		this.status=status;
+		this.entities = entities;
+	}
+
+	@XmlElement(name="categories")
+	public Collection<Category> getUsersEntities() {
+		return entities;
+	}
+
+}

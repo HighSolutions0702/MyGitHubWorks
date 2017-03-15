@@ -1,0 +1,40 @@
+package com.obs.dao;
+
+import com.obs.model.EWallet;
+import com.obs.model.User;
+
+public interface IEWalletDAO {
+	/**
+	 * Add User
+	 * 
+	 * @param  User user
+	 */
+	public Integer addEWallet(EWallet ewallet_user);
+
+	/**
+	 * Update User
+	 * 
+	 * @param  User user
+	 */
+	public void updateEWallet(EWallet ewallet_user);
+
+	/**
+	 * Delete User
+	 * 
+	 * @param  User user
+	 */
+	public void deleteEWallet(EWallet ewallet_user);
+	/**
+	 * Get User
+	 * 
+	 * @param  int User Id
+	 */
+	public EWallet getEWalletById(int id);
+	/**
+	 * Get User
+	 * 
+	 * @param  int User Id
+	 */
+	public EWallet getEWalletByUserId(int user_id);
+
+}

@@ -1,0 +1,1062 @@
+/**
+ * controller for user services methods
+ */
+package com.obs.webservice;
+
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.RandomStringUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.springframework.stereotype.Component;
+
+import sun.security.action.GetBooleanAction;
+
+import com.obs.aws.ManageAWSVideos;
+import com.obs.email.EmailManager;
+import com.obs.model.Amount;
+import com.obs.model.CMS;
+import com.obs.model.Country;
+import com.obs.model.Level;
+import com.obs.model.Referral;
+import com.obs.model.Settings;
+import com.obs.model.User;
+import com.obs.service.IReferralService;
+import com.obs.service.ISettingsService;
+import com.obs.service.IUserService;
+import com.obs.service.ReferralService;
+import com.obs.service.SettingsService;
+import com.obs.service.UserService;
+import com.obs.utils.CommonProperties;
+import com.obs.utils.CommonUtils;
+import com.obs.utils.IoUtils;
+import com.obs.webservice.messages.AmountMessage;
+import com.obs.webservice.messages.CMSMessage;
+import com.obs.webservice.messages.CMSsMessage;
+import com.obs.webservice.messages.CountMessage;
+import com.obs.webservice.messages.CountriesMessage;
+import com.obs.webservice.messages.LevelMessage;
+import com.obs.webservice.messages.LevelsMessage;
+import com.obs.webservice.messages.ResponseStatus;
+import com.obs.webservice.messages.ResponseStatusCode;
+import com.obs.webservice.messages.SettingMessage;
+import com.obs.webservice.messages.SettingsMessage;
+import com.obs.webservice.messages.TagMessage;
+import com.obs.webservice.messages.TokenMessage;
+import com.obs.webservice.messages.UserMessage;
+import com.obs.webservice.messages.UsersMessage;
+
+/**
+ * 
+ * @author Ram
+ *
+ */
+@Component
+public class UserServiceHelper{
+
+	//IUserService userService;
+	private IUserService userService = new UserService();
+	private ISettingsService settingsService = new SettingsService();
+	private IReferralService referralService = new ReferralService();
+	IoUtils ioUtils = IoUtils.getInstance();
+	CommonUtils commonUtils=CommonUtils.getInstance();
+	LoginServiceHelper loginServiceHelper = LoginServiceHelper.getInstance();
+	ManageAWSVideos aws = new ManageAWSVideos();
+
+	/**
+	 * Singleton Instance
+	 */
+	private static UserServiceHelper myInstance = null;
+	public static UserServiceHelper getInstance()
+	{
+		if(myInstance == null)
+			myInstance = new UserServiceHelper();
+		return myInstance;
+	}
+
+	/**
+	 * user registration
+	 * @param InputStream
+	 * @return UsersMessage
+	 */
+	public UserMessage registerUser(InputStream is){
+		ResponseStatus status = null;
+		User user=null;
+		try{
+			JSONObject value = getJSONObject(is);
+			String levelid_str=(String) value.get("level_id");
+			long levelId=(levelid_str!=null && !levelid_str.isEmpty())?Long.valueOf(levelid_str):0;
+			//check duplicate
+			User check = userService.getUserByEmail((String) value.get("emailAddress"));
+			if(check != null && check.getId()>0){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_CONFLICT, "DUPLICATEENTRY");
+				return new UserMessage(status, null);
+			}
+			user = new User();
+			//check not null value for mandatory fields
+			if(((String) value.get("firstName")!=null) &&((String) value.get("lastName")!=null)&&((String) value.get("emailAddress")!=null))
+			{
+				user.setFirstName((String) value.get("firstName"));
+				user.setLastName((String) value.get("lastName"));
+				user.setEmail((String) value.get("emailAddress"));
+			}
+			else
+			{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "Value required");
+				return new UserMessage(status, null);
+			}
+			user.setPhoneNo((String)value.get("phone")!=null?(String)value.get("phone"):null);
+			user.setIsActive(true);
+			user.setIsDeleted(false);
+			user.setUserType(2);
+			user.setLevel_id(levelId);
+			//generate pwd
+			String pwd      	= commonUtils.generatePwd((String) value.get("emailAddress"));
+			String encriptedPwd	= commonUtils.generateEncryptedPwd(pwd);
+			user.setPassword(encriptedPwd);
+
+			//set selected country value in user table
+			if((String)value.get("currentCountry") != null)
+			{
+				Country countryObj=new Country();
+				countryObj.setCountryId(Long.valueOf((String)value.get("currentCountry")));
+				user.setCountry(countryObj);
+			}
+
+			//set referral code and confirmation url
+			user.setReferralCode(generateReferralCode());
+			user.setConfirmationCode(generateConfirmationCode());
+
+			//check referral
+			if(value.get("ref")!=null){
+				user.setRefered_by(getReferral((String)value.get("ref")));
+			}
+			
+			Integer userId = userService.addUser(user);
+			//add referral and amount
+			Long referralObjId = 0L;
+			if(value.get("ref")!=null){
+				referralObjId = ReferralServiceHelper.getInstance().addReferral(userId, user.getRefered_by(), user.getReferralCode());
+			}
+			//add amount
+			ReferralServiceHelper.getInstance().addAmount(userId,referralObjId, levelId);
+			user.setLevel_id(levelId);
+			//create aws bucket
+			//aws.createBucket("um-"+userId);
+			//generate email
+			EmailManager.newUser(user.getEmail(), user.getFirstName(), user.getEmail(), pwd, generateConfirmationUrl(user.getConfirmationCode()), user.getReferralCode()); 
+			//set status 
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new UserMessage(status, user);
+	}
+
+	/**
+	 * login user
+	 * @param is
+	 * @return
+	 */
+	public TokenMessage loginUser(InputStream is){
+		ResponseStatus status = null;
+		String token = null;
+		try{
+			String username=null;
+			String encpwd=null;
+			JSONObject value = getJSONObject(is);
+			if(value.get("emailAddress") != null){
+				username=(String) value.get("emailAddress");
+			}
+			if(value.get("passWord")!=null){
+				encpwd	= commonUtils.generateEncryptedPwd((String)value.get("passWord"));
+			}
+			User user = userService.loginUser(username, encpwd);
+			if(user!=null){
+				token = loginServiceHelper.createLoginToken(user.getId());
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");	
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new TokenMessage(status, token);
+	}
+
+
+	/**
+	 * list all the users
+	 * @return UsersMessage
+	 */
+	public UsersMessage  getUsers(){
+		ResponseStatus status = null;
+		try{
+			List<User> users = userService.getUsers();
+
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new UsersMessage(status, users);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new UsersMessage(status, null);
+		}
+	}
+
+	/**
+	 * list all the users
+	 * @return UsersMessage
+	 */
+	public UsersMessage  getMyReferrals(String token){
+		ResponseStatus status = null;
+		List<User> users = new ArrayList<User>();
+		try{
+			if(token != null && !(token).isEmpty()){
+				boolean flag = loginServiceHelper.checkToken(token);
+				if(!flag){
+					status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+					return new UsersMessage(status, users);
+				}
+				int userId = loginServiceHelper.getUserByToken(token);
+				users = userService.getUsersFromReferredById(userId);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");	
+			}
+			return new UsersMessage(status, users);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new UsersMessage(status, null);
+		}
+	}
+
+	/**
+	 * return the current user's profile
+	 * @return UserMessage
+	 */
+	public UserMessage getUserProfile(String token){
+		ResponseStatus status = null;
+		User user = new User();
+		try{
+			if(token != null && !(token).isEmpty()){
+				boolean flag = loginServiceHelper.checkToken(token);
+				if(!flag){
+					status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+					return new UserMessage(status, user);
+				}
+				int userId = loginServiceHelper.getUserByToken(token);
+				user = userService.getUserById(userId);
+				user.setPassword(null);
+				user.setReferralCode(CommonProperties.getBaseURL()+CommonProperties.getContextPath()+"signup.html?ref="+user.getReferralCode());
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");	
+			}
+			return new UserMessage(status, user);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new UserMessage(status, null);
+		}
+	}
+
+	/**
+	 * get all countries form DB
+	 * @return
+	 */
+	public CountriesMessage getCountries() {
+		ResponseStatus status = null;
+		List<Country> countryList =userService.getCountries();
+		return new CountriesMessage(status, countryList);
+	}
+
+
+	/**
+	 * convert InputStream to JSONObject
+	 * @param is
+	 * @return JSONObject
+	 * @throws Exception
+	 */
+	public JSONObject getJSONObject(InputStream is) throws Exception{ 
+ 		String result = ioUtils.getStringFromInputStream(is);
+		return (JSONObject) new JSONParser().parse(result);
+	}
+	public JSONArray getJSONArray(InputStream is) throws Exception{
+		String result = ioUtils.getStringFromInputStream(is);
+		return (JSONArray) new JSONParser().parse(result);
+	}
+
+	/**
+	 * get Referral user from refCode
+	 * @param refCode
+	 * @return userId
+	 */
+	public int getReferral(String refCode){
+		User user = userService.getUserByReferralCode(refCode);
+		return user!=null?user.getId():0;
+	}
+
+	/**
+	 * generate Referral Code
+	 * @return string
+	 */
+	private String generateReferralCode(){
+		String referralCode = null;
+		referralCode = String.valueOf ((int)(Math.random ()*100000000));
+		return referralCode;
+	}
+
+	/**
+	 * generate Confirmation Code
+	 * @return string
+	 */
+	private String generateConfirmationCode(){
+		String confirmationCode = null;
+		confirmationCode = String.valueOf ((int)(Math.random ()*100000000));
+		return confirmationCode;
+	}
+
+	/**
+	 * generate Confirmation URL
+	 * @return string
+	 */
+	private String generateConfirmationUrl(String ConfirmationCode){
+		String confirmationUrl = CommonProperties.getBaseURL()+CommonProperties.getContextPath()+"check?code="+ConfirmationCode;
+		return confirmationUrl;
+	}
+
+	public TokenMessage forgotPasswordUser(InputStream is) {
+		ResponseStatus status = null;
+		try{
+			JSONObject value = getJSONObject(is);
+			//check duplicate
+			User userCheck = userService.getUserByEmail((String) value.get("emailAddress"));
+			if(userCheck != null && userCheck.getId()>0){
+				String random=RandomStringUtils.randomAlphabetic(5);
+				String resetlink = CommonProperties.getBaseURL()+CommonProperties.getContextPath()+"resetpassword.html?id="+userCheck.getId()+"@@@"+random;
+				EmailManager.forgotPwd(userCheck.getEmail(), userCheck.getFirstName(), resetlink); 
+				//		return new UsersMessage(status, null);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else
+			{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new TokenMessage(status, null);
+	}
+
+	public TokenMessage resetPasswordUser(InputStream is) {
+		ResponseStatus status = null;
+		try{
+			JSONObject value = getJSONObject(is);
+			StringBuffer strBuff = new StringBuffer();
+			String num=null;
+			char c;
+			String str=(String)value.get("ref");
+			for(int i=0;i<str.length();i++)
+			{
+				c=str.charAt(i);
+				if(Character.isDigit(c))
+				{
+					num = strBuff.append(c).toString();
+				}
+			}
+			if((String)value.get("newPassword")!= null)
+			{
+				User userVal=userService.getUserById(Integer.valueOf(num));
+				userVal.setPassword(commonUtils.generateEncryptedPwd((String)value.get("newPassword")));
+				userService.updateUser(userVal);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else
+			{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "REQUIRED");
+				return new TokenMessage(status, null);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new TokenMessage(status, null);	}
+
+
+	public UserMessage updateUser(String token, InputStream is) {
+		ResponseStatus status = null;
+		User user = new User();
+		String firstname=null;
+		String lastname=null;
+		try{
+			if(token != null && !(token).isEmpty()){
+				boolean flag = loginServiceHelper.checkToken(token);
+				if(!flag){
+					status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+					return new UserMessage(status, user);
+				}
+				int userId = loginServiceHelper.getUserByToken(token);
+				user = userService.getUserById(userId);
+				JSONObject value = getJSONObject(is);
+				firstname=(String) value.get("firstName");
+				lastname=(String) value.get("lastName");
+				if(firstname!=null && !(firstname.isEmpty()) && lastname!=null && !(lastname.isEmpty())){
+					user.setFirstName(firstname);
+					user.setLastName(lastname);
+				}
+				else
+				{
+					status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "Value required");
+					return new UserMessage(status, null);
+				}
+				user.setPhoneNo((String) value.get("phoneNo"));
+				JSONObject countryJsonObj = (JSONObject) value.get("country");
+				if(countryJsonObj != null)
+				{
+					Country countryObj=new Country();
+					countryObj.setCountryId(Long.valueOf((String) countryJsonObj.get("countryId")));
+					user.setCountry(countryObj);
+				}
+				userService.updateUser(user);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");	
+				return new UserMessage(status, null);
+			}
+			return new UserMessage(status, user);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new UserMessage(status, null);
+		}
+	}
+
+	public UserMessage changePasswordUser(String token, InputStream is) {
+		ResponseStatus status = null;
+		User user = new User();
+		String newPwd=null;
+		String confirmPwd=null;
+		try{
+			if(token != null && !(token).isEmpty()){
+				boolean flag = loginServiceHelper.checkToken(token);
+				if(!flag){
+					status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+					return new UserMessage(status, user);
+				}
+				int userId = loginServiceHelper.getUserByToken(token);
+				user = userService.getUserById(userId);
+				JSONObject value = getJSONObject(is);
+				newPwd=(String)value.get("newPassword");
+				confirmPwd=(String)value.get("confirmPassword");
+				if(newPwd!= null && confirmPwd!= null)
+				{
+					if(newPwd.equals(confirmPwd))
+					{
+						user.setPassword(commonUtils.generateEncryptedPwd((String)value.get("newPassword")));
+						userService.updateUser(user);
+						status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+					}
+					else
+					{
+						status = new ResponseStatus(ResponseStatusCode.STATUS_NOTMATCHED, "NOTMATCHED");
+						return new UserMessage(status, null);
+					}
+				}
+				else
+				{
+					status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "Value required");
+					return new UserMessage(status, null);
+				}
+			}
+			else
+			{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");	
+				return new UserMessage(status, null);
+			}
+			return new UserMessage(status, user);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new UserMessage(status, null);
+		}
+	}
+	public CountMessage getUsersCount() {
+		ResponseStatus status = null;
+		String count = null;
+		try{
+			count=userService.getUsersCount();
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			return new CountMessage(status, count);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new CountMessage(status, null);
+		}
+
+	}
+
+	public TokenMessage adminLoginUser(InputStream is) {
+		ResponseStatus status = null;
+		String token = null;
+		try{
+			String username=null;
+			String encpwd=null;
+			JSONObject value = getJSONObject(is);
+			if(value.get("emailAddress") != null){
+				username=(String) value.get("emailAddress");
+			}
+			if(value.get("passWord")!=null){
+				encpwd	= commonUtils.generateEncryptedPwd((String)value.get("passWord"));
+			}
+			User user = userService.loginUser(username, encpwd);
+			if(user!=null && (user.getUserType()==1)){
+				token = loginServiceHelper.createLoginToken(user.getId());
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");	
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new TokenMessage(status, token);
+
+	}
+
+	/**
+	 * get all menu form DB
+	 * @return
+	 */
+	public SettingsMessage getMenuSettings() {
+		ResponseStatus status = null;
+		List<Settings> menuList = settingsService.getSettings();
+		if(menuList!=null){
+		status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		} else {
+			status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "NO DATA");	
+		}
+		return new SettingsMessage(status, menuList);
+	}
+	public SettingsMessage updateMenuSettingsJson(InputStream is) {
+		ResponseStatus status = null;		
+		Settings menu = new Settings();
+		List<Settings> menuList = new ArrayList<Settings>();
+
+		try{
+			JSONArray valueArr = getJSONArray(is);
+			if(valueArr!=null){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+				for(int i=0;i<valueArr.size();i++){
+					JSONObject value=(JSONObject)valueArr.get(i);					
+					menu = settingsService.getSettingsById(Integer.valueOf((String) value.get("id")));				
+					
+					String referralLink = String.valueOf( value.get("referralLink"));
+					String upload = String.valueOf( value.get("upload"));
+					String videoManager = String.valueOf( value.get("videoManager"));
+					String umMarketingMaterials = String.valueOf( value.get("umMarketingMaterials"));
+					String onlineMarketingTools = String.valueOf( value.get("onlineMarketingTools"));
+					String onlineMarketingTraining = String.valueOf( value.get("onlineMarketingTraining"));
+
+					menu.setReferralLink(referralLink.equals("true")?true:false);
+					menu.setUpload(upload.equals("true")?true:false);
+					menu.setVideoManager(videoManager.equals("true")?true:false);
+					menu.setUmMarketingMaterials(umMarketingMaterials.equals("true")?true:false);
+					menu.setOnlineMarketingTools(onlineMarketingTools.equals("true")?true:false);
+					menu.setOnlineMarketingTraining(onlineMarketingTraining.equals("true")?true:false);
+					// Update in db
+					settingsService.updateSettings(menu);
+					menuList.add(menu);	
+				}
+			} else {
+				status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "Fail");
+			}
+		} 
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new SettingsMessage(status, menuList);
+
+	}
+	public SettingMessage getActiveMenu(String token){
+		ResponseStatus status = null;
+		User user = new User();
+		Settings menu=new Settings();
+		try{
+			if(token != null && !(token).isEmpty()){
+
+				boolean flag = loginServiceHelper.checkToken(token);
+				if(!flag){
+					status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+					return new SettingMessage(status, null);
+				}
+				int userId = loginServiceHelper.getUserByToken(token);
+				user = userService.getUserById(userId);	
+				if(user!=null){
+					menu = settingsService.getSettingsById(user.getLevel_id());
+				}
+				if(menu!=null && (user.getLevel_id()==menu.getLevel_id().getLevelId())){				
+					status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+				}
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");	
+			}
+			return new SettingMessage(status, menu);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new SettingMessage(status, null);
+		}
+
+	}
+	
+	/**
+	 * get all menu form DB
+	 * @return
+	 */
+	public CMSsMessage getCMSContents() {
+		ResponseStatus status = null;
+		List<CMS> menuList = settingsService.getCMSContents();
+		if(menuList!=null){
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		} else {
+			status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "NO DATA");	
+		}
+		return new CMSsMessage(status, menuList);
+	}
+	/**
+	 * 
+	 * @param is
+	 * @return
+	 */
+	
+	public CMSMessage updateCMSSettingsJson(InputStream is) {
+			ResponseStatus status = null;
+			CMS content=null;
+			try{
+				JSONObject value = getJSONObject(is);
+				//check duplicate
+				content = settingsService.getCMSContentById(Integer.valueOf((String) value.get("id")));
+				if(content != null){
+					status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+					content.setDescription((String) value.get("description"));
+					settingsService.updateCms(content);
+				} else {
+					status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				System.out.println(e.getMessage());
+				status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			}
+			return new CMSMessage(status, content);
+		}
+
+	/**
+	 * get all menu form DB
+	 * @return
+	 */
+	public CMSMessage getCMSContentByID(String id) {
+		ResponseStatus status = null;
+		CMS content = settingsService.getCMSContentById(Integer.valueOf(id));
+		if(content !=null){
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		} else {
+			status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "NO DATA");	
+		}
+		return new CMSMessage(status, content);
+	}
+	/**
+	 * get all level form DB
+	 * @return
+	 */
+	public LevelsMessage getLevelContents() {
+		ResponseStatus status = null;
+		List<Level> menuList = settingsService.getLevelContents();
+		if(menuList!=null){
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		} else {
+			status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "NO DATA");	
+		}
+		return new LevelsMessage(status, menuList);
+	}
+	/**
+	 * get all menu form DB
+	 * @return
+	 */
+	public LevelMessage getLevelContentByID(String id) {
+		ResponseStatus status = null;
+		Level content = settingsService.getLevelContentById(Integer.valueOf(id));
+		if(content !=null){
+			status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+		} else {
+			status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "NO DATA");	
+		}
+		return new LevelMessage(status, content);
+	}
+	/**
+	 * update level
+	 */
+	public LevelMessage updateLevelJson(InputStream is) {
+		ResponseStatus status = null;
+		Level content=null;
+		try{
+			JSONObject value = getJSONObject(is);
+			//check duplicate
+			content = settingsService.getLevelContentById(Integer.valueOf((String) value.get("levelId")));
+			if(content != null){
+				if(!(((String) value.get("levelName")).isEmpty()) && ((String) value.get("levelName"))!=null  && (!((String) value.get("amount")).isEmpty()) && ((String) value.get("amount"))!=null ){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+				content.setLevelName((String) value.get("levelName"));
+				content.setAmount((String) value.get("amount"));
+				settingsService.updateLevel(content);
+				} else {
+					status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "EMPTY FIELD");	
+				}
+			} else {
+				status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "NO RECORD");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new LevelMessage(status, content);
+	}
+	/**
+	 * update level
+	 */
+	public LevelMessage updateNewLevelJson(InputStream is) {
+		ResponseStatus status = null;
+		Level content=null;
+		Settings menu = new Settings();
+		try{
+			JSONObject value = getJSONObject(is);
+			//check duplicate
+			content = new Level();
+			if(content != null && menu != null){
+				if(!(((String) value.get("levelName")).isEmpty()) && ((String) value.get("levelName"))!=null  && (!((String) value.get("amount")).isEmpty()) && ((String) value.get("amount"))!=null ){
+				content.setLevelName((String) value.get("levelName"));
+				content.setAmount((String) value.get("amount"));
+				content.setIsDeleted(false);
+				settingsService.updateNewLevel(content);
+				menu.setLevel_id(content);
+				menu.setReferralLink(false);
+				menu.setUpload(false);
+				menu.setUmMarketingMaterials(false);
+				menu.setVideoManager(false);
+				menu.setOnlineMarketingTools(false);
+				menu.setOnlineMarketingTraining(false);
+				menu.setIsDeleted(false);
+				menu.setUpdated_on(new Date());
+				settingsService.addSettings(menu);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+				} else {
+					status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "EMPTY FIELD");	
+				}
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new LevelMessage(status, content);
+	}
+	/**
+	 * delete level
+	 */
+	public LevelMessage deleteLevelJson(InputStream is) {
+		ResponseStatus status = null;
+		Level content=null;
+		Settings menu =null;
+		try{
+			JSONObject value = getJSONObject(is);
+			//check duplicate
+			content = settingsService.getLevelContentById(Integer.valueOf((String) value.get("levelId")));
+			menu = settingsService.getSettingsByLevelId(Integer.valueOf((String) value.get("levelId")));
+			if(content != null && menu !=null){
+				if(!(((String) value.get("levelName")).isEmpty()) && ((String) value.get("levelName"))!=null  && (!((String) value.get("amount")).isEmpty()) && ((String) value.get("amount"))!=null ){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+				content.setIsDeleted(true);
+				settingsService.updateLevel(content);
+				menu.setIsDeleted(true);
+				settingsService.updateSettings(menu);
+				} else {
+					status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "EMPTY FIELD");	
+				}
+			} else {
+				status = new ResponseStatus(ResponseStatusCode.STATUS_NORECORD, "NO RECORD");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+		}
+		return new LevelMessage(status, content);
+	}
+	/**
+	 * return the current user's profile
+	 * @return UserMessage
+	 */
+	public UserMessage getUserById(String id){
+		ResponseStatus status = null;
+		User user = null;
+		try{
+			if(id != null && !(id).isEmpty()){
+				user = userService.getUserById(Integer.valueOf(id));
+				if(user!=null){
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+				} else {
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+				}
+			}
+			return new UserMessage(status, user);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new UserMessage(status, null);
+		}
+	}
+	/**
+	 * return the current user's amount profile
+	 * @return AmountMessage
+	 */
+	public AmountMessage setPayment(String id){
+		ResponseStatus status = null;
+		Amount amount = null;
+		try{
+			if(id != null && !(id).isEmpty()){
+				amount = userService.getAmountById(Integer.valueOf(id));
+				if(amount!=null){
+				amount.setAmount_paid(true);
+				userService.setPayment(amount);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+				} else {
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+				}
+			}
+			return new AmountMessage(status, amount);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new AmountMessage(status, null);
+		}
+	}
+	/**
+	 * remove the current user's profile
+	 * @return AmountMessage
+	 */
+	public AmountMessage removePayment(String id){
+		ResponseStatus status = null;
+		Amount amount = null;
+		Referral referral=null; 
+		User user=null;
+		try{
+			if(id != null && !(id).isEmpty()){
+				amount = userService.getAmountById(Integer.valueOf(id));
+				referral=referralService.getReferralByUserId(Integer.valueOf(id));
+				user=userService.getUserById(Integer.valueOf(id));
+				if(referral!=null){
+					referralService.removeReferral(referral);
+				}
+				if(amount!=null && user != null){
+				userService.removePayment(amount);
+				user.setIsDeleted(true);
+				userService.updateUser(user);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+				} else {
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+				}
+			}
+			return new AmountMessage(status, amount);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new AmountMessage(status, null);
+		}
+	}
+
+	public UserMessage getUserByAdmin(int editedUserId, String tokenVal) {
+		ResponseStatus status = null;
+		User user = new User();
+		try{
+			if(editedUserId != 0 ){
+				boolean flag = loginServiceHelper.checkToken(tokenVal);
+				if(!flag){
+					status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+					return new UserMessage(status, user);
+				}
+				user = userService.getUserById(editedUserId);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");	
+			}
+			return new UserMessage(status, user);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new UserMessage(status, null);
+		}
+	}
+
+<<<<<<< .mine
+	public UserMessage updateUserByAdmin(String token, int edUserId,InputStream is) {
+		ResponseStatus status = null;
+		User user = new User();
+		String newPwd=null;
+		String confirmPwd=null;
+		String firstname=null;
+		String lastname=null;
+		try{
+			if(token != null && !(token).isEmpty()){
+				boolean flag = loginServiceHelper.checkToken(token);
+				if(!flag){
+					status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+					return new UserMessage(status, user);
+				}
+				//int userId = loginServiceHelper.getUserByToken(token);
+				user = userService.getUserById(edUserId);
+				JSONObject value = getJSONObject(is);
+				firstname=(String) value.get("firstName");
+				lastname=(String) value.get("lastName");
+				if(firstname!=null && !(firstname.isEmpty()) && lastname!=null && !(lastname.isEmpty())){
+					user.setFirstName(firstname);
+					user.setLastName(lastname);
+				}
+				else
+				{
+					status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "Value required");
+					return new UserMessage(status, null);
+				}
+				user.setPhoneNo((String) value.get("phoneNo"));
+				JSONObject countryJsonObj = (JSONObject) value.get("country");
+				if(countryJsonObj != null)
+				{
+					Country countryObj=new Country();
+					countryObj.setCountryId(Long.valueOf((String) countryJsonObj.get("countryId")));
+					user.setCountry(countryObj);
+				}
+				newPwd=(String)value.get("newPassword");
+				confirmPwd=(String)value.get("confirmPassword");
+				if((newPwd!=null && !(newPwd.isEmpty())) && (confirmPwd !=null && !(confirmPwd.isEmpty())))
+				{
+					if(newPwd!= null && confirmPwd!= null)
+					{
+						if(newPwd.equals(confirmPwd))
+						{
+							user.setPassword(commonUtils.generateEncryptedPwd((String)value.get("newPassword")));
+						}
+						else
+						{
+							status = new ResponseStatus(ResponseStatusCode.STATUS_NOTMATCHED, "NOTMATCHED");
+							return new UserMessage(status, null);
+						}
+					}
+					else
+					{
+						status = new ResponseStatus(ResponseStatusCode.STATUS_REQUIRED, "Value required");
+						return new UserMessage(status, null);
+					}
+				}
+				userService.updateUser(user);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");	
+				return new UserMessage(status, null);
+			}
+			return new UserMessage(status, user);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new UserMessage(status, null);
+		}
+	}
+
+	public UsersMessage getEditedUserReferrals(String tokenVal, int editedUserId) {
+		ResponseStatus status = null;
+		List<User> users = new ArrayList<User>();
+		try{
+			if(tokenVal != null && !(tokenVal).isEmpty()){
+				boolean flag = loginServiceHelper.checkToken(tokenVal);
+				if(!flag){
+					status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");
+					return new UsersMessage(status, users);
+				}
+				users = userService.getUsersFromReferredById(editedUserId);
+				status = new ResponseStatus(ResponseStatusCode.STATUS_OK, "OK");
+			}
+			else{
+				status = new ResponseStatus(ResponseStatusCode.STATUS_UNAUTHORIZED, "UNAUTHORIZED");	
+			}
+			return new UsersMessage(status, users);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			status = new ResponseStatus(ResponseStatusCode.STATUS_INTERNAL_ERROR, "INTERNAL_ERROR");
+			return new UsersMessage(status, null);
+		}
+	}
+
+
+=======
+
+>>>>>>> .r304
+}

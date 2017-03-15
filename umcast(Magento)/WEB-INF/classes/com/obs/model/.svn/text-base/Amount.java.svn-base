@@ -1,0 +1,169 @@
+package com.obs.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+/**
+ * @author Ram
+ *
+ */
+@Entity
+@Table(name="tbl_amount")
+public class Amount {
+
+	private long id;
+	private User user;
+	private long level;
+	private long referred_by_id;
+	private long parent_id;
+	private long referral_tbl_id;
+	private String amount;
+	private String referral_share;
+	private String parent_share;
+	private boolean amount_paid;
+
+
+	/**
+	 * @return the id
+	 */
+	@Id
+	@GeneratedValue( strategy = GenerationType.AUTO )
+	@Column(name="DN_ID" , nullable = false )
+	public long getId() {
+		return id;
+	}
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
+	}
+	/**
+	 * @return the user
+	 */
+	@OneToOne ( targetEntity = User.class, fetch = FetchType.EAGER )
+	@JoinColumn (name = "DN_USER_ID")
+	public User getUser() {
+		return user;
+	}
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(User user) {
+		this.user = user;
+	}
+	/**
+	 * @return the referred_by_id
+	 */
+	@Column(name="DN_REFERRAL_ID", nullable = true)
+	public long getReferred_by_id() {
+		return referred_by_id;
+	}
+	/**
+	 * @param referred_by_id the referred_by_id to set
+	 */
+	public void setReferred_by_id(long referred_by_id) {
+		this.referred_by_id = referred_by_id;
+	}
+	/**
+	 * @return the referral_tbl_id
+	 */
+	@Column(name="DN_REFERRAL_TBL_ID", nullable = true)
+	public long getReferral_tbl_id() {
+		return referral_tbl_id;
+	}
+	/**
+	 * @param referral_tbl_id the referral_tbl_id to set
+	 */
+	public void setReferral_tbl_id(long referral_tbl_id) {
+		this.referral_tbl_id = referral_tbl_id;
+	}
+	/**
+	 * @return the amount
+	 */
+	@Column(name="DC_AMOUNT", nullable = true)
+	public String getAmount() {
+		return amount;
+	}
+	/**
+	 * @param amount the amount to set
+	 */
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+	/**
+	 * @return the referral_share
+	 */
+	@Column(name="DC_REFERRAL_SHARE", nullable = true)
+	public String getReferral_share() {
+		return referral_share;
+	}
+	/**
+	 * @param referral_share the referral_share to set
+	 */
+	public void setReferral_share(String referral_share) {
+		this.referral_share = referral_share;
+	}
+	/**
+	 * @return the amount_paid
+	 */
+	@Column(name="DB_AMOUNT_PAID", nullable = true)
+	public boolean isAmount_paid() {
+		return amount_paid;
+	}
+	/**
+	 * @param amount_paid the amount_paid to set
+	 */
+	public void setAmount_paid(boolean amount_paid) {
+		this.amount_paid = amount_paid;
+	}
+	/**
+	 * @return the level
+	 */
+	@Column(name="DN_LEVEL", nullable = true)
+	public long getLevel() {
+		return level;
+	}
+	/**
+	 * @param level the level to set
+	 */
+	public void setLevel(long level) {
+		this.level = level;
+	}
+	/**
+	 * @return the parent_id
+	 */
+	@Column(name="DN_PARENT_ID", nullable = true)
+	public long getParent_id() {
+		return parent_id;
+	}
+	/**
+	 * @param parent_id the parent_id to set
+	 */
+	public void setParent_id(long parent_id) {
+		this.parent_id = parent_id;
+	}
+	/**
+	 * @return the parent_share
+	 */
+	@Column(name="DC_PARENT_SHARE", nullable = true)
+	public String getParent_share() {
+		return parent_share;
+	}
+	/**
+	 * @param parent_share the parent_share to set
+	 */
+	public void setParent_share(String parent_share) {
+		this.parent_share = parent_share;
+	}
+	
+	
+
+}

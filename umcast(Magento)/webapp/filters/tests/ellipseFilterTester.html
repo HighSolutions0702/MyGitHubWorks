@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>TitleLabelTest</title>
+</head>
+<body ng-app="com.obs">
+<div ng-controller="LabelController" id="test_div">
+    <label id="titleLabel">{{videoName| ellipseFilter :55}}</label>
+    <br/>
+    <label>{{videoTitle| ellipseFilter :55}}</label>
+    <br/>
+    <label>{{videoName| ellipseFilter :15}}</label>
+</div>
+<script src="/bower_components/angular/angular.js"></script>
+<script src="/bower_components/angular-cookies/angular-cookies.js"></script>
+<script type="text/javascript">
+    app.controller('LabelController', ['$scope', function ($scope) {
+        $scope.videoName = 'umcast video testing site for title label should summerized text';
+        $scope.videoTitle = 'umcast video testing site for title label';
+           }]);
+</script>
+<script type="text/javascript" src="/bower_components/ng-tags-input/ng-tags-input.js"></script>
+<script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="/js/messageResource.js"></script>
+<script type="text/javascript" src="/application/app.js"></script>
+<script type="text/javascript" src="/filters/ellipses.js"></script>
+</body>
+</html>

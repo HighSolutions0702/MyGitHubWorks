@@ -1,0 +1,37 @@
+package com.obs.webservice.messages;
+
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name="thumnail")
+public class ThumnailMessage {
+
+	@XmlElement(name="status")
+	public ResponseStatus status;
+
+	private List<String> thumnail;
+
+	public ThumnailMessage() {
+		super();
+	}
+
+	public ThumnailMessage(ResponseStatus status, List<String> thumnail) {
+		super();
+		this.status = status;
+		this.thumnail = thumnail;
+	}
+
+	/**
+	 * @return the thumnail
+	 */
+	@XmlElement(name="thumnail")
+	public List<String> getThumnail() {
+		return thumnail;
+	}
+
+
+
+
+}

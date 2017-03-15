@@ -1,0 +1,56 @@
+package com.obs.model;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="tbl_tags")
+public class Tags implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private int tagId;
+	private String tagName;
+	private Boolean isDeleted;
+	/**
+	 * 
+	 * @return
+	 */
+	@Id
+	@GeneratedValue( strategy = GenerationType.AUTO )
+	@Column(name="DN_ID" , nullable = false )
+	public int getTagId() {
+		return tagId;
+	}
+	public void setTagId(int tagId) {
+		this.tagId = tagId;
+	}
+
+	@Column(name="DC_TAGNAME", nullable = true)
+	public String getTagName() {
+		return tagName;
+	}
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
+	}
+
+	@Column(name="DB_DELETED")
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+
+
+}

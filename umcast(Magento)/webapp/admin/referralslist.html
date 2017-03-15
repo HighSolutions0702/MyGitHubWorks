@@ -1,0 +1,254 @@
+<!doctype html>
+<html ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+    <title>Unstoppable Marketers</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0"/>
+    <link rel="shortcut icon" href="/images/favicon.png"/>
+    <link rel="stylesheet" href="/css/bootstrap.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="/css/plugins.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="/css/style_on.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="/css/style_aligh.css" type="text/css" media="all"/>
+
+</head>
+<body>
+
+<div id="wrap" ng-controller="userCntrl" ng-cloak>
+<header>
+    <ng-include src="'adminheader.html'"></ng-include>
+</header>
+<ng-include src="'adminmenu.html'"></ng-include>
+<section class="section_h">
+<div class="col-lg-12 col-xs-12 p-0 f_l">
+<div class="cnt_section">
+
+<div class="col-lg-12  col-xs-12 p-0 silver_pannel">
+<div class="col-lg-12 p-0 inner_menu"></div>
+
+<div class="row  page_heading">
+    <h2>User's Referrals List</h2>
+</div>
+<!--row-->
+
+<div class="col-lg-3 col-xs-12 step">
+    <aside>
+        <div></div>
+    </aside>
+</div>
+<div class="col-lg-6 overflow" style="width: 60%">
+    <div class="row p-0"></div>
+    <!--row-->
+
+    <div class="row p-0">
+        <div class="table_info">
+            <!-- 	<h1>Number of referrals: {{referLength}}</h1> -->
+            <br/>
+
+            <h1>Total Commission from Direct Referral(Non Pass up):
+                ${{refAmtNonPass}}</h1>
+            <br/>
+
+            <h1>Total Commission from Direct Referral(Pass up):
+                ${{refAmtPassup}}</h1>
+            <br/>
+
+            <h1>Total Commission from Passed up: ${{passupbalance}}</h1>
+        </div>
+
+    </div>
+    <!--row-->
+
+    <div class="row p-0">
+        <div class="home_table">
+            <!-- <table class="table table-striped table_space ">
+                <thead>
+                    <tr>
+                    <tr>
+                        <th>no</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        ng-repeat="user in userRefDetails |filter:  searchFilter  |filter:searchEmail ">
+                        <td ng-show="checkUserRefRecords" colspan="4">{{msg}}</td>
+                        <td>{{$index+1}}</td>
+                        <td>{{user.firstName+" "+ user.lastName}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.phoneNo!=null?user.phoneNo:"----"}}</td>
+                    </tr>
+                </tbody>
+            </table> -->
+            <h1>Direct referrals list</h1>
+            <table class="table table-striped table_space "
+                   style="width: 70%;">
+                <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th style="width: 250px;">Name <input name="search"
+                                                          ng-model="searchref" placeholder="Search by name"></th>
+                    <th style="width: 250px;">Email <input
+                            ng-model="searchEmail" placeholder="Search by email"></th>
+                    <th>Status</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-show="directReferLength == 0">
+                    <td colspan="4">No Records found</td>
+                </tr>
+                <tr ng-show="directReferLength &gt; 0"
+                    ng-repeat="directReferral in directReferralDetails| filter:  searchrefFilter |filter:searchEmailFilter">
+                    <td>{{$index+1}}</td>
+                    <td>{{directReferral.user.firstName+"
+                        "+directReferral.user.lastName}}
+                    </td>
+                    <td>{{directReferral.user.email}}</td>
+                    <td><label
+                            ng-if="directReferral.referred_by_id == directReferral.current_parent_id"
+                            style="color: green">Active (Direct)</label> <label
+                            ng-if="directReferral.referred_by_id != directReferral.current_parent_id && editedUserProfile.id == directReferral.referred_by_id"
+                            style="color: red">Passed by me (Direct)</label> <label
+                            ng-if="directReferral.referred_by_id != directReferral.current_parent_id && editedUserProfile.id == directReferral.current_parent_id"
+                            style="color: green">Passed up</label> <label
+                            ng-if="directReferral.referred_by_id !=directReferral.current_parent_id && editedUserProfile.id != directReferral.referred_by_id
+															&& editedUserProfile.id !=directReferral.current_parent_id"
+                            style="color: red">Indirect</label></td>
+                </tr>
+
+                </tbody>
+            </table>
+            <br/>
+            <!-- 	//for Passup referrals -->
+            <h1>Passup referrals list</h1>
+            <table class="table table-striped table_space "
+                   style="width: 70%;">
+                <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th style="width: 250px;">Name <input name="searchName"
+                                                          ng-model="searchName" placeholder="Search by name"></th>
+                    <th>Status</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-show="passUpReferLength == 0">
+                    <td colspan="4">No Records found</td>
+                </tr>
+                <tr ng-show="passUpReferLength &gt; 0"
+                    ng-repeat="passUp in passupReferralDetails| filter:  searchNameFilter">
+                    <td>{{$index+1}}</td>
+                    <td>{{passUp.user.firstName+" "+passUp.user.lastName}}</td>
+
+                    <td><label
+                            ng-if="passUp.referred_by_id == passUp.current_parent_id"
+                            style="color: green">Active (Direct)</label> <label
+                            ng-if="passUp.referred_by_id != passUp.current_parent_id && editedUserProfile.id == passUp.referred_by_id"
+                            style="color: red">Passed by me (Direct)</label> <label
+                            ng-if="passUp.referred_by_id != passUp.current_parent_id && editedUserProfile.id == passUp.current_parent_id"
+                            style="color: green">Passed up</label> <label
+                            ng-if="passUp.referred_by_id != passUp.current_parent_id && editedUserProfile.id != passUp.referred_by_id
+															&& editedUserProfile.id != passUp.current_parent_id"
+                            style="color: red">Indirect</label></td>
+                </tr>
+                </tbody>
+            </table>
+            <br/>
+            <!-- 	//for Indirect referrals -->
+            <h1>Indirect referrals list</h1>
+            <table class="table table-striped table_space "
+                   style="width: 70%;">
+                <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th style="width: 250px;">Name <input
+                            name="searchNames" ng-model="searchNames"
+                            placeholder="Search by name"></th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-show="inDirectReferLength == 0">
+                    <td colspan="4">No Records found</td>
+                </tr>
+                <tr ng-show="inDirectReferLength &gt; 0"
+                    ng-repeat="inDirectReferral in inDirectReferralDetails | filter:  searchNamesFilter">
+                    <td>{{$index+1}}</td>
+                    <td>{{inDirectReferral.user.firstName+"
+                        "+inDirectReferral.user.lastName}}
+                    </td>
+                    <td><label
+                            ng-if="inDirectReferral.referred_by_id == inDirectReferral.current_parent_id"
+                            style="color: green">Active (Direct)</label> <label
+                            ng-if="inDirectReferral.referred_by_id != inDirectReferral.current_parent_id && editedUserProfile.id == inDirectReferral.referred_by_id"
+                            style="color: red">Passed by me (Direct)</label> <label
+                            ng-if="inDirectReferral.referred_by_id != inDirectReferral.current_parent_id && editedUserProfile.id == inDirectReferral.current_parent_id"
+                            style="color: green">Passed up</label> <label
+                            ng-if="inDirectReferral.referred_by_id != inDirectReferral.current_parent_id && editedUserProfile.id != inDirectReferral.referred_by_id
+															&& editedUserProfile.id != inDirectReferral.current_parent_id"
+                            style="color: red">Indirect</label></td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <a href="/admin/admindashboard.html"
+           style="font-size: 15px; margin-left: 600px;">
+            <div
+                    class="col-lg-3 col-xs-12 m-l-10 f_r  m-t-5 blue_button ">
+                <h1>Back</h1>
+            </div>
+        </a>
+        <!--table-->
+    </div>
+    <!--row-->
+</div>
+<div class="col-lg-5  last_box">
+
+
+    <div class="col-lg-12 ">
+        <aside>
+            <div>
+                <div class="row m-0 m-b-30"></div>
+                <!--12-->
+                <div class="news_body"></div>
+            </div>
+        </aside>
+        <aside>
+            <div>
+                <div class="row m-0 m-b-30"></div>
+                <!--12-->
+            </div>
+        </aside>
+
+    </div>
+</div>
+
+
+</div>
+<!--12-->
+
+</div>
+<!--cnt_section-->
+</div>
+<!--12-->
+</section>
+
+<ng-include src="'userfooter.html'"></ng-include>
+
+</div>
+<!--wrap-->
+
+<script src="/bower_components/jquery/dist/jquery.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script type="text/javascript" src="/application/app.js"></script>
+<script src="/bower_components/angular/angular.js"></script>
+<script src="/bower_components/angular-cookies/angular-cookies.js"></script>
+<script type="text/javascript" src="/controllers/userCntrl.js"></script>
+
+</body>
+</html>

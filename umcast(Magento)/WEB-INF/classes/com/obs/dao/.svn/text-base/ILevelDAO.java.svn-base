@@ -1,0 +1,32 @@
+package com.obs.dao;
+
+import java.util.List;
+
+import com.obs.model.Level;
+
+public interface ILevelDAO {
+	/**
+	 * add Level
+	 */
+	public Long addLevel(Level level);
+	/**
+	 * delete Level
+	 */
+	public void deleteLevel(Level level);
+	/**
+	 * edit Level
+	 */
+	public void updateLevel(Level level);
+	
+	/**
+	 * Get Level
+	 */
+	public List<Level> getLevel();
+	
+	/**
+	 * Get Level
+	 */
+	public Level getLevelByID(long id);
+
+}
+

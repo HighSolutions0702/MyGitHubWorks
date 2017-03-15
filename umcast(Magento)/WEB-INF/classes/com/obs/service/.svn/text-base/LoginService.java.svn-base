@@ -1,0 +1,84 @@
+package com.obs.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.obs.dao.ILoginDAO;
+import com.obs.dao.LoginDAO;
+import com.obs.model.Login;
+
+@Transactional(readOnly = true)
+public class LoginService implements ILoginService {
+
+	ILoginDAO loginDAO;
+
+	/**
+	 * Get Login DAO
+	 * 
+	 * @return ILoginDAO - Login DAO
+	 */
+	public ILoginDAO getLoginDAO() {
+		return loginDAO;
+	}
+
+	/**
+	 * Set Login DAO
+	 * 
+	 * @param ILoginDAO - Login DAO
+	 */
+	public void setLoginDAO(ILoginDAO loginDAO) {
+		this.loginDAO = loginDAO;
+	}
+	/**
+	 * Add Login
+	 * 
+	 * @param  Login login
+	 */
+	@Transactional(readOnly = false)
+	@Override
+	public Integer addLogin(Login login) {
+		return getLoginDAO().addLogin(login);
+	}
+
+	/**
+	 * Delete Login
+	 * 
+	 * @param  Login login
+	 */
+	@Transactional(readOnly = false)
+	@Override
+	public void deleteLogin(Login login) {
+		getLoginDAO().deleteLogin(login);
+	}
+
+	/**
+	 * Update Login
+	 * 
+	 * @param  Login login
+	 */
+	@Transactional(readOnly = false)
+	@Override
+	public void updateLogin(Login login) {
+		getLoginDAO().updateLogin(login);
+	}
+
+	/**
+	 * Get Login
+	 * 
+	 * @param  String token
+	 */
+	@Override
+	public Login getLoginByToken(String token) {
+		return getLoginDAO().getLoginByToken(token);
+	}
+	
+	/**
+	 * Get Login
+	 * 
+	 * @param  int userId
+	 */
+	@Override
+	public Login getLoginByUserId(int userId) {
+		return getLoginDAO().getLoginByUserId(userId);
+	}
+}

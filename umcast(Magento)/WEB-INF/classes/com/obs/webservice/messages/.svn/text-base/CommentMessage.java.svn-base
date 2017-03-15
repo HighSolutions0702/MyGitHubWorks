@@ -1,0 +1,38 @@
+package com.obs.webservice.messages;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.Comments;
+
+@XmlRootElement(name="comment")
+public class CommentMessage {
+	@XmlElement(name="status")
+	public ResponseStatus status;
+	private Comments _entity = new Comments();
+
+	@XmlElement(name="comment")
+	public Comments getEntity(){
+		return _entity;
+	}
+
+	public void setEntity(Comments entity){
+		this._entity = entity;
+	}
+
+	public CommentMessage(){
+		super();
+	}
+
+	public CommentMessage(Comments entity){
+		super();
+		setEntity(entity);
+	}
+	
+	public CommentMessage(ResponseStatus status, Comments  entity){
+		super();
+		this.status=status;
+		this._entity = entity;
+	}
+
+}

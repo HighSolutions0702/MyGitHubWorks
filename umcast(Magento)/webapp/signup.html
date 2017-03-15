@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html ng-app="com.obs">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+       <link rel="shortcut icon" href="images/favicon.png" />
+    <title>Unstoppable Marketers</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="css/plugins.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="css/style_on.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="css/style_aligh.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="css/style_media.css" type="text/css" media="all" />
+    <link rel="stylesheet" type="text/css" href="css/style_tooltip.css" />
+    <script src="js/jquery.js"></script>
+    <script src="js/menu.js"></script>
+       <link rel="stylesheet" href="css/menu.css">
+</head>
+
+<body ng-controller="signupCtrl">
+    <div id="wrap" ng-cloak>
+        <header>
+            <ng-include src="loginheader.html"></ng-include>
+        </header>
+        <ng-include src="'menu.html'"></ng-include>
+        <section class="section_h">
+            <div class="col-lg-12 col-xs-12 p-0 f_l">
+                <div class="main_cnt_section">
+                    <form name="form" novalidate ng-controller="signupCtrl">
+                        <div id="signup_div" class="col-lg-12  col-xs-12 p-0  m-t-20">
+                            <div class="sign_in">
+                                <div class="col-lg-12 col-xs-12 m-0">
+                                    <aside>
+                                        <div class="sign_up_form shadow">
+                                            <div class="row m-0 m-b-30">
+                                                <div class="sign_tit">
+                                                    <img src="images/sigh_tit_bg.png" />
+                                                </div>
+                                            </div>
+                                            <!--12-->
+                                            <div ng-show="checkVal" class="alert-danger" style="padding: 10px;">
+                                                <span ng-show="checkVal" class="alert-danger" style="margin-left: 125px">{{msg}}</span>
+                                            </div>
+                                            <div class="row m-10">
+                                                <div class="col-lg-5  col-xs-12">First Name *</div>
+                                                <div class="col-lg-7  col-xs-12">
+                                                    <input type="text" ng-model="user.firstName" id="firstName" ng-blur="visitedFirstName = true" class="form-control input-sm" required name="firstName" placeholder="First name" autofocus>
+                                                    <div ng-show="form.firstName.$dirty && visitedFirstName">
+                                                        <span ng-show="form.firstName.$error.required" class="alert-danger"> Required</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row m-10">
+                                                <div class="col-lg-5 col-xs-12">Last Name *</div>
+                                                <div class="col-lg-7 col-xs-12">
+                                                    <input type="text" ng-model="user.lastName" id="lastName" ng-blur="visitedlastName = true" class="form-control input-sm" required name="lastName" placeholder="Last name">
+                                                     <div ng-show="form.lastName.$dirty && visitedlastName">
+                                                        <span ng-show="form.lastName.$error.required" class="alert-danger"> Required</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row m-10">
+                                                <div class="col-lg-5 col-xs-12">Your E-mail *</div>
+                                                <div class="col-lg-7 col-xs-12">
+                                                    <input type="email" ng-model="user.emailAddress" name="emailAddress" ng-blur="visitedEmail = true" class="form-control input-sm" id="emailAddress" required placeholder="Your E-mail" />
+                                                                 <div ng-show="form.emailAddress.$dirty && form.emailAddress.$invalid && visitedEmail">
+                                                        <span ng-show="form.emailAddress.$error.required" class="alert-danger">
+                                       Required</span>  <span ng-show="form.emailAddress.$error.email" class="alert-danger">Not
+                                       a valid email.</span>
+                                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="row m-10">
+                                                <div class="col-lg-5 col-xs-12">Re-Your E-mail *</div>
+                                                <div class="col-lg-7 col-xs-12">
+                                                    <input type="email" ng-model="user.confirmEmail" ng-blur="visitedconfirmEmail = true" class="form-control input-sm" id="confirmEmail" name="confirmEmail" placeholder="Re-enter Email" checkmail/>
+                                                                       <div ng-show=" visitedconfirmEmail ">
+                                                        <span ng-show="form.confirmEmail.$error.noMatch" class="alert-danger">Not
+                                       match</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row m-10">
+                                                <div class="col-lg-5 col-xs-12">Country</div>
+                                                <div class="col-lg-7 col-xs-12">
+                                                    <select style="width: 100%; background-color: none;" name="country_id" class="btn btn-default dropdown-toggle" id="country" ng-model="user.currentCountry" ng-options="c.countryId as c.countryName for c in countryItems">
+                                                        <option value="">-- Country --
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row m-10">
+                                                <div class="col-lg-5 col-xs-12">Mobile</div>
+                                                <div class="col-lg-7 col-xs-12">
+                                                    <input class="form-control input-sm" type="text" name="phone" ng-model="user.phone" id="phone" placeholder="Mobile" ng-pattern="onlyNumbers" /> <span class="alert-danger" ng-show="phoneLength">Invalid</span>  <span class="alert-danger" ng-show="form.phone.$error.pattern">Numbers only allowed</span>
+                                                </div>
+                                            </div>
+                                            <div class="row m-10 p-20 ">
+                                                <div class="col-lg-12 col-xs-12 align-center">
+                                                    <a href="" ng-click="showSubscribe()">
+                                                        <img src="images/sign_up_but.png" />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="row m-10   ">
+                                                <div class="col-md-2 col-xs-3"></div>
+                                                <div class="col-md-8 col-xs-6">
+                                                    Already have an account? <a href="login.html">Sign In Here</a>
+                                                </div>
+                                                <div class="col-md-2 col-xs-3"></div>
+                                            </div>
+                                        </div>
+                                    </aside>
+                                </div>
+                            </div>
+                        </div>
+             
+                        <div id="subscribtion_div" class="col-lg-12  col-xs-12 p-0 m-t-20" - style="display: none">
+                            <div class="silver_pannel">
+                                <div class="row m-0">
+                                    <div class="bold_l">
+                                        <img src="images/bold.png" />
+                                    </div>
+                                    <div class="bold_r">
+                                        <img src="images/bold.png" />
+                                    </div>
+                                </div>
+                                <!--row-->
+                                <div class="row m-0 m-t-10">
+                                    <div class="row m-0 m-t-20">
+                                        <!-- Level Pack -->
+                                        <!-- 							<div ng-repeat="(key,menu) in menuDetails"> -->
+                                        <div class="col-md-4" id={{menu.id}}>
+                                            <div class="sign_up_form p-b-20">
+                                                <div class="row m-0 m-b-30">
+                                                    <div class="pricing_tit">
+                                                        <h2>
+                                {{menu.level_id.levelName}}
+                                <h2>
+                        </div>
+                    </div>
+                    <div class="pricing_body" style="height: auto">
+                        <a class="tooltips" href="#"><h1>Viral Video Hosting and Sharing Platform
+                            (VVHSP) including personal UMcast Channel</h1> <span>Unstoppable Marketers
+                                          Viral Video Hosting and Sharing platform gives members a place to safely
+                                          upload and host marketing videos without the fear of videos being deleted and
+                                          accounts banned as is currently the issue with other video sharing platforms.
+                                          Uploading videos to the VVHSP is fast and easy as members have the ability to
+                                          use the webcam on their computer to shoot and upload a video, import videos
+                                          already created from their personal computer or transfer from other video
+                                          sharing sites. We offer a personalized channel for all of our members as well
+                                          as customizable backrounds, images, and links. </span></a> <a class="tooltips"
+                                                                                                        href="#"><h1>SEO
+                        Booster for videos hosted using the WHSP</h1> <span>The SEO booster aspect
+                                          of the VVHSP is focused on driving massive organic traffic to the videos that
+                                          you upload onto our platform. At the push of a button our patent pending
+                                          algorithm will upload your video to other video sharing platforms while
+                                          spinning the content to emulate each video into looking like multiple keyword
+                                          rich videos to the search engines. We add in our secret back end processes
+                                          that will make sure that you get huge link juice in order to get your videos
+                                          ranked very highly on the search engines for multiple keywords for floods of
+                                          organic traffic</span></a> <a class="tooltips" href="#"><h1>Video Editor
+                        Lite</h1> <span>All
+                                          of our members will have access to a lite version of our video editor that
+                                          will allow members to clip and edit videos before uploading them to our VVHS
+                                          Platform.</span></a> <a class="tooltips" href="#"><h1>500+ PLR offerings</h1> <span>All
+                                          Unstoppable Marketers members will have access to five hundred of PLR
+                                          offerings that can be used as give aways to build subscriber lists or as
+                                          products that can be sold for a profit </span></a> <a class="tooltips"
+                                                                                                href="#"><h1>Full
+                        Suite of Online Marketing Training</h1> <span>We wanted to make sure that we
+                                          not only offer amazing products and services to our members but also amazing
+                                          training that can be used by marketers in any industry to increase marketing
+                                          competency, while learning new ways to harness the power of the internet to
+                                          generate leads and sales. Unstoppable Marketers offers an unparrelled suite of
+                                          hands on over the shoulder training videos that will teach exactly how to use
+                                          the newest cutting edge techniques. Some of the topics we will be covering
+                                          include but are not limited to<br/> Learning to think like an entropenure <br/>
+                                          Using PLR and give aways to build a list of hungry buyers <br/> Facebook
+                                          marketing<br/> Twitter marketing <br/>How to create your first video <br/>Using
+                                          video to generate sales in any industry <br/>Using SEO to increase your
+                                          brand exposure and generate revenue<br/> Google + and using Google Hangouts
+                                          Using auto Responders to keep your followers involved<br/> And so much
+                                          more...
+                                    </span></a> <a class="tooltips" href="#"><h1>Ability to earn from our compensation
+                        plan</h1> <span>Every member of Unstoppable Marketers has the ability to
+                                          tell others about our company and be rewarded with the most cutting edge
+                                          compensation plan around. You finally have the ability to change your
+                                          financial situation and increase your income just by telling others about
+                                          Unstoppable Marketers and how it can help grow their business. To Learn more
+                                          about our compensation plan please (Click Here) to view the video</span></a>
+                    </div>
+                    <div class="price_box">
+                        <h2>$ {{menu.level_id.amount}}</h2>
+                                                         </div>
+                                                    <a href="#" ng-click="showCreditCardPayment(menu)">
+                                                        <div class="blue_button" style="margin: auto;">
+                                                            <h1>Subscribe</h1>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row m-0">
+                                            <div class="bold_l">
+                                                <img src="images/bold.png" />
+                                            </div>
+                                            <div class="bold_r">
+                                                <img src="images/bold.png" />
+                                            </div>
+                                        </div>
+                                        <!--row-->
+                                    </div>
+                                    <!--silver_pannel-->
+                                </div>
+                            </div>
+                            <div id="credit_card_div" class="col-lg-12  col-xs-12 p-0  m-t-20" style="display: none">
+                                <div class="sign_in">
+                                    <div class="col-lg-12 col-xs-12 m-0">
+                                        <aside>
+                                            <div class="sign_up_form shadow">
+                                                <div class="row m-0 m-b-30">
+                                                    <div class="pricing_tit">
+                                                        <h1>
+                                <strong>Credit card payment</strong>
+                            </h1>
+                  
+                                                    </div>
+                                                </div>
+                                                <div ng-show="checkCard" class="alert-danger">
+                                                    <span ng-show="checkCard" class="alert-danger" style="margin-left: 175px;">
+                                 {{checkMsg}}</span>
+                  
+                                                </div>
+                                                <!--12-->
+                                                <div ng-show="checkCreditCard" class="alert-danger" style="padding: 10px;">
+                                                    <span ng-show="checkCreditCard" class="alert-danger" style="margin-left: 125px">{{cardMsg}}</span>
+                                                </div>
+                                                <div class="row m-10">
+                                                    <div class="col-lg-5  col-xs-12">Cardtype *</div>
+                                                    <div class="col-lg-7  col-xs-12">
+                                                        <select style="width: 100%; background-color: none;" name="cardType" class="btn btn-default dropdown-toggle" id="cardType" ng-model="user.cardType" ng-options="">
+                                                            <option value="">-- Cardtype --</option>
+                                                            <option value="1">VISA CARD</option>
+                                                            <option value="2">MASTER CARD</option>
+                                                            <option value="3">AMERICAN EXPRESS</option>
+                                                            <option value="4">DISCOVER</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row m-10">
+                                                    <div class="col-lg-5 col-xs-12">Card Holder name *</div>
+                                                    <div class="col-lg-7 col-xs-12">
+                                                        <input type="text" ng-model="user.cardName" id="cardName" ng-blur="visitedcardName = true" class="form-control input-sm" required name="cardName" placeholder=" Card Holder name *">
+                    
+                                                        <div ng-show="form.cardName.$dirty && visitedcardName">
+                                                            <span ng-show="form.cardName.$error.required" class="alert-danger"> Required</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row m-10">
+                                                    <div class="col-lg-5 col-xs-12">Card Number *</div>
+                                                    <div class="col-lg-7 col-xs-12">
+                                                        <input type="text" ng-model="user.cardNo" name="cardNo" ng-pattern="onlyNos" ng-blur="visitedcardNo = true" class="form-control input-sm" id="cardNo" required placeholder=" Card Number *" />
+
+                      
+                                                        <div ng-show="form.cardNo.$dirty && visitedcardNo">
+                                                            <span ng-show="form.cardNo.$error.required" class="alert-danger"> Required</span>
+                                                        </div>
+                                                        <span class="alert-danger" ng-show="cardNoLen">{{msg}}</span>  <span ng-show="form.cardNo.$error.pattern" class="alert-danger"> Numbers only
+                                    allowed</span>
+                  
+                                                </div>
+                                                <div class="row m-10">
+                                                    <div class="col-lg-5 col-xs-12">Valid until *</div>
+                                                    <div class="col-lg-7 col-xs-12">
+                                                        <div class="col-lg-6 ">
+                                                            <select style="width: 100%; background-color: none;" name="expMonth" class="btn btn-default dropdown-toggle" id="expMonth" ng-model="user.expMonth" ng-options="">
+                                                                <option value="">--Month--</option>
+                                                                <option value="01">01</option>
+                                                                <option value="02">02</option>
+                                                                <option value="03">03</option>
+                                                                <option value="04">04</option>
+                                                                <option value="05">05</option>
+                                                                <option value="06">06</option>
+                                                                <option value="07">07</option>
+                                                                <option value="08">08</option>
+                                                                <option value="09">09</option>
+                                                                <option value="10">10</option>
+                                                                <option value="11">11</option>
+                                                                <option value="12">12</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-lg-6 ">
+                                                            <select style="width: 100%; background-color: none;" name="expYear" class="btn btn-default dropdown-toggle" id="expYear" ng-model="user.expYear" ng-options="">
+                                                                <option value="">--Year--</option>
+                                                                <option value="2014">2014</option>
+                                                                <option value="2015">2015</option>
+                                                                <option value="2016">2016</option>
+                                                                <option value="2017">2017</option>
+                                                                <option value="2018">2018</option>
+                                                                <option value="2019">2019</option>
+                                                                <option value="2020">2020</option>
+                                                                <option value="2021">2021</option>
+                                                                <option value="2022">2022</option>
+                                                                <option value="2023">2023</option>
+                                                                <option value="2024">2024</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row m-10">
+                                                    <div class="col-lg-5 col-xs-12">CVV</div>
+                                                    <div class="col-lg-7 col-xs-12">
+                                                        <input type="text" ng-model="user.cvv" name="cvv" ng-pattern="onlyNos" ng-blur="visitedCvv = true" class="form-control input-sm" id="cvv" required placeholder=" CVV *" />
+
+                          
+                                                        <div ng-show="form.cvv.$dirty && visitedCvv">
+                                                            <span ng-show="form.cvv.$error.required" class="alert-danger"> Required</span>
+                                                        </div>
+                                                        <span class="alert-danger" ng-show="cvvLength">{{msg}}</span>  <span ng-show="form.cvv.$error.pattern" class="alert-danger"> Numbers only allowed</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row m-10 p-20 ">
+                                                    <div class="col-lg-12 col-xs-12 ">
+                                                        <div class="col-lg-7">
+                                                            <a href="#" ng-click="signUp()">
+                                                                <div class="blue_button" style="margin: auto;">
+                                                                    <h1>Pay</h1>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-lg-5">
+                                                            <a href="#" ng-click="goBack()">
+                                                                <div class="red_button" style="margin: auto;">
+                                                                    <h1>Cancel</h1>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </aside>
+                                    </div>
+                            
+                                </div>
+                            </div>
+                         
+                    </form>
+                    </div>
+                </div>
+     
+        </section>
+        <ng-include src="footer.html"></ng-include>
+        </div>
+   
+        <script type="text/javascript">
+            window.onload = function () {
+                var myInput = document.getElementById('confirmEmail');
+                myInput.onpaste = function (e) {
+                    e.preventDefault();
+                }
+            }
+        </script>
+        <!--
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>  -->
+
+        <script src="js/bootstrap.js"></script>
+        <!-- jQuery tooltip needed -->
+        <script type="text/javascript">
+            function DropDown(el) {
+                this.dd = el;
+                this.initEvents();
+            }
+            DropDown.prototype = {
+                initEvents: function () {
+                    var obj = this;
+
+         
+                    obj.dd.on('click', function (event) {
+                        $(this).toggleClass('active');
+                        event.stopPropagation();
+                    });
+                }
+            }
+
+    
+            $(function () {
+
+   
+                var dd = new DropDown($('#dd'));
+
+    
+                $(document).click(function () {
+                    // all dropdowns
+                    $('.wrapper-dropdown-5').removeClass('active');
+                });
+            });
+        </script>
+        <script src="js/jquery.jscrollpane.min.js"></script>
+        <script src="js/jquery.bookblock.js"></script>
+        <script src="js/page.js"></script>
+        <script>
+            $(function () {
+
+                Page.init();
+
+            });
+        </script>
+
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script type="text/javascript" src="application/app.js"></script>
+<script type="text/javascript" src="controllers/signupController.js"></script>
+</body>
+</html>

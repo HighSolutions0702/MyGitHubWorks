@@ -1,0 +1,107 @@
+package com.obs.service;
+import java.util.List;
+
+import com.obs.model.Amount;
+import com.obs.model.Country;
+import com.obs.model.User;
+
+
+
+/**
+ * 
+ * User Service Interface
+ * 
+ * @author Jeevanantham
+ *
+ */
+public interface IUserService {
+
+	/**
+	 * Add User
+	 * 
+	 * @param  User user
+	 */
+	public Integer addUser(User user);
+
+	/**
+	 * Update User
+	 * 
+	 * @param  User user
+	 */
+	public void updateUser(User user);
+
+	/**
+	 * Delete User
+	 * 
+	 * @param  User user
+	 */
+	public void deleteUser(User user);
+
+	/**
+	 * Get User
+	 * 
+	 * @param  int User Id
+	 */
+	public User getUserById(int id);
+
+	/**
+	 * Get User List
+	 * 
+	 * @return List - User list
+	 */
+	public List<User> getUsers();
+
+	/**
+	 * Login User
+	 * @param userName
+	 * @param password
+	 * @return
+	 */
+	public User loginUser(String email, String password);
+
+	/**
+	 * Get User User
+	 * @param email
+	 * 
+	 * @return User - User
+	 */
+	public User getUserByEmail(String email);
+
+	public List<Country> getCountries();
+
+	/**
+	 * check user by email confirmation code
+	 * @param confirmationCode
+	 * @return user
+	 */
+	public User getUserByConfirmationCode(String confirmationCode);
+	
+	/**
+	 * check user by email referral code
+	 * @param referralCode
+	 * @return user
+	 */
+	public User getUserByReferralCode(String referralCode);
+	
+	/**
+	 * get users from referred by Id
+	 * @param userId
+	 * @return
+	 */
+	public List<User> getUsersFromReferredById(int userId);
+
+	public String getUsersCount();
+
+	Amount getAmountById(int id);
+
+	public void setPayment(Amount amount);
+
+	public void removePayment(Amount amount);
+
+	public User getUserByUMCastName(String um_Cast_Name);
+
+	public List<User> getSubscribedUsers();
+	
+	public User getUserByToken(String token);
+
+}

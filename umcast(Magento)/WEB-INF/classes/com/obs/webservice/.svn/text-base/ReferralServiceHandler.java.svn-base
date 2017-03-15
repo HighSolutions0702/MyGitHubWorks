@@ -1,0 +1,414 @@
+package com.obs.webservice;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+
+import org.springframework.stereotype.Component;
+
+import com.obs.webservice.messages.CountMessage;
+import com.obs.webservice.messages.ReferralsMessage;
+import com.obs.webservice.messages.ResponseStatus;
+import com.obs.webservice.messages.ResponseStatusCode;
+import com.obs.webservice.messages.UsersMessage;
+
+/**
+ * @author Ram
+ *
+ */
+@Path("/refer/")
+public class ReferralServiceHandler {
+
+	LoginServiceHelper loginServiceHelper 				= new LoginServiceHelper();
+	ReferralServiceHelper referralServiceHelper 		= new ReferralServiceHelper();
+	/**
+	 * Get referred user list is calling for JSON request
+	 * @method : get
+	 * @return JSON response contains status message and users
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getDirectReferralsCount")
+	public CountMessage getDirectReferralsCountJson(@Context HttpServletRequest req) {
+		String token = null;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new CountMessage(status, null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getDirectReferralsCount(token);
+	}
+
+
+	/**
+	 * 
+	 * @param req
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getDirectReferrals")
+	public ReferralsMessage getDirectReferralsJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=-1;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new ReferralsMessage(status, null);
+			}
+			refId=loginServiceHelper.getUserByToken(token);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getDirectReferrals(refId);
+	}
+	
+	/**
+	 * 
+	 * @param req
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getUnSubscribedDirectReferrals")
+	public ReferralsMessage getUnSubscribedDirectReferralsJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=-1;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new ReferralsMessage(status, null);
+			}
+			refId=loginServiceHelper.getUserByToken(token);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getUnSubscribedDirectReferral(refId);
+	}
+	
+
+	/**
+	 * Get referred user list is calling for JSON request
+	 * @method : get
+	 * @return JSON response contains status message and users
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getAllReferralsCount")
+	public CountMessage getAllReferralsCountJson(@Context HttpServletRequest req) {
+		String token = null;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new CountMessage(status, null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getAllReferralsCount(token);
+	}
+
+	/**
+	 * 
+	 * @param req
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getAllReferrals")
+	public UsersMessage getAllReferralsJson(@Context HttpServletRequest req) {
+		String token = null;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new UsersMessage(status, null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getAllReferrals(token);
+	}
+
+	/**
+	 * 
+	 * @param req
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getDirectReferralsAndPassups")
+	public ReferralsMessage getDirectReferralsAndPassupsJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=0;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new ReferralsMessage(status, null);
+			}
+			refId=loginServiceHelper.getUserByToken(token);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getDirectReferralsAndPassups(refId);
+	}
+
+	/**
+	 * 
+	 * @param req
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getReferralAmount")
+	public CountMessage getReferralAmountJson(@Context HttpServletRequest req) {
+		String token = null;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new CountMessage(status, null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getDirectReferralAmount(token);
+	}
+
+	/**
+	 * 
+	 * @param req
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getPassupParentReferralAmount")
+	public CountMessage getPassupParentReferralAmountJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=0;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new CountMessage(status, null);
+			}
+			refId=loginServiceHelper.getUserByToken(token);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getPassupParentReferralAmount(refId);
+	}
+	/**
+	 * 
+	 * @param req
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getReferralAmountFromDirectNonPassup")
+	public CountMessage getReferralAmountFromDirectNonPassupJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=0;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new CountMessage(status, null);
+			}
+			refId=loginServiceHelper.getUserByToken(token);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getReferralAmountFromDirectNonPassup(refId);
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getReferralAmountFromDirectPassup")
+	public CountMessage getReferralAmountFromDirectPassupJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=0;
+		try {
+
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new CountMessage(status, null);
+			}
+			refId=loginServiceHelper.getUserByToken(token);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getReferralAmountFromDirectPassup(refId);
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getInDirectReferrals")
+	public ReferralsMessage getInDirectReferralsJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=0;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new ReferralsMessage(status, null);
+			}
+			refId=loginServiceHelper.getUserByToken(token);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getInDirectReferrals(refId);
+	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getPassupReferrals")
+	public ReferralsMessage getPassupReferralsJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=0;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new ReferralsMessage(status, null);
+			}
+			refId=loginServiceHelper.getUserByToken(token);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getPassupReferrals(refId);
+	}
+	/**
+	 * passup parent referral amount by admin
+	 * @param req
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getPassupParentReferralAmtByAdmin")
+	public CountMessage getPassupParentReferralAmtByAdminJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=0;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new CountMessage(status, null);
+			}
+			refId=Integer.valueOf(req.getParameter("id"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getPassupParentReferralAmount(refId);
+	}
+	/**
+	 * 
+	 * @param req
+	 * @return
+	 */
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getReferralAmtFromDirectNonPassupByAdmin")
+	public CountMessage getReferralAmtFromDirectNonPassupByAdminJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=0;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new CountMessage(status, null);
+			}
+			refId=Integer.valueOf(req.getParameter("id"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getReferralAmountFromDirectNonPassup(refId);
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getReferralAmtFromDirectPassupByAdmin")
+	public CountMessage getReferralAmtFromDirectPassupByAdminJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=0;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new CountMessage(status, null);
+			}
+			refId=Integer.valueOf(req.getParameter("id"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getReferralAmountFromDirectPassup(refId);
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getDirectReferralsByAdmin")
+	public ReferralsMessage getDirectReferralsByAdminJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=0;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new ReferralsMessage(status, null);
+			}
+			refId=Integer.valueOf(req.getParameter("id"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getDirectReferrals(refId);
+	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getInDirectReferralsByAdmin")
+	public ReferralsMessage getInDirectReferralsByAdminJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=0;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new ReferralsMessage(status, null);
+			}
+			refId=Integer.valueOf(req.getParameter("id"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getInDirectReferrals(refId);
+	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getPassupReferralsByAdmin")
+	public ReferralsMessage getPassupReferralsByAdminJson(@Context HttpServletRequest req) {
+		String token = null;
+		Integer refId=0;
+		try {
+			token = req.getParameter("token");
+			ResponseStatus status = loginServiceHelper.checkTokenValid(token);
+
+			if(status != null && status.status == ResponseStatusCode.STATUS_UNAUTHORIZED){
+				return new ReferralsMessage(status, null);
+			}
+			refId=Integer.valueOf(req.getParameter("id"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return referralServiceHelper.getPassupReferrals(refId);
+	}
+}

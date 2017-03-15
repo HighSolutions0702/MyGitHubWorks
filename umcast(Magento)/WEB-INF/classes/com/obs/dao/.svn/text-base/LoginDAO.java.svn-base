@@ -1,0 +1,121 @@
+package com.obs.dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
+import com.obs.base.BaseObject;
+import com.obs.model.Login;
+
+public class LoginDAO implements ILoginDAO{
+
+	SessionFactory sessionFactory;
+
+	/**
+	 * @return the sessionFactory
+	 */
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	/**
+	 * @param sessionFactory the sessionFactory to set
+	 */
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	
+	/**
+	 * Add Login
+	 * 
+	 * @param  Login login
+	 */
+	@Override
+	public Integer addLogin(Login login) {
+		Integer id = -1;
+		try{
+			id = (Integer)sessionFactory.getCurrentSession().save(login);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return id;
+	}
+
+	/**
+	 * Delete Login
+	 * 
+	 * @param  Login login
+	 */
+	@Override
+	public void deleteLogin(Login login) {
+		try{
+			sessionFactory.getCurrentSession().delete(login);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Update Login
+	 * 
+	 * @param  Login login
+	 */
+	@Override
+	public void updateLogin(Login login) {
+		try{
+			sessionFactory.getCurrentSession().update(login);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Get Login
+	 * 
+	 * @param  int token
+	 * @return Login 
+	 */
+	@Override
+	public Login getLoginByToken(String token) {
+		List list = null;
+		try{
+			list = sessionFactory.getCurrentSession()
+					.createQuery("from Login where token=?")
+					.setParameter(0,token).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return (list!=null && list.size()>0)?(Login)list.get(0):null;
+	}
+
+	/**
+	 * Get Login
+	 * 
+	 * @param  int user Id
+	 * @return Login 
+	 */
+	@Override
+	public Login getLoginByUserId(int userId) {
+		List list = null;
+		try{
+			list = sessionFactory.getCurrentSession()
+					.createQuery("from Login where userId=?")
+					.setParameter(0,userId).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return (list!=null && list.size()>0)?(Login)list.get(0):null;
+	}
+}

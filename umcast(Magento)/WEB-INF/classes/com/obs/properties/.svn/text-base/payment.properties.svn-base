@@ -1,0 +1,8 @@
+#live payment
+#paymenturl=https://api.authorize.net/xml/v1/request.api
+#paymentlogin=62uhvJ7We5
+#paymentkey=6p95R69LXpj93CBb
+#sanbox
+paymenturl = https://apitest.authorize.net/xml/v1/request.api
+paymentlogin = 9xEk24PM
+paymentkey = 32A9dY63s36eKFTM

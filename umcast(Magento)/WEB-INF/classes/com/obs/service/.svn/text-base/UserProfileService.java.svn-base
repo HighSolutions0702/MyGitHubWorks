@@ -1,0 +1,47 @@
+package com.obs.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.obs.dao.IUserDAO;
+import com.obs.dao.IUserProfileDAO;
+import com.obs.dao.UserDAO;
+import com.obs.dao.UserProfileDAO;
+import com.obs.model.UserProfileImages;
+
+@Transactional(readOnly = true)
+public class UserProfileService implements IUserProfileService{
+
+	IUserProfileDAO userProfileDAO;
+	
+	
+	public IUserProfileDAO getUserProfileDAO() {
+		return userProfileDAO;
+	}
+
+
+	public void setUserProfileDAO(IUserProfileDAO userProfileDAO) {
+		this.userProfileDAO = userProfileDAO;
+	}
+
+
+	@Transactional(readOnly = false)
+	@Override
+	public void addProfileImage(UserProfileImages userProfileObj) {
+		 getUserProfileDAO().addProfileImage(userProfileObj);
+	}
+
+
+	@Override
+	public UserProfileImages getUserProfileById(int userId) {
+		return getUserProfileDAO().getUserProfileById(userId);
+	}
+
+
+	@Transactional(readOnly = false)
+	@Override
+	public void updateUserProfile(UserProfileImages userProfileObj) {
+		getUserProfileDAO().updateUserProfile(userProfileObj);
+	}
+
+}

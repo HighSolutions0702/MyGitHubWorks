@@ -1,0 +1,286 @@
+package com.obs.webservice;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Date;
+import java.util.ResourceBundle;
+import org.apache.log4j.Logger;
+
+import com.obs.model.EWallet;
+import com.obs.utils.IoUtils;
+
+public class EWalletPage {
+
+	//live
+	public final String EWALLETTREGISTERURL 			= getResourceBundle().getString("ewalletRegurl");
+	public final static String EWALLETMERCHANTID		= getResourceBundle().getString("ewalletMerchantId");
+	public final static String EWALLETMERCHANTPWD 		= getResourceBundle().getString("ewalletMerchantPwd");
+	IoUtils ioUtils = IoUtils.getInstance();
+
+	// Bundle Name  
+	public static final String EWALLET = "com.obs.properties.ewallet";
+
+	/**
+	 * get AWS resource bundle 
+	 * @return
+	 */
+	private static ResourceBundle getResourceBundle() {
+		ResourceBundle bundle = null;
+		bundle = ResourceBundle.getBundle(EWALLET);
+		return bundle;
+	}
+	static Logger log = Logger.getLogger(
+			EWalletPage.class.getName());
+
+
+	public EWallet registerUser(String firstName,String lastName,String emailAdd) {
+		EWallet eWallet=new EWallet();
+		String url=" ";
+		String data=" ";
+		String output="";
+		String[] responseValues = null;
+		String[] parseValues = null;
+		String[] spiltedValues = null;
+		String result=" ";
+		String valueDec="";
+		String loginTransId=null;
+		String achId=null;
+		String transRefId=null;
+		String m_code=null;
+		try{
+			String userName=URLEncoder.encode(emailAdd,"UTF-8");
+			String fName=URLEncoder.encode(firstName,"UTF-8");
+			String lName=URLEncoder.encode(lastName,"UTF-8");
+			String emailVal=URLEncoder.encode(emailAdd,"UTF-8");
+			String dob=URLEncoder.encode("1/1/1900","UTF-8"); 
+
+			//pass user values 
+			data = "fn=eWallet_RegisterUser&MerchantGUID="+EWALLETMERCHANTID+"&MerchantPassword="+EWALLETMERCHANTPWD+"&UserName="+userName+"&FirstName="+fName+"&LastName="+lName+"&CompanyName=&Address1=&Address2=&City=&State=&ZipCode=&Country2xFormat=&PhoneNumber=&CellPhoneNumber=&EmailAddress="+emailVal+"&SSN=123-45-6789&CompanyTaxID=&GovernmentID=&MilitaryID=&PassportNumber=" +
+					"&DriversLicense=&DateOfBirth="+dob+"&WebsitePassword=&DefaultCurrency=USD";
+
+			//set url for ewallet register method
+			url = "https://testewallet.com/eWalletWS/ws_Adapter.aspx?"+data;
+
+			output = getmethod(url);
+
+			System.out.println(output);
+			log.info("payment output"+output);
+
+			//split response values
+			responseValues =output.split("=");
+			valueDec=java.net.URLDecoder.decode(responseValues[1], "UTF-8");
+			parseValues=valueDec.split("&");
+			for(int i=0;i<parseValues.length;i++)
+			{
+				result=parseValues[i];
+				spiltedValues=result.split("=");
+				//set ewallet values
+				if(spiltedValues[0].equals("m_Code")){
+					m_code=spiltedValues[1];
+				}
+				if(spiltedValues[0].equals("LogTransactionID")){
+					loginTransId=spiltedValues[1];
+				}
+				if(spiltedValues[0].equals("TransactionRefID")){
+					transRefId=spiltedValues[1];
+				}
+				if(spiltedValues[0].equals("ACHTransactionID")){
+					achId=spiltedValues[1];
+				}
+			}
+			if(m_code.equals("NO_ERROR")){
+				eWallet.setLogTransactionID(loginTransId!=null?loginTransId:null);
+				eWallet.setTransactionRefID(transRefId!=null?transRefId:null);
+				eWallet.setACHTransactionID(achId!=null?achId:null);
+				eWallet.setUserName(emailAdd);
+				eWallet.setIsDeleted(false);
+			}
+			else
+			{
+				eWallet=null;
+			}
+			//eWallet=userService.addEWallet(eWallet);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return eWallet;
+	}
+	public EWallet checkUserBal(String walletUserName){
+		EWallet ewallet=new EWallet();
+		String parameters=null;
+		String[] responseValues = null;
+		String[] parseValues = null;
+		String[] spiltedValues = null;
+		String[] tempValues = null;
+		String value=" ";
+		String result=" ";
+		String valueDec="";
+		String balance=null;
+		String userName=" ";
+		String loginTransId=null;
+		String achId=null;
+		String transRefId=null;
+		String m_code=null;
+		try{
+			userName=URLEncoder.encode(walletUserName,"UTF-8");
+			parameters="fn=eWallet_GetCurrencyBalance&MerchantGUID="+EWALLETMERCHANTID+"&MerchantPassword="+EWALLETMERCHANTPWD+"&UserName="+userName+"&CurrencyCode=USD";
+			String url = "https://testewallet.com/eWalletWS/ws_Adapter.aspx?"+parameters;
+			String output = getmethod(url);
+			System.out.println(output);
+			log.info("payment output"+output);
+
+			//get values
+			responseValues =output.split("&");
+			String bal=responseValues[1];
+			value=responseValues[0];
+			tempValues=value.split("=");
+			valueDec=java.net.URLDecoder.decode(tempValues[1], "UTF-8");
+			valueDec=valueDec+"&"+bal;
+			parseValues=valueDec.split("&");
+			for(int i=0;i<parseValues.length;i++)
+			{
+				result=parseValues[i];
+				spiltedValues=result.split("=");
+				//set ewallet values
+				if(spiltedValues[0].equals("m_Code")){
+					m_code=spiltedValues[1];
+				}
+				if(spiltedValues[0].equals("LogTransactionID")){
+					loginTransId=spiltedValues[1];
+				}
+				if(spiltedValues[0].equals("TransactionRefID")){
+					transRefId=spiltedValues[1];
+				}
+				if(spiltedValues[0].equals("ACHTransactionID")){
+					achId=spiltedValues[1];
+				}
+				if(spiltedValues[0].equals("Balance"))
+				{
+					balance=spiltedValues[1];
+				}
+			}
+			if(m_code.equals("NO_ERROR")){
+				ewallet.setBalance(balance);
+			}
+			else
+			{
+				ewallet=null;
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ewallet;
+	}
+
+	public EWallet payOutUser(int userId,String emailAddress) {
+		String urlParams=null;
+		try{
+			Date d=new Date();
+			String merchantId=String.valueOf(userId+d.getTime());
+			String userName=URLEncoder.encode(emailAddress,"UTF-8");
+			String comments=URLEncoder.encode("PassupAmount","UTF-8");
+			String merchantRefId=URLEncoder.encode(merchantId,"UTF-8");
+			String partnerBatchId=URLEncoder.encode("test_load2","UTF-8");
+			urlParams="fn=eWallet_Load&MerchantGUID="+EWALLETMERCHANTID+"&MerchantPassword="+EWALLETMERCHANTPWD+"&PartnerBatchID="+partnerBatchId+"&PoolID="+"test"+"&arrAccounts=[UserName="+userName+"%26Amount=100.00%26Comments="+comments+"%26MerchantReferenceID="+merchantRefId+"]&CurrencyCode=USD";
+			String url = "https://testewallet.com/eWalletWS/ws_Adapter.aspx?"+urlParams;
+			//String output = getmethod(url);
+			//System.out.println(output);
+			//log.info("payment output"+output);
+			/*	String responseValues=java.net.URLDecoder.decode(output, "UTF-8");
+			System.out.println(responseValues);*/
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public String userAutoLogin(String userName)
+	{
+		String urlParams=null;
+		String url =" ";
+		String output =" ";
+		String[] responseValues = null;
+		String[] parseValues = null;
+		String[] spiltedValues = null;
+		String result=" ";
+		String valueDec="";
+		String processorRefNo=null;
+		String achId=null;
+		String transRefId=null;
+		String m_code=null;
+		String refValue=null;
+		try{
+			userName=URLEncoder.encode(userName,"UTF-8");
+			urlParams="fn=eWallet_RequestUserAutoLogin&MerchantGUID="+EWALLETMERCHANTID+"&MerchantPassword="+EWALLETMERCHANTPWD+"&UserName="+userName;
+			url = "https://testewallet.com/eWalletWS/ws_Adapter.aspx?"+urlParams;
+			output = new EWalletPage().getmethod(url);
+			System.out.println(output);
+			
+			//split response values
+			responseValues =output.split("=");
+			valueDec=java.net.URLDecoder.decode(responseValues[1], "UTF-8");
+			parseValues=valueDec.split("&");
+			for(int i=0;i<parseValues.length;i++)
+			{
+				result=parseValues[i];
+				spiltedValues=result.split("=");
+				//set ewallet values
+				if(spiltedValues[0].equals("m_Code")){
+					m_code=spiltedValues[1];
+				}
+				if(spiltedValues[0].equals("ProcessorTransactionRefNumber")){
+					processorRefNo=spiltedValues[1];
+				}
+			}
+			if(m_code.equals("NO_ERROR")){
+				refValue=processorRefNo!=null?processorRefNo:null;
+			}
+			else
+			{
+				refValue=null;
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return refValue;
+	}
+
+	public static String getmethod(String urls1) {
+		URL url;
+		HttpURLConnection conn;
+		BufferedReader rd;
+		String line;
+		String result = "";
+		try {
+			url = new URL(urls1);
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			while ((line = rd.readLine()) != null) {
+				result += line ;
+			}
+			rd.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	/*public static void main(String[] args) {
+		String urlParams="fn=eWallet_RequestUserAutoLogin&MerchantGUID="+EWALLETMERCHANTID+"&MerchantPassword="+EWALLETMERCHANTPWD+"&UserName="+"optisol123@gmail.com";
+		String url = "https://testewallet.com/eWalletWS/ws_Adapter.aspx?"+urlParams;
+		String output = new EWalletPage().getmethod(url);
+		System.out.println(output);
+		//response=m_Code%3dNO_ERROR%26m_Text%3dOK%26LogTransactionID%3d0%26TransactionRefID%3d0%26ACHTransactionID%3d0%26ProcessorTransactionRefNumber%3dbef57518-b837-48ed-bb8b-0b8dadf37c33%26CustomerFeeAmount%3d0%26CurrencyCode%3d
+	}*/
+}

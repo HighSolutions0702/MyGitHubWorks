@@ -1,0 +1,86 @@
+package com.obs.model;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="tbl_login")
+public class Login implements Serializable{
+
+	/**
+	 * Default SerialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private int id;
+	private int userId;
+	private Date loginDate;
+	private String token;
+
+	/**
+	 * @return the id
+	 */
+	@Id
+	@GeneratedValue( strategy = GenerationType.AUTO )
+	@Column(name="DN_ID" , nullable = false )
+	public int getId() {
+		return id;
+	}
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+	/**
+	 * @return the userId
+	 */
+	@Column(name="DN_USER_ID", nullable = true)
+	public int getUserId() {
+		return userId;
+	}
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	/**
+	 * @return the loginDate
+	 */
+	@Column(name="DD_LOGIN_DATE", nullable = true)
+	public Date getLoginDate() {
+		return loginDate;
+	}
+	/**
+	 * @param loginDate the loginDate to set
+	 */
+	public void setLoginDate(Date loginDate) {
+		this.loginDate = loginDate;
+	}
+	/**
+	 * @return the token
+	 */
+	@Column(name="DC_TOKEN", nullable = true)
+	public String getToken() {
+		return token;
+	}
+	/**
+	 * @param token the token to set
+	 */
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+
+
+
+
+}

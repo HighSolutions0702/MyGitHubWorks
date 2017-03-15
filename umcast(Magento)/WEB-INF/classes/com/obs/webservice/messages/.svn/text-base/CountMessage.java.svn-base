@@ -1,0 +1,32 @@
+package com.obs.webservice.messages;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+
+@XmlRootElement(name="count")
+public class CountMessage {
+
+	@XmlElement(name="status")
+	public ResponseStatus status;
+
+	private String count;
+
+	public CountMessage() {
+		super();
+	}
+
+	public CountMessage(ResponseStatus status, String count) {
+		super();
+		this.status = status;
+		this.count = count;
+	}
+
+	/**
+	 * @return the token
+	 */
+	@XmlElement(name="count")
+	public String getCount() {
+		return count;
+	}
+}

@@ -1,0 +1,83 @@
+package com.obs.dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import com.obs.base.BaseObject;
+import com.obs.model.Comments;
+import com.obs.model.Tags;
+import com.obs.model.Video;
+
+public class TagsDAO implements ITagsDAO {
+	
+	SessionFactory sessionFactory;
+
+	/**
+	 * @return the sessionFactory
+	 */
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	/**
+	 * @param sessionFactory the sessionFactory to set
+	 */
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	
+	@Override
+	public void addNewTag(Tags tags) {
+		try{
+			sessionFactory.getCurrentSession().save(tags);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public List<Tags> getTags() {
+		List<Tags> list = null;
+		try{
+			String SQL = "from Tags WHERE isDeleted = 0 ";
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public Tags getTagById(Integer tagId) {
+		List list = null;
+		try{
+			list = sessionFactory.getCurrentSession()
+					.createQuery("from Tags WHERE tagId=? and isDeleted = 0")
+					.setParameter(0,tagId).list();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return list!=null?(Tags)list.get(0):null;
+	}
+
+	@Override
+	public void updateTags(Tags tags) {
+		try{
+			sessionFactory.getCurrentSession().update(tags);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+
+}

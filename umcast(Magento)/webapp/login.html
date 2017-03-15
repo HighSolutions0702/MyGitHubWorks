@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html ng-app="myApp">
+
+<head>
+    <title>Unstoppable Marketers</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
+    <link rel="shortcut icon" href="images/favicon.png" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="css/plugins.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="css/style_on.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="css/style_aligh.css" type="text/css" media="all" />
+    <style type="text/css">
+        .alert-danger {
+            border-color: red;
+        }
+    </style>
+</head>
+
+<body ng-controller="loginCtrl">
+    <div id="wrap" ng-cloak>
+        <header>
+            <ng-include src="loginheader.html"></ng-include>
+        </header>
+        <section class="section_h">
+            <div class="col-lg-12 col-xs-12 p-10 m-t-30 f_l">
+                <div class="cnt_section">
+                    <div class="sign_in">
+                        <div class="col-lg-12 col-xs-12 silver_pannel">
+                            <aside>
+                                <div class="row m-0 m-b-30">
+                                    <div class="sign_tit">
+                                        <img src="images/signin_tit_bg.png" />
+                                    </div>
+                                </div>
+                                <!--12-->
+                                <form name="loginform" novalidate class="row form-horizontal" n>
+                                    <div ng-show="checkVal" class="alert-danger" style="padding: 10px;">
+                                        <span ng-show="checkVal" class="alert-danger" style="margin-left: 210px;">{{msg}}</span>
+                                    </div>
+                                    <div class="row m-10">
+                                        <div class="col-lg-5  col-xs-12">User name *</div>
+                                        <div class="col-lg-7  col-xs-12">
+                                            <input type="email" ng-model="user.emailAddress" ng-blur="visitedEmail = true" placeholder="Enter email address" name="emailAddress" class="form-control input-sm " id="emailAddress" required autofocus/>
+
+                                            <div ng-show="loginform.emailAddress.$dirty && loginform.emailAddress.$invalid && visitedEmail ">
+                                                <span ng-show="loginform.emailAddress.$error.required" class="alert-danger">
+                                 Required</span>  <span ng-show="loginform.emailAddress.$error.email" class="alert-danger">Not
+                                 a valid email.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row m-10">
+                                        <div class="col-lg-5 col-xs-12">Password *</div>
+                                        <div class="col-lg-7 col-xs-12">
+                                            <input class="form-control input-sm" id="password" ng-blur="visitedpwd = true" type="password" ng-model="user.passWord" name="password" placeholder="Enter password" required/>
+
+                                            <div ng-show="loginform.password.$dirty && visitedpwd">
+                                                <span ng-show="loginform.password.$error.required" class="alert-danger"> Required</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row m-10">
+                                        <div class="col-lg-5 col-xs-12"></div>
+                                        <div class="col-lg-7 col-xs-12">
+                                            <input type="checkbox" class="m-r-10">Keep me Logged in
+                                            <br/>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                    <div class="row m-10 p-20 ">
+                                        <div class="col-lg-6 col-xs-12 align-right">
+                                            <button ng-click="login()" style="background: none repeat scroll 0 0 rgba(0, 0, 0, 0); border: medium none; overflow: visible;">
+                                                <img src="images/sign_in_but.png" />
+                                            </button>
+                                        </div>
+                                        <div class="col-lg-6 col-xs-12">
+                                            <a href="index.html">
+                                                <img src="images/cancel_but.png" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="row m-10   ">
+                                        <div class="col-md-7 col-xs-6">
+                                            Create Account: <a href="signup.html">Sign Up Here</a>
+                                        </div>
+                                        <div class="col-md-5 col-xs-6">
+                                            <a href="forgotpassword.html">Lost your password?</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </aside>
+                        </div>
+                        <!--12-->
+                    </div>
+                </div>
+                <!--cnt_section-->
+            </div>
+            <!--12-->
+        </section>
+        <ng-include src="'footer.html'"></ng-include>
+    </div>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="js/messageResource.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="application/app.js"></script>
+    <script type="text/javascript" src="controllers/loginController.js"></script>
+
+</body>
+
+</html>

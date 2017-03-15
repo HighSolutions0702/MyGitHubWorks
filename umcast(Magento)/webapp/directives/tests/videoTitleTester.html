@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+</head>
+<body ng-app="com.obs">
+<ng-form name="userForm" >
+    <!-- <title-box limit="55" formname="userForm" modelref="video.videoName"
+                placeholder="Please enter a  title" allowedchars="/^[a-zA-Z0-9 ,.@!%$&*?-]+$/"></title-box>-->
+    <div><input type="text" name="titleBox" id="titleBox"  ng-model="videoName" placeholder="Please enter a  title" ng-maxlength="5" required>
+        <span ng-show="userForm.titleBox.$error.required" class="alert-danger">Required</span>
+        <span ng-show="userForm.titleBox.$error.maxlength" class="alert-danger">Title should be shorter than 55 characters.</span>
+       <!-- <span ng-show="userForm.titleBox.$error.pattern" class="alert-danger">Title should not contain invalid characters.</span>-->
+    </div>
+</ng-form>
+
+<script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="/bower_components/angular-cookies/angular-cookies.js"></script>
+<script type="text/javascript" src="/bower_components/angular-mocks/angular-mocks.js"></script>
+<script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="/js/messageResource.js"></script>
+<script type="text/javascript" src="/application/app.js"></script>
+<script type="text/javascript" src="/directives/titleBox.js"></script>
+</body>
+</html>

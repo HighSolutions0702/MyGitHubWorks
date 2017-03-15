@@ -1,0 +1,37 @@
+package com.obs.dao;
+
+import java.util.List;
+
+import com.obs.model.CMSPage;
+
+public interface ICMSPageDAO {
+	/**
+	 * add CMS
+	 */
+	public Long addCMSPage(CMSPage cmspage);
+	/**
+	 * delete CMS
+	 */
+	public void deleteCMSPage(CMSPage cmspage);
+	/**
+	 * edit CMS
+	 */
+	public void updateCMSPage(CMSPage cmspage);
+	
+	/**
+	 * Get CMS
+	 */
+	public List<CMSPage> getCMSPage();
+	
+	/**
+	 * Get CMS
+	 */
+	public CMSPage getCMSPageByID(long id);
+	/**
+	 * 
+	 * @param menuId
+	 * @return
+	 */
+	public List<CMSPage> getCMSPagesByMenu(Integer menuId);
+
+}

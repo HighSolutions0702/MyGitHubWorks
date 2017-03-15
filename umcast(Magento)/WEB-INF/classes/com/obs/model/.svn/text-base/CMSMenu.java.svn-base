@@ -1,0 +1,91 @@
+package com.obs.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import java.io.Serializable;
+
+/**
+ * 
+ * @author rameshbabu_s
+ *
+ */
+@Entity
+@Table(name="tbl_cmsmenu")
+public class CMSMenu implements Serializable{
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue( strategy = GenerationType.AUTO )
+	@Column(name="DN_ID" , nullable = false )
+	private long id;
+	
+	@Column(name="DC_NAME", nullable = true)
+	private String name;
+	
+	@Column(name="DB_ACTIVE", nullable = true)
+	private Boolean isActive;
+	
+	@Column(name="DB_DELETED", nullable = true)
+	private Boolean isDeleted;
+	
+	@Column(name="DB_MEMBER", nullable = true)
+	private Boolean isMember;
+
+	@Column(name="DN_PARENT_ID" , nullable = false )
+	private long parent_id;
+	
+	public long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(long parent_id) {
+		this.parent_id = parent_id;
+	}
+
+	public Boolean getIsMember() {
+		return isMember;
+	}
+
+	public void setIsMember(Boolean isMember) {
+		this.isMember = isMember;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
+	
+}

@@ -1,0 +1,62 @@
+package com.obs.service;
+
+import java.util.List;
+
+import com.obs.model.Category;
+import com.obs.model.Video;
+/**
+ * 
+ * @author cini priya devi_l
+ *
+ */
+public interface IVideoService {
+	
+	/**
+	 * Add Video
+	 * 
+	 * @param  Video video
+	 */
+	public Integer addVideo(Video video);
+
+	/**
+	 * Update Video
+	 * 
+	 * @param  Video video
+	 */
+	public void updateVideo(Video video);
+
+	/**
+	 * Delete Video
+	 * 
+	 * @param  Video video
+	 */
+	public void deleteVideo(Video video);
+	
+	/**
+	 * Get video List
+	 * 
+	 */
+	public List<Video> getVideosByUser(long userId);
+
+	public List<Video> getAllVideos(String val);
+
+	public List<Video> getVideoInfoById(Integer videoVal);
+
+	public Video getVideoById(Integer videoVal);
+
+	public List<Video> getVideoInfoByDetails(Video videoDetails);
+
+	public List<Video> getRelatedVideos(Video videoDetails);
+
+	public Video getLoginUserVideo(int userId);
+
+	public List<Video> getlatestVideos();
+
+	public List<Video> getSearchItems(String searchVal);
+
+	public List<Category> getCategories();
+
+	public Category getVideoCategoryById(int valueOf);
+
+	public List<Video> getAllVideosByCategory(String catVal);
+}

@@ -1,0 +1,36 @@
+package com.obs.webservice.messages;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+
+@XmlRootElement(name="token")
+public class TokenMessage {
+
+	@XmlElement(name="status")
+	public ResponseStatus status;
+
+	private String token;
+
+	public TokenMessage() {
+		super();
+	}
+
+	public TokenMessage(ResponseStatus status, String token) {
+		super();
+		this.status = status;
+		this.token = token;
+	}
+
+	/**
+	 * @return the token
+	 */
+	@XmlElement(name="token")
+	public String getToken() {
+		return token;
+	}
+
+
+
+
+}

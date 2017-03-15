@@ -1,0 +1,38 @@
+package com.obs.webservice.messages;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.CMSPage;
+
+
+@XmlRootElement(name="cmspage")
+public class CMSPageMessage {
+	@XmlElement(name="status")
+	public ResponseStatus status;
+	private CMSPage _entity = new CMSPage();
+	@XmlElement(name="pagecontent")
+	public CMSPage getEntity(){
+		return _entity;
+	}
+
+	public void setEntity(CMSPage entity){
+		this._entity = entity;
+	}
+
+	public CMSPageMessage(){
+		super();
+	}
+
+	public CMSPageMessage(CMSPage entity){
+		super();
+		setEntity(entity);
+	}
+	
+	public CMSPageMessage(ResponseStatus status, CMSPage  entity){
+		super();
+		this.status=status;
+		this._entity = entity;
+	}
+	
+}

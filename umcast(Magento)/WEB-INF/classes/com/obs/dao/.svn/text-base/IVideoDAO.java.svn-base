@@ -1,0 +1,58 @@
+package com.obs.dao;
+
+import java.util.List;
+
+import com.obs.model.Category;
+import com.obs.model.Video;
+
+public interface IVideoDAO {
+	
+	/**
+	 * Add Video
+	 * 
+	 * @param  Video video
+	 */
+	public Integer addVideo(Video video);
+
+	/**
+	 * Update Video
+	 * 
+	 * @param  Video video
+	 */
+	public void updateVideo(Video video);
+
+	/**
+	 * Delete Video
+	 * 
+	 * @param  Video video
+	 */
+	public void deleteVideo(Video video);
+	
+	/**
+	 * Get Video List
+	 * 
+	 */
+	public List<Video> getVideosByUser(long userId);
+
+	public List<Video> getAllVideos(String val);
+
+	public List<Video> getVideoInfoById(Integer videoVal);
+
+	public Video getVideoById(Integer videoVal);
+
+	public List<Video> getVideoInfoByDetails(Video videoDetails);
+
+	public List<Video> getRelatedVideos(Video video);
+
+	public Video getLoginUserVideo(int userId);
+
+	List<Video> getLatestVideos();
+
+	public List<Video> getSearchItems(String searchVal);
+
+	public List<Category> getCategories();
+
+	public Category getVideoCategoryById(int catId);
+
+	public List<Video> getAllVideosByCategory(String catVal);
+}

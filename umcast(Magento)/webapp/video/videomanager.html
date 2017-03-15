@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html ng-app="com.obs.video">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="shortcut icon" href="images/favicon.png"/>
+    <title>Unstoppable Marketers</title>
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css"    media="all"/>
+    <link rel="stylesheet" href="css/plugins.css" type="text/css"  media="all"/>
+    <link rel="stylesheet" href="css/style_on.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_aligh.css"  type="text/css" media="all"/>
+    <link rel="stylesheet" href="css/style_media.css"  type="text/css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="css/style_tooltip.css"/>
+    <link rel="stylesheet" type="text/css" href="css/ng-tags-input.min.css"/>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/custom.css"/>
+    <!-- <script src="/js/angular-file-uploadVideosController.js"></script>
+    <script src="/js/youtube.js"></script>
+    <script src="http://connect.facebook.net/en_US/all.js"></script> -->
+
+</head>
+<body>
+<div id="wrap" ng-controller="videoEditController" ng-cloak>
+    <header>
+        <ng-include src="'user/umcastheader.html'"></ng-include>
+    </header>
+    <section class="section_h">
+        <div class="col-lg-12 col-xs-12 p-0 f_l">
+            <div class="main_cnt_section">
+                <div class="col-lg-12  col-xs-12 p-0 m-t-20">
+                    <div class="silver_pannel">
+                        <div class="row m-0">
+                            <div class="bold_l">
+                                <img src="images/bold.png"/>
+                            </div>
+                            <div class="bold_r">
+                                <img src="images/bold.png"/>
+                            </div>
+                        </div>
+                        <!--row-->
+                        <div class="row m-0 panel_title">
+                            <h1>Video Manager</h1>
+                        </div>
+                        <div ng-show="checkStatus" class="alert-danger"
+                             style="padding: 5px;">
+                     <span ng-show="checkStatus" class="alert-danger"
+                           style="margin-left: 165px">Deleted
+                        Successfully</span>
+                        </div>
+                        <!--row-->
+                        <div class="row m-0 m-t-10">
+                            <div class="settings_box"
+                                 style="min-width: 1055px; min-height: 400px;">
+                                <!--7-->
+                                <div class="col-xs-12 "
+                                     ng-show="videoLength == 0" align="center"
+                                     style="margin-top: 125px;">
+                                    <h2>No Records found</h2>
+                                </div>
+                                <div
+                                        class="col-lg-2 col-xs-12 p-0 com_vid_width"
+                                        ng-repeat="videos in userVideos"
+                                        ng-show="videoLength &gt; 0">
+                                    <div class="video_pan">
+                                        <div class="row video_frame resp_img">
+                                            <a href="#"
+                                               ng-click="redirectToVideo(videos)">
+                                                <img ng-src="{{videos.posterUrl}}"
+                                                     style="height: 135px; width: 235px;"/>
+                                            </a>
+                                        </div>
+                                        <div class="row m-0">
+                                            <div class="video_title_sml"
+                                                 align="center">
+                                                <h2><label class="label_txt">{{videos.videoName}}</label></h2>
+                                            </div>
+                                            <div class="video_statistics_sml">
+                                                <div class="row m-0"></div>
+                                                <div class="video_statistics_sml">
+                                                    <div class="row m-0 p-t-5">
+                                                        <a href="#"
+                                                           ng-click="editVideo(videos)">Edit</a>
+                                                        <a href="#"
+                                                           ng-click="removeVideo(videos)"
+                                                           style="float: right">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--7-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--row-->
+                        <!--End Recommended-->
+                        <!--row-->
+                        <div class="row m-0">
+                            <div class="bold_l">
+                                <img src="images/bold.png"/>
+                            </div>
+                            <div class="bold_r">
+                                <img src="images/bold.png"/>
+                            </div>
+                        </div>
+                        <!--row-->
+                    </div>
+                    <!--silver_pannel-->
+                </div>
+                <!--12-->
+                <!--End Recent Videos-->
+            </div>
+            <!--main_cnt_section-->
+        </div>
+        <!--12--> </section>
+    <ng-include src="'footer.html'"></ng-include>
+</div>
+<!-- <script src="https://apis.google.com/js/client.js"></script> -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+
+<script src="bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="bower_components/ng-tags-input/ng-tags-input.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/danialfarid-angular-file-upload/dist/angular-file-upload-shim.js"></script>
+<script type="text/javascript" src="application/app.js"></script>
+<script type="text/javascript" src="controllers/videoEditController.js"></script>
+<script src="js/bootstrap-dropdown.js"></script>
+</body>
+</html>

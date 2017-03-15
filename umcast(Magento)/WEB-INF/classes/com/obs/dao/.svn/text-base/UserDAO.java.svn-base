@@ -1,0 +1,319 @@
+package com.obs.dao;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Component;
+
+import com.obs.base.BaseObject;
+import com.obs.model.Country;
+import com.obs.model.User;
+
+/**
+ * 
+ * User DAO
+ * 
+ * @author Ram
+ *
+ */
+public class UserDAO implements IUserDAO {
+
+	SessionFactory sessionFactory;
+
+	/**
+	 * @return the sessionFactory
+	 */
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	/**
+	 * @param sessionFactory the sessionFactory to set
+	 */
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	/**
+	 * Add User
+	 * 
+	 * @param  User user
+	 */
+	@Override
+	public Integer addUser(User user) {
+		Integer id = -1;
+		try{
+			id = (Integer)sessionFactory.getCurrentSession().save(user);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return id;
+	}
+
+	/**
+	 * Delete User
+	 * 
+	 * @param  User user
+	 */
+	@Override
+	public void deleteUser(User user) {
+		try{
+			sessionFactory.getCurrentSession().delete(user);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Update User
+	 * 
+	 * @param  User user
+	 */
+	@Override
+	public void updateUser(User user) {
+		try{
+			sessionFactory.getCurrentSession().update(user);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Get User
+	 * 
+	 * @param  int User Id
+	 * @return User 
+	 */
+	@Override
+	public User getUserById(int id) {
+		List list = null;
+		try{
+			list = sessionFactory.getCurrentSession()
+					.createQuery("from User where id=? and isDeleted = 0")
+					.setParameter(0,id).list();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return (list!=null && list.size()>0)?(User)list.get(0):null;
+	}
+
+	/**
+	 * Get User List
+	 * 
+	 * @return List - User list
+	 */
+	@Override
+	public List<User> getUsers() {
+		List<User> list = null;
+		try{
+			String SQL = "from User as m WHERE isDeleted = 0 AND isActive = 1 and userType=2";
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+	/**
+	 * 
+	 */
+	@Override
+	public User loginUser(String email, String password) {
+		List<User> list = null;
+		try{
+			list = sessionFactory.getCurrentSession().createQuery("from User where email=? and password=? and isDeleted = 0 and isActive=1 ")
+					.setParameter(0, email)
+					.setParameter(1, password).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return !list.isEmpty()?(User)list.get(0):null;
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public User getUserByEmail(String email) {
+		List<User> userList = null;
+		try{
+			userList = sessionFactory.getCurrentSession().createQuery("from User where email=? and isDeleted=0 ").setParameter(0, email).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (userList.size() > 0 ) {
+			return userList.get(0);
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<Country> getCountries() {
+		List<Country> list = null;
+		try{
+			String SQL = "from Country ";
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	/**
+	 * check user by email confirmation code
+	 * @param confirmationCode
+	 * @return user
+	 */
+	@Override
+	public User getUserByConfirmationCode(String confirmationCode){
+		List<User> userList = null;
+		try{
+			userList = sessionFactory.getCurrentSession().createQuery("from User where confirmationCode=? and isDeleted=0 ").setParameter(0, confirmationCode).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (userList!=null && userList.size() > 0 ) {
+			return userList.get(0);
+		}
+		return null;
+	}
+
+	/**
+	 * check user by referral code
+	 * @param referralCode
+	 * @return user
+	 */
+	@Override
+	public User getUserByReferralCode(String referralCode){
+		List<User> userList = null;
+		try{
+			userList = sessionFactory.getCurrentSession().createQuery("from User where referralCode=? and isDeleted=0 ").setParameter(0, referralCode).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (userList!=null && userList.size() > 0 ) {
+			return userList.get(0);
+		}
+		return null;
+	}
+
+	/**
+	 * get users from referred by Id
+	 * @param userId
+	 * @return
+	 */
+	@Override
+	public List<User> getUsersFromReferredById(int userId){
+		List<User> list = null;
+		try{
+			String SQL = "from User as m WHERE isDeleted = 0 AND refered_by = "+userId;
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public String getUsersCount() {
+		List userCount = new ArrayList<>();
+		try{
+			String SQL = "Select count (*) from User as m WHERE isDeleted = 0 AND isActive = 1 and userType=2";
+			userCount = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (userCount.size() > 0 ) {
+			return String.valueOf(userCount.get(0));
+		}
+		return null;
+	}
+
+	@Override
+	public User getUserByUMCastName(String um_Cast_Name) {
+		List<User> userList = null;
+		try{
+			userList = sessionFactory.getCurrentSession().createQuery("from User where umcast_name=? and isDeleted=0 ").setParameter(0, um_Cast_Name).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		if (userList.size() > 0 ) {
+			return userList.get(0);
+		}
+
+		return null;
+	}
+
+	@Override
+	public List<User> getSubscribedUsers() {
+		List<User> list = null;
+		try{
+			String SQL = "from User WHERE isDeleted = 0 AND isActive = 1 and userType=2 and subscribe_On != null order by subscribe_On";
+			list = sessionFactory.getCurrentSession().createQuery(SQL).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+	@Override
+	public User getUserByToken(String token) {
+		List<User> refNameList = null;
+		try{
+			refNameList = sessionFactory.getCurrentSession().createQuery("from User where referralCode=? and isDeleted=0 ").setParameter(0, token).list();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		if (refNameList!=null && refNameList.size() > 0 ) {
+			return refNameList.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public Country getCountryNameById(Long countryId) {
+		List list = null;
+		try{
+			list = sessionFactory.getCurrentSession()
+					.createQuery("from Country where countryId=?")
+					.setParameter(0,countryId).list();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return list!=null?(Country)list.get(0):null;
+	}
+	
+}

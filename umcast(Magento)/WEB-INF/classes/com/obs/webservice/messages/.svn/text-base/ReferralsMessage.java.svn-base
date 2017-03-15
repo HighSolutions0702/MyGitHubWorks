@@ -1,0 +1,31 @@
+package com.obs.webservice.messages;
+import java.util.Collection;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.obs.model.Referral;
+
+@XmlRootElement(name="referrals")
+
+public class ReferralsMessage {
+
+	@XmlElement(name="status")
+	public ResponseStatus status;
+
+	private Collection<Referral> entities;
+
+	public ReferralsMessage(){
+		super();
+	}
+
+	public ReferralsMessage(ResponseStatus status, Collection<Referral>  entities){
+		super();
+		this.status=status;
+		this.entities = entities;
+	}
+
+	@XmlElement(name="referrals")
+	public Collection<Referral> getUsersEntities() {
+		return entities;
+	}
+}

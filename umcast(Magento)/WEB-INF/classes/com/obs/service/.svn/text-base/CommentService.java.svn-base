@@ -1,0 +1,38 @@
+package com.obs.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.obs.dao.CommentsDAO;
+import com.obs.dao.ICommentsDAO;
+import com.obs.model.Comments;
+
+
+@Transactional(readOnly = true)
+public class CommentService implements ICommentService{
+	ICommentsDAO commentsDAO ;
+
+	public ICommentsDAO getCommentsDAO() {
+		return commentsDAO;
+	}
+
+	public void setCommentsDAO(ICommentsDAO commentsDAO) {
+		this.commentsDAO = commentsDAO;
+	}
+
+	@Transactional(readOnly = false)
+	@Override
+	public void addNewComment(Comments comments) {
+		getCommentsDAO().addNewComment(comments);
+	}
+
+	@Override
+	public List<Comments> getAllComments(Integer videoId) {
+		return getCommentsDAO().getAllComments(videoId);
+	}
+
+
+
+}
