@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="robots" content="noindex, nofollow">
+	<meta name="googlebot" content="noindex, nofollow">
+
+	<title>Angular & Bootstrap sample</title>
+
+	<link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">
+
+	<script type="text/javascript" src="http://code.angularjs.org/angular-1.0.1.js"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.4.0/ui-bootstrap-tpls.min.js"></script>
+</head>
+
+<body ng-app="myApp">
+	<div class="navbar navbar-inverse" ng-controller="NavBarCtrl">
+		<div class="navbar-inner">
+			<div class="container">
+				<button class="btn btn-navbar" ng-click="isCollapsed = !isCollapsed"> 
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+
+				</button> 
+				<a class="brand" href="#">Logo</a>
+
+			<div class="nav-collapse" collapse="isCollapsed">
+				<ul class="nav">
+					<li><a href="#"><i class="icon-home icon-white"></i> Home</a></li>
+					<li><a href="#">Menu 1</a></li>
+					<li><a href="#">Menu 2</a></li>
+				</ul>
+				<ul class="nav pull-right">
+					<li><a href="#/class"><i class="icon-upload icon-white"></i> Upload</a></li>
+					<li><a href="#/class"><i class="icon-off icon-white"></i> Logout</a></li>
+				</ul>
+			</div>
+			<!-- /.nav-collapse -->
+			</div>
+		</div>
+		<!-- /navbar-inner -->
+	</div>
+</body>
+
+<script type='text/javascript'>
+	angular.module('myApp', ['ui.bootstrap'])
+		.controller("NavBarCtrl", function($scope) {
+			$scope.isCollapsed = true;
+		});
+</script>
+
+</html>
+
