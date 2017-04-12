@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang = "en">
+<head>
+	<meta charset = "UTF-8">
+	<title>Build Simple Javascript Pricing Calculator</title>
+	
+	
+	<!-- --libraries-- -->
+	
+	<!-- jQuery -->
+	<script type = "text/javascript" src = "./assets/lib/jquery/jquery.js"></script>
+	<script type = "text/javascript" src = "./assets/lib/jquery/jquery-migrate.min.js"></script>
+
+	<!-- Bootstrap -->
+	<link rel = "stylesheet" type = "text/css" href = "./assets/lib/bootstrap/bootstrap.css"/>
+	<script type = "text/javascript" src = "./assets/lib/bootstrap/bootstrap.min.js"></script>
+
+
+	<!-- --stylesheet-- -->
+	<link rel = "stylesheet" type = "text/css" href = "http://newismdev.com/clients/camplify/styleguide/styleguide/bower_components/prism/themes/prism.css"/>
+	<link rel = "stylesheet" type = "text/css" href = "http://newismdev.com/clients/camplify/styleguide/styleguide/bower_components/prism/plugins/line-numbers/prism-line-numbers.css"/>
+	<link rel = "stylesheet" type = "text/css" href = "http://newismdev.com/clients/camplify/styleguide/styleguide/public/layout.css"/>
+	<link rel = "stylesheet" type = "text/css" href = "http://newismdev.com/clients/camplify/styleguide/src/js/bower_components/photoswipe/dist/photoswipe.css"/>
+	<link rel = "stylesheet" type = "text/css" href = "http://newismdev.com/clients/camplify/styleguide/src/styles/screen.css"/>
+		
+	<!-- --javascript-- -->
+	<script type = "text/javascript" src = "./assets/js/script.js"></script>
+</head>
+
+<body>
+
+<div id = "calculator" class = "container">
+	<div class="Form-section">
+		<h3 class="Form-sectionTitle">What type of Recreactional Vehicle do you have?</h3>
+		
+		<div class="row Control">
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioBlockButton RadioBlockButton--block">
+					<input type="radio" id="rv-type-caravan" name="rv-type" class="form-field RadioBlockButton-input" value = "20" checked/>
+					<label class="RadioBlockButton-label" for="rv-type-caravan">
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--checked">
+							<i class="Icon Icon--large-rv-caravan--blue"></i>
+						</div>
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--unchecked">
+							<i class="Icon Icon--large-rv-caravan--grey"></i>
+						</div>
+						<h4 class="RadioBlockButton-labelText">Standard Caravan</h4>
+					</label>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioBlockButton RadioBlockButton--block">
+					<input type="radio" id="rv-type-hybrid" name="rv-type" class="form-field RadioBlockButton-input" value = "20"/>
+					<label class="RadioBlockButton-label" for="rv-type-hybrid">
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--checked">
+							<i class="Icon Icon--large-rv-hybrid--blue"></i>
+						</div>
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--unchecked">
+							<i class="Icon Icon--large-rv-hybrid--grey"></i>
+						</div>
+						<h4 class="RadioBlockButton-labelText">Hybrid Caravan</h4>
+					</label>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioBlockButton RadioBlockButton--block">
+					<input type="radio" id="rv-type-pop-top" name="rv-type" class="form-field RadioBlockButton-input" value = "15"/>
+					<label class="RadioBlockButton-label" for="rv-type-pop-top">
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--checked">
+							<i class="Icon Icon--large-rv-pop-top--blue"></i>
+						</div>
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--unchecked">
+							<i class="Icon Icon--large-rv-pop-top--grey"></i>
+						</div>
+						<h4 class="RadioBlockButton-labelText">Popup Camper Trailer</h4>
+					</label>
+				</div>
+			</div>
+
+
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioBlockButton RadioBlockButton--block">
+					<input type="radio" id="rv-type-camper-trailer" name="rv-type" class="form-field RadioBlockButton-input" value = "5"/>
+					<label class="RadioBlockButton-label" for="rv-type-camper-trailer">
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--checked">
+							<i class="Icon Icon--large-rv-camper-trailer--blue"></i>
+						</div>
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--unchecked">
+							<i class="Icon Icon--large-rv-camper-trailer--grey"></i>
+						</div>
+						<h4 class="RadioBlockButton-labelText">Softfloor Tent trailer</h4>
+					</label>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioBlockButton RadioBlockButton--block">
+					<input type="radio" id="rv-type-tent-camper" name="rv-type" class="form-field RadioBlockButton-input" value = "8"/>
+					<label class="RadioBlockButton-label" for="rv-type-tent-camper">
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--checked">
+							<i class="Icon Icon--large-rv-tent-camper--blue"></i>
+						</div>
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--unchecked">
+							<i class="Icon Icon--large-rv-tent-camper--grey"></i>
+						</div>
+						<h4 class="RadioBlockButton-labelText">Hardfloor tent trailer</h4>
+					</label>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioBlockButton RadioBlockButton--block">
+					<input type="radio" id="rv-type-fifth-wheel" name="rv-type" class="form-field RadioBlockButton-input" value = "20"/>
+					<label class="RadioBlockButton-label" for="rv-type-fifth-wheel">
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--checked">
+							<i class="Icon Icon--large-rv-fifth-wheel--blue"></i>
+						</div>
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--unchecked">
+							<i class="Icon Icon--large-rv-fifth-wheel--grey"></i>
+						</div>
+						<h4 class="RadioBlockButton-labelText">Fifth Wheeler</h4>
+					</label>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioBlockButton RadioBlockButton--block">
+					<input type="radio" id="rv-type-c-class" name="rv-type" class="form-field RadioBlockButton-input" value = "30"/>
+					<label class="RadioBlockButton-label" for="rv-type-c-class">
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--checked">
+							<i class="Icon Icon--large-rv-c-class--blue"></i>
+						</div>
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--unchecked">
+							<i class="Icon Icon--large-rv-c-class--grey"></i>
+						</div>
+						<h4 class="RadioBlockButton-labelText">C Class Motorhome</h4>
+					</label>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioBlockButton RadioBlockButton--block">
+					<input type="radio" id="rv-type-b-class" name="rv-type" class="form-field RadioBlockButton-input" value = "35"/>
+					<label class="RadioBlockButton-label" for="rv-type-b-class">
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--checked">
+							<i class="Icon Icon--large-rv-b-class--blue"></i>
+						</div>
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--unchecked">
+							<i class="Icon Icon--large-rv-b-class--grey"></i>
+						</div>
+						<h4 class="RadioBlockButton-labelText">B Class Motorhome</h4>
+					</label>
+				</div>
+			</div>
+			
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioBlockButton RadioBlockButton--block">
+					<input type="radio" id="rv-type-a-class" name="rv-type" class="form-field RadioBlockButton-input" value = "40"/>
+					<label class="RadioBlockButton-label" for="rv-type-a-class">
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--checked">
+							<i class="Icon Icon--large-rv-a-class--blue"></i>
+						</div>
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--unchecked">
+							<i class="Icon Icon--large-rv-a-class--grey"></i>
+						</div>
+						<h4 class="RadioBlockButton-labelText">A Class Motorhome</h4>
+					</label>
+				</div>
+			</div>
+			
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioBlockButton RadioBlockButton--block">
+					<input type="radio" id="rv-type-one-site" name="rv-type" class="form-field RadioBlockButton-input" value = "30"/>
+					<label class="RadioBlockButton-label" for="rv-type-one-site">
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--checked">
+							<i class="Icon Icon--large-rv-a-class--blue"></i>
+						</div>
+						<div class="RadioBlockButton-labelIcon RadioBlockButton-labelIcon--unchecked">
+							<i class="Icon Icon--large-rv-a-class--grey"></i>
+						</div>
+						<h4 class="RadioBlockButton-labelText">On Site RV</h4>
+					</label>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="Form-section">
+		<h3 class="Form-sectionTitle">What is the Age in Years of Your RV</h3>
+
+		<div class="row Control">
+			<div class="col-sm-6 col-md-4">
+				<div class="Select">
+					<select id="yourrv" name="yourrv" class="form-field Select-input">
+						<option value="16">1</option>
+						<option value="15" selected>2</option>
+						<option value="14">3</option>
+						<option value="13">4</option>
+						<option value="12">5</option>
+						<option value="11">6</option>
+						<option value="10">7</option>
+						<option value="9">8</option>
+						<option value="8">9</option>
+						<option value="7">10</option>
+						<option value="6">11</option>
+						<option value="5">12</option>
+						<option value="4">13</option>
+						<option value="3">14</option>
+						<option value="2">15+</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="Form-section">
+		<h3 class="Form-sectionTitle">Select the Features of Your RV</h3>
+
+		<div class="row Control">
+		
+			<div class="col-sm-6 col-md-4">
+				<div class="Checkbox Checkbox--custom">
+					<input type="checkbox" id="features-type-annex" name="features-type" class="form-field Checkbox-input" value = "8" checked/>
+					<label for="features-type-annex" class="Checkbox-label">Annex</label>
+				</div>
+			</div>
+			
+			<div class="col-sm-6 col-md-4">
+				<div class="Checkbox Checkbox--custom">
+					<input type="checkbox" id="features-type-awning" name="features-type" class="form-field Checkbox-input" value = "3" checked/>
+					<label for="features-type-awning" class="Checkbox-label">Awning</label>
+				</div>
+			</div>
+			
+			<div class="col-sm-6 col-md-4">
+				<div class="Checkbox Checkbox--custom">
+					<input type="checkbox" id="features-type-aireconditioning" name="features-type" class="form-field Checkbox-input" value = "3" checked/>
+					<label for="features-type-aireconditioning" class="Checkbox-label">Air Conditioning</label>
+				</div>
+			</div>
+			
+			<div class="col-sm-6 col-md-4">
+				<div class="Checkbox Checkbox--custom">
+					<input type="checkbox" id="features-type-tv" name="features-type" class="form-field Checkbox-input" value = "3"/>
+					<label for="features-type-tv" class="Checkbox-label">TV</label>
+				</div>
+			</div>
+			
+			<div class="col-sm-6 col-md-4">
+				<div class="Checkbox Checkbox--custom">
+					<input type="checkbox" id="features-type-bathroom" name="features-type" class="form-field Checkbox-input" value = "3"/>
+					<label for="features-type-bathroom" class="Checkbox-label">Bathroom</label>
+				</div>
+			</div>
+			
+			<div class="col-sm-6 col-md-4">
+				<div class="Checkbox Checkbox--custom">
+					<input type="checkbox" id="features-type-freecomping" name="features-type" class="form-field Checkbox-input" value = "3"/>
+					<label for="features-type-freecomping" class="Checkbox-label">Free Comping</label>
+				</div>
+			</div>
+			
+			<div class="col-sm-6 col-md-4">
+				<div class="Checkbox Checkbox--custom">
+					<input type="checkbox" id="features-type-outdoorkitchenbbq" name="features-type" class="form-field Checkbox-input" value = "3"/>
+					<label for="features-type-outdoorkitchenbbq" class="Checkbox-label">Outdoor Kitchen/BBQ</label>
+				</div>
+			</div>
+			
+			<div class="col-sm-6 col-md-4">
+				<div class="Checkbox Checkbox--custom">
+					<input type="checkbox" id="features-type-fredge" name="features-type" class="form-field Checkbox-input" value = "3" checked/>
+					<label for="features-type-fredge" class="Checkbox-label">Fridge</label>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="Form-section">
+		<h3 class="Form-sectionTitle">How Does Your RV Sleep?</h3>
+
+		<div class="row Control">
+			<div class="col-sm-6 col-md-4">
+				<div class="Select">
+					<select id="yourrvsleep" name="yourrvsleep" class="form-field Select-input">
+						<option value="6">2</option>
+						<option value="9">3</option>
+						<option value="12" selected>4</option>
+						<option value="15">5</option>
+						<option value="18">6</option>
+						<option value="21">7</option>
+						<option value="24">8</option>
+						<option value="27">9</option>
+						<option value="30">10</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="Form-section">
+		<h3 class="Form-sectionTitle">Which one of These Describe the Type of Hire You Would Like to Have</h3>
+
+		<div class="row Control">
+		
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioButton RadioButton--custom">
+					<input type="radio" id="portability-static" name="portability-type" class="form-field RadioButton-input" value = "5"/>
+					<label class="RadioButton-label" for="portability-static">Static Hire</label>
+				</div>
+			</div>
+		
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioButton RadioButton--custom">
+					<input type="radio" id="portability-selfdrive" name="portability-type" class="form-field RadioButton-input" value = "12" checked/>
+					<label class="RadioButton-label" for="portability-selfdrive">Self Drive</label>
+				</div>
+			</div>
+		
+			<div class="col-sm-6 col-md-4">
+				<div class="RadioButton RadioButton--custom">
+					<input type="radio" id="portability-setup" name="portability-type" class="form-field RadioButton-input" value = "8"/>
+					<label class="RadioButton-label" for="portability-setup">Owner Drop Off</label>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="Form-section">
+		<h3 class="Form-sectionTitle">Would Pets be Allowed in Your RV?</h3>
+
+		<div class="row Control">
+			<div class="col-sm-6 col-md-4">
+				<div class="Select">
+					<select id="petsallowed" name="petsallowed" class="form-field Select-input">
+						<option value="8" selected>Yes</option>
+						<option value="0">No</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="Form-section">
+		<h3 class="Form-sectionTitle">Does the Hirer Need to Have on Electric Brake Controller Fitted to Hire?</h3>
+
+		<div class="row Control">
+			<div class="col-sm-6 col-md-4">
+				<div class="Select">
+					<select id="petsallowed" name="petsallowed" class="form-field Select-input">
+						<option value="0" selected>Yes</option>
+						<option value="5">No</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="Form-section">
+		<h3 class="Form-sectionTitle">The Average Caculated Rate Per Day For Your RV is</h3>
+
+		<div class="row Control">
+			<div class="col-sm-12 col-md-12">
+				<table class="col-sm-12 col-md-12">
+					<thead>
+						<tr>
+							<th scope="col" class = "col-md-6"></th>
+							<th scope="col" class = "col-md-3">From</th>
+							<th scope="col" class = "col-md-3">To</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th class = "col-md-6" scope="row">Per Day Hire Default Price</th>
+							<td class = "col-md-3"><span id = "result-per-day-hire-default-price-from"></span></td>
+							<td class = "col-md-3"><span id = "result-per-day-hire-default-price-to"></span></td>
+						</tr>
+						<tr>
+							<th class = "col-md-6" scope="row">Per Day Hire Peak Price</th>
+							<td class = "col-md-3"><span id = "result-per-day-hire-peak-price-from"></span></td>
+							<td class = "col-md-3"><span id = "result-per-day-hire-peak-price-to"></span></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="Form-section">
+		<h3 class="Form-sectionTitle">Email Me The Results</h3>
+
+		<div class="row Control">
+			<form>
+				<input type = "hidden" id = "per-day-hire-default-price-from" name = "per-day-hire-default-price-from" value = ""/>
+				<input type = "hidden" id = "per-day-hire-default-price-to" name = "per-day-hire-default-price-to" value = ""/>
+				<input type = "hidden" id = "per-day-hire-peak-price-from" name = "per-day-hire-peak-price-from" value = ""/>
+				<input type = "hidden" id = "per-day-hire-peak-price-to" name = "per-day-hire-peak-price-to" value = ""/>
+
+				<div class="col-sm-8 col-md-8">
+					<div class="TextField $modifier_class">
+						<input type="email" id="textfield" class="TextField-input" placeholder="email address" required/>
+					</div>
+				</div>
+				<div class="col-sm-4 col-md-4">
+					<div class="TextField $modifier_class">
+						<input type="submit" id="submit" class="Button Button--large" value = "Submit"/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+</body>
+</html>
