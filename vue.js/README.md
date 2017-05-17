@@ -1,5 +1,3 @@
-# Minimalistic
-
 This branch cointains some incrementably adoptable standalone Vue examples.
 
 See tags: @step0, @step0.1, @step1 —  and so on.
