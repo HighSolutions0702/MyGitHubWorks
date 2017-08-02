@@ -1,0 +1,14 @@
+div.FactorAuthModal.modal.fade.slide-up.disable-scroll id="#{id}" tabindex="-1" role="dialog" aria-labelledby="modalSlideUpLabel" aria-hidden="false"
+  .modal-dialog
+    .modal-content-wrapper
+      .modal-content
+        .model-header.clearfix.text-center
+          button.close type="button" data-dismiss="modal" aria-hidden="true"
+            i.pg-close.fs-14
+          h3 2-Step Authorization
+        .modal-body
+          div#otp_not_match_tip.alert.alert-danger role="alert"
+          p.mb-30 Enter the 6-digit code below
+          p Enter code
+          input#otp_attempt.form-control.input-lg name="user[otp_attempt]" autofocus="true" autocomplete="off"
+          button.btn.btn-purple.input-lg.btn-block.fw-500.mt-180 type="submit" Authenticate

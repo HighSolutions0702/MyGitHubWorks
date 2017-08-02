@@ -1,0 +1,20 @@
+table.table
+  thead
+    tr
+      th
+        | Status
+      th.text-right
+        | Amount
+  tbody.no-footer
+    - transfers.each do |record|
+      tr
+        td.v-align-top
+          p.fw-500.text-capitalize class=('text-success' if record.completed?) class=('text-danger' if record.denied?)
+            = record.display_status
+          p = record.created_at.strftime('%Y-%m-%d')
+          p = record.address_display_name
+        td.v-align-middle.text-right
+          - if record.address.instance_of?(DepositBitcoinAddress) || record.address.instance_of?(WithdrawBitcoinAddress)
+            h5 = number_to_currency(record.amount, locale: :btc, :precision => (record.amount.round == record.amount) ? 0 : 8)
+          - else
+            h5 = number_to_currency(record.amount)

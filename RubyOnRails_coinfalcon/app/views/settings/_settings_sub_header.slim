@@ -1,0 +1,6 @@
+ul.settings-nav.nav.nav-tabs.nav-tabs-simple
+  = active_link_to(t('sub_header.account'), settings_account_path, wrap_tag: :li)
+  = active_link_to(t('sub_header.security'), settings_security_path, wrap_tag: :li)
+  li = link_to t('sub_header.funding'), '/'
+  li = link_to t('sub_header.alerts'), '/'
+  li = link_to t('sub_header.verify'), '/'

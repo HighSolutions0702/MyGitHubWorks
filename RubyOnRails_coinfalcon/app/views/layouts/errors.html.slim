@@ -1,0 +1,10 @@
+html
+  = render 'layouts/header'
+
+  body.body
+    .page-container
+      .header
+        nav.navbar.navbar-toggleable.navbar-inverse
+          div.navbar-inner
+            img alt="logo" data-src="#{image_path('logo.svg')}" data-src-retina="#{image_path('logo.svg')}" width="200" height="22" src="#{image_path('logo.svg')}"
+      = yield

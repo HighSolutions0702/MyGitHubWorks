@@ -1,0 +1,25 @@
+.col-12
+  .row#bank_account_container
+    .panel-heading
+      h3 Bank Account
+    .panel-body
+      = render 'transfers/withdraws/new_bank_account_modal'
+      - if current_user.bank_accounts.count == 0
+        button.btn.btn-purple.input-lg.btn-block.fw-500 data-dismiss="modal" data-toggle="modal" data-target="#NewBankAccountModal" Add Bank Account
+      - else
+        = form_for @transfer, url: transfers_withdraw_do_euro_path, remote: true do |f|
+          - if @user.otp_required_for_login
+            = render partial: 'users/otp_auth', locals: {id: 'WithdrawFactorAuthModal'}
+          .form-group.mb-26
+            p.add_withdraw.float-right data-dismiss="modal" data-toggle="modal" data-target="#NewBankAccountModal" Add
+            p.select_title.mb-7 Select bank account
+            = f.select(:address_id, current_user.bank_accounts.all.collect { |p| [ p.display_name, p.id ] }, {}, {:class => 'form-control form-control-lg input-lg select2'})
+          .form-group
+            p.select_title.mb-7 Withdraw Amount
+            .input-group
+              = f.text_field :amount, type: 'text', class: 'form-control input-lg', required: true, id: 'amount'
+              span.input-group-addon EUR
+            label.error for="amount"
+          p.balance.mb-76 Balance: #{number_to_currency(current_user.eur_sum)}
+          button.btn.btn-purple.input-lg.btn-block.fw-500 Withdraw
+        = render 'transfers/withdraws/success'

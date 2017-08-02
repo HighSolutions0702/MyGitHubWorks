@@ -1,0 +1,19 @@
+# config/app.yml for rails-settings-cached
+defaults: &defaults
+  btc_confirmation: 1
+  last_block: 0
+  block_hash: ''
+  chat_active_user: 0
+  btc_withdraw_fee: 0.0004
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
+
+staging:
+  <<: *defaults

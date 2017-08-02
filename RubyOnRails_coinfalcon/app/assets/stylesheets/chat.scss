@@ -1,0 +1,51 @@
+@media (max-width: 767px) {
+  .chat {
+    display: none;
+  }
+}
+#chat {
+  height: calc(100% - 75px);
+  overflow-y: scroll;
+}
+#chat_body {
+  position: fixed;
+  bottom: 0;
+}
+
+.chat {
+  width: 240px;
+  position: absolute;
+  z-index: 1000;
+  height: 100%;
+  right: 0;
+  top: 59px;
+  background-color: #ffffff;
+  border: 1px solid #E6ECF0;
+  border-right: 0;
+  border-top: 0;
+
+  .online-count {
+    font-size: 14px;
+    margin: 12px 0;
+  }
+
+  .chat-body {
+    padding: 10px;
+    border-top: 1px solid #E6ECF0;
+    font-size: 15px;
+
+
+
+    &.own {
+      background-color: rgba(102, 101, 225, .1);
+    }
+  }
+
+  .username {
+  }
+}
+
+.chat-fixed {
+  position: fixed;
+  top: 0;
+}

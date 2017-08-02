@@ -1,0 +1,58 @@
+image: "ruby:2.3.1"
+
+services:
+  - postgres:latest
+
+variables:
+  POSTGRES_DB: test
+  POSTGRES_USER: runner
+  POSTGRES_PASSWORD: ""
+
+stages:
+  - test
+  - staging
+
+test:
+  stage: test
+  before_script:
+  - apt-get update -qy
+  - apt-get install -qy postgresql postgresql-contrib libpq-dev cmake
+  - ruby -v
+  - which ruby
+  - gem install bundler --no-ri --no-rdoc
+  script:
+  - RAILS_ENV=test bundle install --jobs $(nproc) "${FLAGS[@]}"
+  - RAILS_ENV=test bundle exec rake db:create db:schema:load
+  only:
+  - staging
+
+staging:
+  stage: staging
+  type: deploy
+  environment:
+    name: staging
+  before_script:
+  - apt-get update -qy
+  - apt-get install -qy python-pip python-dev
+  - apt-get install -qy zip
+  - pip install -q awscli
+  - ts=`date +%s`
+  - fn="$EB_APP_NAME-$ts.zip"
+  - S3_KEY="$S3_KEY/$fn"
+  script:
+  - zip -r $fn .
+  - aws s3 cp $fn "s3://$S3_BUCKET/$S3_KEY"
+  - echo "Creating ElasticBeanstalk Application Version ..."
+  - aws elasticbeanstalk create-application-version
+      --application-name $EB_APP_NAME
+      --version-label "$EB_APP_NAME-$ts"
+      --description "$EB_APP_NAME-$ts"
+      --source-bundle S3Bucket="$S3_BUCKET",S3Key="$S3_KEY" --auto-create-application
+  - echo "Updating ElasticBeanstalk Application Version ..."
+  - aws elasticbeanstalk update-environment
+      --application-name $EB_APP_NAME
+      --environment-name $EB_APP_ENV
+      --version-label "$EB_APP_NAME-$ts"
+  - echo "Done! Deployed version $EB_APP_NAME-$ts"
+  only:
+  - staging

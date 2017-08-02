@@ -1,0 +1,21 @@
+.hidden-sm-down.m-t-90
+.row
+  .register-container
+    .panel.col-xs-height.col-middle.b-rad-sm.register-container
+      .panel-heading.text-center
+        h1 Resend Confirmation
+      .panel-body
+        - if alert
+          .alert.alert-danger role="alert"
+            = alert.html_safe
+        - if notice
+          .alert.alert-warning role="alert"
+            = notice
+        = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: {method: :post}) do |f|
+          .form-group.m-b-10
+            = f.email_field :email, :class => 'form-control input-lg', :placeholder => 'Email', :required => true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email)
+          .form-group.m-b-10.btn-group-lg
+            = f.submit "Resend", :class => 'btn btn-yellow btn-lg btn-block fw-700'
+        .links
+          = link_to('Login', new_session_path(resource_name), :class => 'float-left')
+          .clearfix

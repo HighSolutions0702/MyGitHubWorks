@@ -1,0 +1,70 @@
+.row
+  .col-12
+    .panel-heading
+      h3
+        = t('transfers.bank_details')
+    .panel-body.pr-0.pl-0
+      table.table
+        tbody
+          tr
+            td
+              = t('transfers.account_owner')
+              | :
+            td.fw-500 CoinFalcon
+          tr
+            td IBAN:
+            td.fw-500 DE92 1234 1234 1234 1234 12
+          tr
+            td
+              = t('transfers.reference')
+              | :
+            td.fw-500.text-danger
+              = @user.reference
+          tr
+            td.fw-500.text-danger.p-4.text-center colspan="2"
+              = t('transfers.reference_message')
+          tr
+            td
+              = t('transfers.bank_name')
+              | :
+            td.fw-500 LVH Pank
+          tr
+            td
+              = t('address.city')
+              | :
+            td.fw-500 Tallinn 10145
+          tr
+            td
+              = t('address.country')
+              | :
+            td.fw-500 Estonia
+          tr
+            td BIC:
+            td.fw-500 HEBACY2NXXX
+  .col-12
+    .panel-heading
+      h3
+        = t('transfers.company_details')
+    .panel-body.pr-0.pl-0
+      table.table
+        tbody
+          tr
+            td
+              = t('company')
+              | :
+            td.fw-500 CoinFalcon
+          tr
+            td
+              = t('address.address')
+              | :
+            td.fw-500 173 Athalassa Avenue.
+          tr
+            td
+              = t('address.city')
+              | :
+            td.fw-500 Tallinn
+          tr
+            td
+              = t('address.country')
+              | :
+            td.fw-500 Estonia

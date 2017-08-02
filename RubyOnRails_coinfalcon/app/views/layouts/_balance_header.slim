@@ -1,0 +1,52 @@
+#balance.dropdown
+  div.button_container
+    div.balance_dropdown[data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"]
+      img alt="bitcoin" data-src="#{image_path('btc_white_border.svg')}" data-src-retina="#{image_path('btc_white_border.svg')}" src="#{image_path('btc_white_border.svg')}"
+      .content
+        p.title Balance:
+        p.value.fw-500 = number_to_currency(current_user.btc_sum, locale: :btc, unit: '')
+      span.caret
+    ul.dropdown-menu[role="menu"]
+      li
+        a.menu-item.active[href="#"]
+          .col-6.justify-content-between
+            img alt="bitcoin" data-src="#{image_path('btc_white_bg.svg')}" data-src-retina="#{image_path('btc_white_bg.svg')}" src="#{image_path('btc_white_bg.svg')}"
+            span
+              .sum.text-right = number_to_currency(current_user.btc_sum, locale: :btc, unit: '')
+              .currency.text-right Bitcoin
+          .col-6.right
+            span
+              .sum-calculated ≈ €79.522,24
+              .currency-calculated 3.259 in orders
+      li
+        a.menu-item[href="#"]
+          .col-6.justify-content-between
+            img alt="ethereum" data-src="#{image_path('eth_white_bg.svg')}" data-src-retina="#{image_path('eth_white_bg.svg')}" src="#{image_path('eth_white_bg.svg')}"
+            span
+              .sum.text-right = number_to_currency(current_user.eth_sum, locale: :eth, unit: '')
+              .currency.text-right Ethereum
+          .col-6.right
+            span
+              .sum-calculated ≈ €79.522,24
+              .currency-calculated 3.259 in orders
+      li
+        a.menu-item[href="#"]
+          .col-6.justify-content-between
+            img alt="euro" data-src="#{image_path('euro_white_bg.svg')}" data-src-retina="#{image_path('euro_white_bg.svg')}" src="#{image_path('euro_white_bg.svg')}"
+            span
+              .sum.text-right = number_to_currency(current_user.eur_sum, unit: '')
+              .currency.text-right Euro
+          .col-6.right
+            span
+              .sum-calculated ≈ €79.522,24
+              .currency-calculated 3.259 in orders
+      li
+        a.menu-item[href="#"]
+          .col-6.justify-content-end
+            span
+              .sum.text-right €1.879.293,30
+              .currency.text-right Total Value
+          .col-6.right
+            span
+              .sum-calculated &nbsp;
+              .currency-calculated €4.052,19 in orders

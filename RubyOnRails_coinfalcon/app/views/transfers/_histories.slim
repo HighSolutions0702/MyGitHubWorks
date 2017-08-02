@@ -1,0 +1,9 @@
+- pagination_enable = pagination_enable.nil?? true: pagination_enable
+.panel.panel-default
+  .panel-heading
+    h3 History
+  .panel-body.pr-0.pl-0.pb-0.clearfix.dataTables_wrapper
+    #histories_container class="#{params[:controller]}_#{params[:action]}"
+      = render partial: 'transfers/list', locals: {transfers: transfers}
+    - if pagination_enable
+      = paginate transfers

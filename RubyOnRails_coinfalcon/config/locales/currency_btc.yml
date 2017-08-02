@@ -1,0 +1,9 @@
+btc:
+  number:
+    currency:
+      format:
+        unit: "BTC"
+        delimiter: ""
+        separator: "."
+        format: "%n %u"
+        precision: 4

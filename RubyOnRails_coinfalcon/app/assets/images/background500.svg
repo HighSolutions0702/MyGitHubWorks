@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="502" height="288" viewBox="0 0 502 288">
+  <defs>
+    <linearGradient id="background500-c" x1="98.015%" x2="0%" y1="50%" y2="50%">
+      <stop offset="0%" stop-color="#4641FF"/>
+      <stop offset="100%" stop-color="#795DFF"/>
+    </linearGradient>
+    <rect id="background500-a" width="500" height="286"/>
+    <filter id="background500-b" width="100.8%" height="101.4%" x="-.4%" y="-.3%" filterUnits="objectBoundingBox">
+      <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation=".5"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.25 0"/>
+    </filter>
+    <linearGradient id="background500-d" x1="0%" y1="50%" y2="50%">
+      <stop offset="0%" stop-color="#4641FF"/>
+      <stop offset="100%" stop-color="#592EFF"/>
+    </linearGradient>
+    <linearGradient id="background500-f" x1="0%" y1="50%" y2="50%">
+      <stop offset="0%" stop-color="#7435FF"/>
+      <stop offset="100%" stop-color="#644EFF"/>
+    </linearGradient>
+    <linearGradient id="background500-g" x1="0%" y1="50%" y2="50%">
+      <stop offset="0%" stop-color="#4F3EF5"/>
+      <stop offset="100%" stop-color="#401DFF"/>
+    </linearGradient>
+    <linearGradient id="background500-h" x1="100%" x2="0%" y1="50%" y2="50%">
+      <stop offset="0%" stop-color="#4F3EF6"/>
+      <stop offset="100%" stop-color="#785DFF"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd" transform="translate(1)">
+    <mask id="background500-e" fill="#fff">
+      <use xlink:href="#background500-a"/>
+    </mask>
+    <use fill="#000" filter="url(#background500-b)" xlink:href="#background500-a"/>
+    <use fill="url(#background500-c)" xlink:href="#background500-a"/>
+    <polygon fill="url(#background500-d)" points="203.571 0 500 0 467.857 94.38 203.571 94.38" mask="url(#background500-e)" transform="matrix(-1 0 0 1 703.571 0)"/>
+    <polygon fill="url(#background500-f)" points="0 .083 249.332 0 270 94.38 0 94.38" mask="url(#background500-e)"/>
+    <rect width="250" height="28.6" x="250" y="257.4" fill="url(#background500-g)" mask="url(#background500-e)"/>
+    <rect width="250" height="28.6" y="257.4" fill="url(#background500-h)" mask="url(#background500-e)"/>
+  </g>
+</svg>

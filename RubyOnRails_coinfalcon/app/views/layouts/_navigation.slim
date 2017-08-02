@@ -1,0 +1,13 @@
+nav.navbar.navbar-toggleable-sm.navbar-inverse
+  div.navbar-inner
+    img alt="logo" data-src="#{image_path('logo.svg')}" data-src-retina="#{image_path('logo.svg')}" width="200" height="22" src="#{image_path('logo.svg')}" 
+    button.navbar-toggler.navbar-toggler-right aria-controls="navbarNav" aria-expanded="false" aria-label=("Toggle navigation") data-target="#navbarNav" data-toggle="collapse" type="button" 
+      .py-2
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+  #navbarNav.collapse.navbar-collapse.justify-content-lg-end
+    .justify-content-center
+      .navbar-nav.text-center.col-4.col-lg-12.pr-0.pr-lg-4.mx-auto
+        = link_to('Login', new_user_session_path, :class => 'nav-item nav-link active')
+        = link_to('Sign Up', new_user_registration_path, :class => 'btn btn-signup mb-2 mt-1 fw-500')

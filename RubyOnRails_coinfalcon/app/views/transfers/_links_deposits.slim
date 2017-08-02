@@ -1,0 +1,21 @@
+.panel-heading
+  h3 Currency
+.panel-body.d-flex.justify-content-between
+  = link_to(transfers_deposit_euro_path)
+    .currency-button class=(current_page?(controller: 'deposits', action: 'euro') ? 'active' : '')
+      - if current_page?(controller: 'deposits', action: 'euro')
+        i.fa.fa-check.checked
+      i.icon.euro.mx-auto
+      p.mt-2.text-center Euro
+  = link_to(transfers_deposit_bitcoin_path)
+    .currency-button class=(current_page?(controller: 'deposits', action: 'bitcoin') ? 'active' : '')
+      - if current_page?(controller: 'deposits', action: 'bitcoin')
+        i.fa.fa-check.checked
+      i.icon.bitcoin.mx-auto
+      p.mt-2.text-center Bitcoin
+  = link_to(transfers_deposit_ethereum_path)
+    .currency-button class=(current_page?(controller: 'deposits', action: 'ethereum') ? 'active' : '')
+      - if current_page?(controller: 'deposits', action: 'ethereum')
+        i.fa.fa-check.checked
+      i.icon.ethereum.mx-auto
+      p.mt-2.text-center Ethereum

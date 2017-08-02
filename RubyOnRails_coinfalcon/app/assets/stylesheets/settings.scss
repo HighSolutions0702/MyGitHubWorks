@@ -1,0 +1,28 @@
+// Place all the styles related to the settings controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+ul.settings-nav {
+  padding: 0;
+  width: 100%;
+  background-color: #F6F6F6;
+
+  &::after {
+    bottom: 0;
+    border: none;
+  }
+
+  @media (max-width: 575px) {
+    display: block;
+    li {
+      margin-left: auto;
+      margin-right: auto;
+      width: 38%;
+      text-align: center;
+      a {
+        padding: 6.5px;
+      }
+    }
+  }
+
+}
+

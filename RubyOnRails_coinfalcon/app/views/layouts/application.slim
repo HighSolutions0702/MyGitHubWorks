@@ -1,0 +1,23 @@
+html
+  = render 'layouts/header'
+
+  body class="#{user_signed_in? ? 'body-main': 'body'}"
+    - if user_signed_in?
+      = render 'layouts/chat'
+    = include_gon(:init => true)
+    .page-container
+      .header
+        - if user_signed_in?
+          = render 'layouts/navigation_main'
+        - else
+          = render 'layouts/navigation'
+      div
+        - if user_signed_in?
+          = render 'layouts/navigation_main_sub'
+        /! START PAGE CONTENT
+        - if params[:controller] == "settings"
+          = render 'settings/settings_sub_header'
+        .content.col-12.mt-3
+          = render 'layouts/notice'
+          #notifications.pgn-wrapper data-position="top-right"
+          = yield

@@ -1,0 +1,9 @@
+.panel-heading
+  h3 Deposit Address
+.panel-body.text-center
+  input#deposit_address.input-lg.form-control.btc-address-input value="#{current_user.latest_deposit_bitcoin_address.address}" readonly="true"
+  = raw RQRCode::render_qrcode(current_user.latest_deposit_bitcoin_address.address, :svg, :level => :l, :unit => @qr_unit )
+  - if current_user.can_assign_address?
+    p#new_deposit_address New address
+  - else
+    p.mt-23.text-danger Please wait #{distance_of_time_in_words(Time.now, current_user.next_assign_address_date)} for a new address

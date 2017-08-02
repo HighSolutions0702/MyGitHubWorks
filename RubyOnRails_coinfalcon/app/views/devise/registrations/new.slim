@@ -1,0 +1,19 @@
+.hidden-sm-down.m-t-90
+.row
+  .register-container
+    .panel.col-xs-height.col-middle.b-rad-sm.register-container
+      .panel-heading.text-center
+        h1 Sign Up
+      .panel-body
+        = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+          .form-group.m-b-10
+            = f.email_field :email, :class => "form-control input-lg \#{'error' if resource.errors.messages[:email].any?}", :placeholder => 'Email', :required => true
+            - if resource.errors.messages[:email].any?
+              label#user_email-error.error for="user_email"  Email <%= resource.errors.messages[:email].join("")
+          .form-group.m-b-10
+            = f.password_field :password, autocomplete: 'off', :class => "form-control input-lg  \#{'error' if resource.errors.messages[:password].any?}", :placeholder => 'Password (min of 8)', :required => true,  :minlength => 8, :maxlength => 128
+            - if resource.errors.messages[:password].any?
+              label#user_password-error.error for="user_password"  Password <%= resource.errors.messages[:password].join("")
+          .form-group.m-b-10.btn-group-lg
+            = f.submit "Create account", :class => 'btn btn-yellow btn-lg btn-block fw-700'
+          p.text-center By signing up, you agree to the TOS and PP.

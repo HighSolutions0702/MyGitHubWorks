@@ -1,0 +1,67 @@
+= render 'users/enable_otp_modal'
+= render 'users/check_otp_email'
+.row
+  .col-12.col-sm-6.col-md-5.col-lg-4
+    .panel.panel-default
+      .panel-heading
+        h3 Change Password
+      .panel-body
+        = form_for(@user, :url => { :action => "password_update" }, html: { id: 'password_update_form', method: :patch, class: 'm-o' }, remote: @user.otp_required_for_login ) do |f|
+          div#password_update_error_tip.hidden.alert.alert-danger role="alert"
+          - if @user.otp_required_for_login
+            = render partial: 'users/otp_auth', locals: {id: 'PasswordUpdateFactorAuthModal'}
+          .form-group
+            p Current password
+            = f.password_field :current_password, :class => 'form-control input-lg', :required => true,  :minlength => 8, :maxlength => 128
+          .form-group
+            p New password
+            = f.password_field :password, :class => 'form-control input-lg', :required => true,  :minlength => 8, :maxlength => 128
+          .form-group
+            p Confirm password
+            = f.password_field :password_confirmation, :class => 'form-control input-lg', :required => true,  :minlength => 8, :maxlength => 128, :equalTo => '#user_password'
+          .form-group.m-0
+            button.btn.btn-purple.input-lg.btn-block.fw-500 Change
+
+
+  .col-12.col-sm-6.col-md-5.col-lg-4
+    .panel.panel-default
+      .panel-heading
+        h3 Change Email
+      .panel-body
+        = form_for(@user, :url => { :action => "email_update" }, html: { method: :patch, class: 'm-o' } ) do |f|
+          .form-group
+            p Email
+            = f.email_field :email, :class => 'form-control input-lg', :required => true
+          .form-group
+            p Password
+            = f.password_field :current_password, :class => 'form-control input-lg', :required => true,  :minlength => 8, :maxlength => 128
+          .form-group.m-0
+            button.btn.btn-purple.input-lg.btn-block.fw-500 Change
+
+    #two-factor-panel.panel.panel-default
+      .panel-heading
+        h3 2-Step Verification
+      .panel-body
+        p Use your mobile phone to confirm your identity at login for enhanced security.
+        .icon-list.fw-400
+          .fa-item
+            i.fa.fa-check.text-success
+            | Logins
+          .fa-item
+            i.fa.fa-check.text-success
+            | Withdrawals confirmations
+          .fa-item
+            i.fa.fa-check.text-success
+            | API key creation
+          .fa-item
+            i.fa.fa-check.text-success
+            | Password change
+        .form-group.m-0
+          - if current_user.otp_required_for_login
+            = form_tag users_disable_otp_url, id: 'disable-otp-form', remote: true
+              button.btn.btn-purple.input-lg.btn-block.fw-500 type="button" data-toggle="modal" data-target="#TurnOffFactorAuthModal" Turn Off
+              = render partial: 'users/otp_auth', locals: {id: 'TurnOffFactorAuthModal'}
+          - else
+            = form_tag users_sent_enable_otp_email_url, id: 'enable-otp-form', remote: true
+              button.btn.btn-purple.input-lg.btn-block.fw-500 type="button" data-toggle="modal" data-target="#EnableOtpModal" Turn On
+              = render partial: 'users/otp_auth', locals: {id: 'TurnOnFactorAuthModal'}

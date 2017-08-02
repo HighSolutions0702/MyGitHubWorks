@@ -1,0 +1,21 @@
+.panel-heading
+  h3 Currency
+.panel-body.d-flex.justify-content-between
+  = link_to(transfers_withdraw_euro_path)
+    .currency-button class="#{active_link_to_class(transfers_withdraw_euro_path, active: [['withdraws'], ['euro', 'withdraw_euro']])}"
+      - if current_page?(controller: 'withdraws', action: 'euro')
+        i.fa.fa-check.checked
+      i.icon.euro.mx-auto
+      p.mt-2.text-center Euro
+  = link_to(transfers_withdraw_bitcoin_path)
+    .currency-button class=(current_page?(controller: 'withdraws', action: 'bitcoin') ? 'active' : '')
+      - if current_page?(controller: 'withdraws', action: 'bitcoin')
+        i.fa.fa-check.checked
+      i.icon.bitcoin.mx-auto
+      p.mt-2.text-center Bitcoin
+  = link_to(transfers_withdraw_ethereum_path)
+    .currency-button class=(current_page?(controller: 'withdraws', action: 'ethereum') ? 'active' : '')
+      - if current_page?(controller: 'withdraws', action: 'ethereum')
+        i.fa.fa-check.checked
+      i.icon.ethereum.mx-auto
+      p.mt-2.text-center Ethereum

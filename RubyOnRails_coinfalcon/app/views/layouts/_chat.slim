@@ -1,0 +1,15 @@
+.chat
+  .online-count.fw-500.text-center
+    span.user_count
+      = Setting.chat_active_user
+    |  Online
+  #chat
+    - @chats.each do |chat|
+      .chat-body class=('own' if current_user.id == chat.user_id)
+        span.username.fw-700
+          | Simon&nbsp;
+        = chat.body
+  div
+    = form_for @chat_message, url: '#' do |f|
+      .form-group
+        = f.text_field :body, { class: 'form-control', autocomplete: 'off', placeholder: 'Say hello' }

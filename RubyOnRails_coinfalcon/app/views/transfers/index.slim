@@ -1,0 +1,19 @@
+.row
+  .col-12.col-sm-12.col-md-8.col-lg-4
+    .panel.panel-default.transfers
+      ul.nav.nav-tabs.nav-tabs-simple
+        li class="#{active_link_to_class(transfers_deposit_euro_path, active: [['deposits'], ['euro', 'bitcoin', 'ethereum']])}"
+          = link_to(t('deposit'), controller: 'deposits', action: params[:action])
+        li class="#{active_link_to_class(transfers_withdraw_euro_path, active: [['withdraws'], ['euro', 'bitcoin', 'ethereum']])}"
+          = link_to(t('withdraw'), controller: 'withdraws', action: params[:action])
+      .tab-content
+        .tab-pane.active
+          .row
+            = render 'transfers/links_' + controller_name
+            = render 'transfers/' + controller_name + '/' + action_name
+  .col-12.col-sm-12.col-md-8.col-lg-4
+    - if @transfers.count > 0
+      #histories_container
+        = render partial: 'transfers/histories', locals: {transfers: @transfers}
+    = render 'transfers/' + controller_name + '/infos/' + action_name
+

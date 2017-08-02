@@ -1,0 +1,26 @@
+- @title = 'Deposit confirmed'
+.single_notification
+  .pgn.push-on-sidebar-open.pgn-circle
+    .alert.alert-success
+      div
+        .pgn-thumbnail
+          div
+            = image_tag "#{currency_code}_white_bg.svg"
+        .pgn-message
+          - if transfer.completed?
+            div
+              p.bold
+                = t('notification.deposit_confirmed')
+              p
+                = link_to t('notification.start_trading', currency: currency), new_orders_path
+          - else
+            div
+              p.bold.text-capitalize
+                = t('notification.currency_received', currency: currency)
+              p
+                = link_to t('notification.conf_needed', count: transfer.bitcoin_network_transaction.rest_confirmations, confirmation: transfer.bitcoin_network_transaction.rest_confirmations), transfers_deposit_bitcoin_path(anchor: 'withdraw_histories')
+      button.close[type="button" data-dismiss="alert"]
+        span[aria-hidden="true"]
+          | ×
+        span.sr-only
+          | Close

@@ -1,0 +1,223 @@
+.navbar {
+  height: 60px;
+}
+
+.navbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  .navbar-toggler {
+    align-self: center;
+  }
+  #balance {
+    width: 100%;
+    .button_container {
+      display: flex;
+      justify-content: center;
+      width: 275px;
+      @media (min-width: 576px) {
+        width: 318px;
+      }
+      margin: 0 auto;
+      position: relative;
+      .balance_dropdown {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .content {
+          margin-left: 14px;
+          p.title {
+            color: #FFFFFF;
+            font-size: 12px;
+            line-height: 15px;
+            margin-bottom: 3px;
+          }
+          p.value {
+            color: #FFFFFF;
+            font-size: 18px;
+            line-height: 21px;
+          }
+        }
+      }
+
+      ul.dropdown-menu {
+        width: 100%;
+        padding-top: 0;
+        padding-bottom: 0;
+        background-color: #ffffff;
+        div.sum {
+          color: #1F314A;
+          font-size: 18px;
+          font-weight: 500;
+          line-height: 21px;
+        }
+        div.currency {
+          color: #1F314A;
+          font-size: 15px;
+          line-height: 17px;
+        }
+        div.sum-calculated {
+          line-height: 23px;
+        }
+        div.currency-calculated {
+          line-height: 13px;
+        }
+        div.currency-calculated, div.sum-calculated {
+          color: #A5ADB7;
+        }
+        .col-6 {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          padding-left: 0;
+          padding-right: 0;
+          &.right {
+            justify-content: flex-start;
+          }
+        }
+        & > li > a {
+          padding-right: 0;
+          padding-bottom: 0;
+          padding-left: 10px;
+          border-radius: 0;
+        }
+        .dropdown-divider {
+          margin: 0;
+        }
+        & > li {
+          padding: 0;
+          height: 60px;
+          border-bottom: 1px solid #EDEDED;
+        }
+        & > li:last-child {
+          height: 60px;
+          border-radius: 0 0 3px 3px;
+        }
+        & > li:first-child, a.menu-item.active {
+          border-radius: 3px 3px 0 0;
+        }
+      }
+    }
+
+    img {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+    }
+    span {
+      display: inline-block;
+    }
+    a.menu-item {
+      height: 59px;
+      display: flex;
+      justify-content: space-between;
+      &:hover, &.active {
+        background-color: #FEF6DD;
+      }
+      span div {
+        padding-right: 10px;
+      }
+    }
+  }
+}
+
+.header-main.navbar {
+  padding-left: 15px;
+}
+
+.header-main {
+  background: #7435FF;
+  background: -webkit-linear-gradient(left, #7435FF , #644EFF); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, #7435FF, #644EFF); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, #7435FF, #644EFF); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, #7435FF , #644EFF); /* Standard syntax */
+  #navbarNav {
+    overflow: visible;
+    margin-left: -15px;
+  }
+}
+
+.nav-tabs-simple:after {
+  bottom: -1px;
+}
+
+
+.main-nav, ul.settings-nav {
+  li.active a {
+    color: #6665FF;
+  }
+  li a:hover {
+    color: #6665FF;
+  }
+}
+
+.main-nav {
+  background-color: #FFFFFF;
+  img {
+    margin-right: 9px;
+    display: inline-block;
+  }
+  li.active svg.svg_icon, a:hover svg.svg_icon {
+    stroke: #6665FF;
+    fill: #6665FF;
+    path, polygon {
+      stroke: #6665FF;
+      fill: #6665FF;
+    }
+  }
+
+  svg.svg_icon {
+    vertical-align: middle;
+    display: inline-block;
+  }
+  @media (max-width: 575px) {
+    padding-left: 0;
+    svg.svg_icon {
+      margin: 0 auto;
+      display: block;
+    }
+    li {
+      width: 25%;
+      text-align: center;
+    }
+    & > li > a {
+      padding: 9px 0;
+      padding-right: 0;
+    }
+    img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+.navbar {
+  padding: 0px;
+}
+
+.navbar-inner {
+  padding: 19px 0px;
+}
+
+.nav-item {
+  font-size: 16px;
+  color: #FFFFFF;
+}
+
+.navbar .icon-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  border-radius: 1px;
+  border: 1px solid #fff;
+}
+
+.navbar .icon-bar+.icon-bar {
+  margin-top: 4px;
+}
+
+.navbar-toggler-right {
+  margin-top: -8px;
+}

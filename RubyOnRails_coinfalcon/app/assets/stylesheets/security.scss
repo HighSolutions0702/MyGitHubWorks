@@ -1,0 +1,48 @@
+#current-otp, #otp_not_match_tip {
+  display: none;
+}
+
+#two-factor-panel {
+  .icon-list {
+    margin-bottom: 25px;
+  }
+}
+
+#current-otp {
+  height: 17px;
+  color: #1F314A;
+  font-family: "Maven Pro";
+  font-size: 15px;
+  line-height: 17px;
+  text-align: center;
+}
+
+#view-current-otp {
+  height: 17px;
+  color: #6665FF;
+  font-family: "Maven Pro";
+  font-size: 15px;
+  line-height: 17px;
+}
+
+#EnableOtpModal {
+  svg {
+    margin-bottom: 10px;
+  }
+}
+
+.FactorAuthModal {
+  #enable-otp-form {
+    input {
+      margin-bottom: 10px;
+    }
+    p {
+      height: 17px;
+      color: #1F314A;
+      font-family: "Maven Pro";
+      font-size: 15px;
+      line-height: 17px;
+    }
+  }
+}
+

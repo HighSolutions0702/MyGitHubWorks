@@ -1,0 +1,9 @@
+eth:
+  number:
+    currency:
+      format:
+        unit: "ETH"
+        delimiter: ""
+        separator: "."
+        format: "%n %u"
+        precision: 4

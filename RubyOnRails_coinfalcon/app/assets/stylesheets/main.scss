@@ -1,0 +1,263 @@
+@import "vars";
+@import "pages-core/scss/pages";
+
+.body {
+  background-image: asset-data-url("background.svg");
+  background-size: cover;
+}
+
+.body-main {
+  background-color: #FAFAFA;
+}
+
+body {
+  font-family: 'Maven Pro', Arial;
+}
+
+.turbolinks-progress-bar {
+  background-color: white;
+}
+
+.btn, h1, h2, h3, h4, h5, h6, .input, .form-control, .nav-tabs > li > a, .table thead tr th {
+  font-family: 'Maven Pro', Arial;
+}
+
+.table thead tr th {
+  text-transform: none;
+  font-weight: 700;
+  font-size: 16px;
+  color: #282B31;
+}
+
+.table tr td p {
+  font-size: 16px;
+  color: #1E314A;
+}
+
+.table tr td p:last-child {
+  margin-bottom: 0;
+}
+
+.nav-tabs > li > a {
+  padding: 15px 17px;
+}
+
+h1 {
+  font-size: 30px;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+form p {
+  margin-bottom: .25rem;
+}
+
+.page-container {
+  padding-left: 0px;
+}
+
+.header {
+  padding: 0px;
+  background-color: transparent;
+  border-bottom: 0px;
+  color: #FFFFFF;
+  a, a.btn {
+    color: #FFFFFF;
+  }
+}
+
+.pagination {
+  span {
+    margin-right: 5px;
+  }
+}
+
+@media (max-width: 575px) {
+  .header {
+    background-color: transparent !important;
+  }
+  .navbar-collapse {
+    background-color: #1E314A;
+  }
+}
+
+.btn-signup {
+  @include button(#FFFFFF, transparent, #FFFFFF);
+  font-size: 16px;
+  border-color: #FFFFFF !important;
+}
+
+.btn-yellow {
+  @include button(#1E314A, #FFCF00, #FFCF00);
+  font-size: 22px;
+}
+
+.btn-grey {
+  @include button(#1E314A, #FAFAFA, #FAFAFA);
+  border-color: #E6ECF0 !important;
+}
+
+.btn-purple {
+  @include button(#FFFFFF, #6665FF, #6665FF);
+}
+
+.register-container {
+  width: 360px;
+  height: auto !important;
+}
+
+.table tbody tr td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+/* Iphone 5 */
+@media (max-width: 374px) {
+  .register-container {
+    width: 320px;
+    height: auto !important;
+  }
+  .table tbody tr td {
+    padding: 12px 4px;
+  }
+  .nav-tabs > li > a {
+    padding: 15px 10px;
+  }
+}
+
+@media (min-width: 768px) {
+  .modal .modal-dialog {
+    min-width: 500px;
+  }
+}
+
+.panel {
+  .panel {
+    &-heading {
+      padding-top: 0px;
+      & + .panel-body {
+        height: auto;
+      }
+    }
+    &-body {
+      font-size: 15px;
+      font-weight: 500;
+    }
+  }
+}
+
+input.error {
+  font-size: 18px;
+}
+
+.form-group label:not(.error) {
+  text-transform: none;
+}
+
+.mt-180 {
+  margin-top: 180px;
+}
+
+.wi-100 {
+  width: 100px;
+}
+
+.mt-76 {
+  margin-top: 76px;
+}
+
+.mb-22 {
+  margin-bottom: 22px;
+}
+
+.mb-35 {
+  margin-bottom: 35px;
+}
+
+.mt-23 {
+  margin-top: 23px;
+}
+
+.mt-35 {
+  margin-top: 35px;
+}
+
+.mt-59 {
+  margin-top: 59px;
+}
+
+.mb-26 {
+  margin-bottom: 26px;
+}
+
+.mb-45 {
+  margin-bottom: 45px;
+}
+
+.mb-30 {
+  margin-bottom: 30px;
+}
+
+.mb-7 {
+  margin-bottom: 7px;
+}
+
+.mb-72 {
+  margin-bottom: 72px;
+}
+
+.mb-76 {
+  margin-bottom: 76px;
+}
+
+.mb-87 {
+  margin-bottom: 87px;
+}
+
+.pr-20 {
+  padding-right: 20px;
+}
+
+.fw-400 {
+  font-weight: 400;
+}
+
+.fw-500 {
+  font-weight: 500;
+}
+
+.fw-700 {
+  font-weight: 700;
+}
+
+.alert .close {
+  background: asset-data-url("noti-cross.png") no-repeat scroll 0 0 transparent;
+}
+
+.panel .panel-body {
+  height: auto;
+}
+
+.nav-tabs > li > a {
+  text-transform: capitalize;
+}
+
+@media (max-width: 767px) {
+  .header {
+    height: auto;
+  }
+}
+@media (max-width: 480px) {
+  body .header {
+    height: auto;
+    border-bottom: none;
+  }
+}
+
+.text-success {
+  color: #08C200 !important;
+}

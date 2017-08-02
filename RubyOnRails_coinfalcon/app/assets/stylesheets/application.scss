@@ -1,0 +1,30 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ * BEGIN VENDOR CSS FOR PAGES
+ *= require tether
+ *= require pages-plugins/bootstrap/css/bootstrap.min
+ *= require pages-plugins/jquery-scrollbar/jquery.scrollbar
+ *= require pages-plugins/select2/css/select2.min
+ *= require pages-plugins/switchery/css/switchery.min
+ *
+ * BEGIN CORE TEMPLATE CSS FOR PAGES
+ *= require pages-core/css/pages-icons
+ *
+ * BEGIN PAGES ASSET PIPELINE OVERRIDE
+ *= require ./pages-asset-pipeline
+ * BEGIN SITE STYLES
+ *
+ * I prefer to list stylesheets in a specific order, so I comment out require_tree .
+ *= require main
+ *= require_tree .
+ */

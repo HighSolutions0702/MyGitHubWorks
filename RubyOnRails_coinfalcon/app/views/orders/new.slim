@@ -1,0 +1,44 @@
+.row
+  .col-12.col-sm-12.col-md-8.col-lg-4
+    .panel.panel-default.transfers
+      .panel-body
+        = form_for(@order, html: {class: 'm-o'}) do |f|
+          .form-group
+            select#order_type.select2.form-control v-model="order_type"
+              option :value="item" v-for="item in order_type_options" {{item}}
+            input#order_volume.form-control type="text" name="order[volume]" v-model="left_volume"
+            select#left_currency.select2.form-control v-model="left_currency"
+              option :value="item" v-for="item in currency_options" {{item}}
+          .form-group.mb-35
+            p.balance Balance: {{balances[left_currency]}} {{left_currency}}
+
+          .form-group
+            span.wi-100 {{right_text}}
+            input#order_right_volume.form-control type="text" name="order[right_volume]" v-model="right_volume"
+            select#right_currency.select2.form-control v-model="right_currency"
+              option :value="item" v-if="item != left_currency" v-for="item in right_currency_options" {{item}}
+
+          .form-group.mb-22
+            span.balance Balance: {{balances[right_currency]}} {{right_currency}}
+            span.use_all @click="use_all" Use all
+
+          .form-group.m-0
+            button.btn.btn-purple.input-lg.btn-block.fw-500 @click="submit" {{order_type}}
+
+          .bottom
+            hr
+            p {{order_type}}ing
+            p.currency {{left_volume}} {{left_currency}}
+            p At {{exchanges[left_currency + '2eur']}} euro per {{right_currency}}
+            .line
+              span Fee
+              span.dot
+              span.money €0,00
+            .line
+              span {{right_text}}
+              span.dot
+              span.money {{right_volume}} {{right_currency}}
+
+  .col-12.col-sm-12.col-md-8.col-lg-4
+    - if @transfers.count > 0
+      = render partial: 'transfers/histories', locals: {transfers: @transfers}

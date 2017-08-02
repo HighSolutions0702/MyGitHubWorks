@@ -1,0 +1,21 @@
+#EnableOtpModal.modal.fade.slide-up.disable-scroll[tabindex="-1" role="dialog" aria-labelledby="modalSlideUpLabel" aria-hidden="false"]
+  .modal-dialog
+    .modal-content-wrapper
+      .modal-content
+        .model-header.clearfix.text-center
+          button.close type="button" data-dismiss="modal" aria-hidden="true"
+            i.pg-close.fs-14
+          h3 Set up Authenticator
+        .modal-body.text-center
+          .tips.text-left
+            p 1. Get the Authenticator App from the #{link_to 'Play Store', 'https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en'} or #{link_to 'App Store', 'https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8'}.
+            p 2. In the App, select <b>Set up account</b>.
+            p 3. Choose <b>Scan a barcode</b>.
+          = raw RQRCode::render_qrcode(current_user.otp_provisioning_uri(current_user.email, issuer: "CoinFalcon-#{Rails.env.humanize}"),
+                                             :svg,
+                                             :level => :l,
+                                             :unit => 2)
+          p#current-otp = current_user.otp_secret
+          p#view-current-otp.text-center view code
+
+          button.btn.btn-purple.input-lg.btn-block.fw-500 data-dismiss="modal" data-toggle="modal" data-target="#TurnOnFactorAuthModal" Next

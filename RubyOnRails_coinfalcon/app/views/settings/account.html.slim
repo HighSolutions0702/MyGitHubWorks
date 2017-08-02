@@ -1,0 +1,23 @@
+.row
+  .col-12.col-sm-6.col-md-5.col-lg-4
+    .panel.panel-default
+      .panel-heading
+        h3 Details
+      .panel-body
+        = form_for(@user, :url => { :action => "account_update" }, html: { method: :patch, class: 'm-o' } ) do |f|
+          .form-group
+            p Timezone
+            = f.time_zone_select("time_zone", nil, {include_blank: true}, {:class => 'form-control input-lg'})
+          .form-group
+            p Language
+            = f.select(:language_id, Language.all.collect { |p| [ p.language, p.id ] }, {}, {:class => 'form-control input-lg'})
+          .form-group.m-0
+            button.btn.btn-purple.input-lg.btn-block.fw-500 Change
+
+  .col-12.col-sm-6.col-md-5.col-lg-4
+    .panel.panel-default
+      .panel-heading
+        h3 Address
+      .panel-body
+        .form-group.m-0
+          button.btn.btn-purple.input-lg.btn-block.fw-500 Verify Identity

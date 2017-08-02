@@ -1,0 +1,14 @@
+#WithdrawSuccessModal.modal.fade.slide-up.disable-scroll[tabindex="-1" role="dialog" aria-labelledby="modalSlideUpLabel" aria-hidden="false"]
+  .modal-dialog
+    .modal-content-wrapper
+      .modal-content
+        .model-header.clearfix.text-center
+          button.close type="button" data-dismiss="modal" aria-hidden="true"
+            i.pg-close.fs-14
+          h3 Withdrawal Complete
+        .modal-body.text-center
+          p.mt-35 = t("do_withdraw.#{params[:action]}.success")
+          .text-center.mb-72.mt-59
+            = inline_svg 'check.svg'
+          .text-center
+            = link_to "View History", url_for(anchor: 'withdraw_histories'), class: "btn btn-purple input-lg btn-block fw-500"

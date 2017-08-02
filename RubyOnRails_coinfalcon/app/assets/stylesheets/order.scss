@@ -1,0 +1,69 @@
+#new_order {
+
+  .select2 {
+    width: 100px;
+  }
+
+  @media (max-width: 575px) {
+    margin-top: 15px;
+  }
+
+  input {
+    display: inline-block;
+    width: calc(100% - 200px);
+  }
+
+  .form-group {
+    span.wi-100 {
+      display: inline-block;
+    }
+    .balance {
+      color: #A5ADB7;
+      font-family: "Maven Pro";
+      font-size: 15px;
+      line-height: 17px;
+    }
+    .use_all {
+      color: #6665FF;
+      font-family: "Maven Pro";
+      font-size: 15px;
+      line-height: 17px;
+      float: right;
+    }
+  }
+
+  .bottom {
+    text-align: center;
+    p,span {
+      color: #A5ADB7;
+      font-family: "Maven Pro";
+      font-size: 15px;
+      line-height: 17px;
+      text-align: center;
+      &.currency {
+        color: #1F314A;
+        font-family: "Maven Pro";
+        font-size: 24px;
+        line-height: 28px;
+        text-align: center;
+      }
+    }
+    .line {
+      display: flex;
+      align-items: center;
+      .dot {
+        display: inline-block;
+        border-top: dotted 1px;
+        width: 70%;
+      }
+      span.money {
+        color: #1F314A;
+        font-family: "Maven Pro";
+        font-size: 15px;
+        line-height: 17px;
+        text-align: right;
+      }
+    }
+  }
+
+}

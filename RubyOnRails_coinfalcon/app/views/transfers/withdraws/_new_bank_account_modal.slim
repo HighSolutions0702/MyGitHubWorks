@@ -1,0 +1,21 @@
+#NewBankAccountModal.modal.fade.slide-up.disable-scroll[tabindex="-1" role="dialog" aria-labelledby="modalSlideUpLabel" aria-hidden="false"]
+  .modal-dialog
+    .modal-content-wrapper
+      .modal-content
+        .model-header.clearfix.text-center
+          button.close type="button" data-dismiss="modal" aria-hidden="true"
+            i.pg-close.fs-14
+          h3 Add Bank Account
+        .modal-body.text-left
+          = form_for @bank_account || BankAccount.new, remote: true do |f|
+            div#bank_account_tips.hidden.alert.alert-danger role="alert"
+            .form-group.mb-26
+              p.input_title Bank Name
+              = f.text_field :name, class: 'form-control input-lg', required: true
+            .form-group.mb-26
+              p.input_title IBAN
+              = f.text_field :iban, class: 'form-control input-lg', required: true
+            .form-group.mb-45
+              p.input_title BIC (SWIFT)
+              = f.text_field :bic, class: 'form-control input-lg', required: true
+            button.btn.btn-purple.input-lg.btn-block.fw-500 Add

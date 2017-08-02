@@ -1,0 +1,18 @@
+ul.main-nav.nav.nav-tabs.nav-tabs-simple
+  li
+    a aria-expanded="false" data-toggle="tab" href="#tab2hellowWorld" role="tab"
+      = inline_svg 'summary.svg', class: 'svg_icon'
+      = t('sub_menu.summary')
+  li class="#{active_link_to_class(new_orders_path, active: [['orders'], ['new']])}"
+    = active_link_to new_orders_path, active: [['orders'], ['new']] do
+      = inline_svg 'buy-sell.svg', class: 'svg_icon'
+      = t('sub_menu.buysell')
+  li class="#{active_link_to_class(transfers_deposit_euro_path, active: [['deposits', 'withdraws'], ['euro', 'bitcoin', 'ethereum']])}"
+    = active_link_to transfers_deposit_euro_path, active: [['deposits', 'withdraws'], ['euro', 'bitcoin', 'ethereum']] do
+      = inline_svg 'transfers.svg', class: 'svg_icon'
+      = t('sub_menu.transfer')
+
+  li class="#{active_link_to_class(settings_account_path, active: [['settings'], ['security', 'account', 'funding', 'alerts', 'verify']] )}"
+    = active_link_to settings_account_path, active: [['settings'], ['security', 'account', 'funding', 'alerts', 'verify']] do
+      = inline_svg 'settings.svg', class: 'svg_icon'
+      = t('sub_menu.settings')
