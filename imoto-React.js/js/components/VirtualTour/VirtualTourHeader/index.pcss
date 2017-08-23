@@ -1,0 +1,118 @@
+@import url("../../../../styles/constant.css");
+
+.main {
+  position: relative;
+}
+.main img {
+  display: block;
+  width: 100%; 
+  height: auto;
+}
+.slick-slider {
+  top: 40px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+.slide-wrapper {
+  position: relative;
+}
+.slide-wrapper img {
+  margin: 0 auto;
+  width: 100%;
+}
+.wrapper {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  top: 0;
+  left:0;
+  right:0;
+  bottom:0;
+  color: white;
+}
+.logo {
+  margin-top: 32px;
+}
+.logo img {
+  display: block;
+}
+.header {
+  text-align: center;
+  font-family: Montserrat;
+  font-size: 66px;
+  font-weight: 700;
+  line-height: 87px;
+  letter-spacing: 4.6px;
+  margin: 10px 0 0;
+}
+.description {
+  text-align: center;
+  font-family: Avenir;
+  font-size: 31px;
+  font-weight: 400;
+  line-height: 42px;
+  letter-spacing: 2px;
+}
+.scroll {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 40px;
+  margin-bottom: 41px;
+}
+.scroll-name {
+  color: white;
+  font-family: Avenir;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.97px;
+  line-height: 20px;
+}
+.arrows {
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+  align-items: center;
+  width: 30px;
+  height: 15px;
+}
+.first-arrow {
+  opacity: 0.28;
+}
+.second-arrow {
+  opacity: 0.6;
+}
+.third-arrow {
+  opacity: 1;
+}
+
+@media screen and (max-width: $the-tablet) {
+  .main img {
+    width: auto;
+    height: auto;
+  }
+  .header {
+    max-width: 500px;
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .header {
+    max-width: 500px;
+    font-size: 35px;
+    line-height: 48px;
+  }
+  .description {
+    text-align: center;
+    font-size: 25px;
+    line-height: 36px;
+  }
+}
+
+
+ 

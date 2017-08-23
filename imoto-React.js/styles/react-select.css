@@ -1,0 +1,106 @@
+.order-select .Select-control {
+  box-shadow: none !important;
+  height: 28px;
+  cursor: pointer;
+  border: 0.5px solid #7e8890 !important;
+  border-radius: 14px;
+}
+
+.order-select, .Select-placeholder {
+  padding-bottom: 15px;
+  line-height: 26px !important;
+}
+
+
+.order-select .Select.is-open .Select-control {
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.order-select .Select-menu-outer {
+  border: 0.5px solid #7e8890 !important;
+  border-top: none !important;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  overflow: hidden;
+}
+
+.order-select .Select-input {
+  height: 28px;
+}
+
+.order-select .Select-value {
+  color: #101414;
+  font-size: 12px;
+  line-height: 28px !important;
+}
+
+.order-select .Select-value-label {
+  color: #101414;
+  line-height: 28px;
+}
+
+.order-select .Select-option {
+  color: #7e8890;
+  font-size: 13px;
+}
+
+.order-select .Select-option.is-focused {
+  color: #101414;
+  background-color: #f1f1f1;
+}
+
+.order-select .Select-option.is-selected {
+  background-color: #f1f1f1;
+}
+
+.preffered-time-select .Select, .photographer-time-select .Select {
+  background-color: #ffffff;
+  border-radius: 14px;
+  box-sizing: border-box;
+  height: 28px;
+  width: 142px;
+}
+
+.preffered-time-select .Select-placeholder, .photographer-time-select .Select-placeholder {
+  border-radius: 14px;
+  height: 28px;
+}
+
+.preffered-time-select .Select-control, .photographer-time-select .Select-control {
+  border-radius: 14px;
+  display: block;
+  border: 1px solid #d6d9dc;
+  height: 28px;
+}
+
+.preffered-time-select .Select-control .Select-value-label, .photographer-time-select .Select-control .Select-value-label {
+  line-height: 26px;
+  display: block;
+}
+
+.preffered-time-select .Select.is-open .Select-control, .photographer-time-select .Select.is-open .Select-control {
+  border: 1px solid #d6d9dc;
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.preffered-time-select .Select-menu-outer, .photographer-time-select .Select-menu-outer {
+  border: 0.5px solid #d6d9dc !important;
+  border-top: none !important;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  overflow: hidden;
+}
+
+.photographer-time-select .Select-menu-outer  {
+  border: none !important;
+}
+.photographer-time-select .Select.is-open .Select-control {
+  border: none !important;
+}
+.photographer-time-select .Select-control {
+  border: none !important;
+}

@@ -1,0 +1,39 @@
+@import url("../../../styles/constant.css");
+
+.account-wrapper {
+  background-color: #f5f6f7;
+}
+.row {
+  display: flex;
+  justify-content: center;
+  margin-top: 65px;
+}
+.content {
+  margin: 20px 20px 0 0;
+  width: 740px;
+}
+.side-bar {
+  margin-top: 20px;
+  width: 310px;
+}
+
+@media screen and (max-width: $the-tablet) {
+  .row {
+    flex-wrap: wrap-reverse;
+  }
+  .content {
+    margin-right: 0;
+  }
+  .side-bar {
+    width: 740px;
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .content {
+    width: 100%;
+  }
+  .side-bar {
+    width: 100%;
+  }
+}

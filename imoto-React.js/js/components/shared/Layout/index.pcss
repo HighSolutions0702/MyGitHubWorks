@@ -1,0 +1,29 @@
+@import url("../../../../styles/constant.css");
+
+.main {
+  background-color: white;
+  height: 100%;
+}
+.root {
+  min-height: 100%;
+  margin: 0 auto -339px;
+  overflow-y: hidden;
+}
+.root:after {
+  height: 338px;
+  content: "";
+  display: block;
+  background-color: #F5F6F7;
+}
+
+@media screen and (max-width: $the-tablet) {
+  .root {
+    margin: 0 auto -330px;
+    overflow-x: hidden;
+  }
+  .root:after {
+    height: 316px;
+    content: "";
+    display: block;
+  }
+}

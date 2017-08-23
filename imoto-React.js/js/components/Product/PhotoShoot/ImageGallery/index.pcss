@@ -1,0 +1,60 @@
+@import url("../../../../../styles/constant.css");
+
+.main {
+  position: relative;
+  width: 850px;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+.slide-wrapper {
+  width: 100%; /* temporary fix for chrome; see https://github.com/akiran/react-slick/issues/299 */
+}
+.slide-wrapper img {
+  margin: 0 auto;
+  width: 100%;
+  display: block;
+}
+.arrow-left img {
+  width: 15px;
+  height: 24px;
+}
+.arrow-right, .arrow-left {
+  width: 64px;
+  height: 64px;
+  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.5s;
+}
+.arrow-left {
+  margin-left: -18px;
+}
+.arrow-right {
+  margin-right: -18px;
+}
+.arrows-container {
+  align-self: center;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  position: absolute;
+  top: calc(50% - 33px);
+  left: 0;
+}
+
+.arrow-left:hover, .arrow-right:hover {
+  background-color: rgb(255, 255, 255)
+}
+
+@media screen and (max-width: $the-tablet) {
+  .main {
+    width: 100%;
+    padding: 0;
+  }
+}

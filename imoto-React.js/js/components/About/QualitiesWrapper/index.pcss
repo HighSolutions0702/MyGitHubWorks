@@ -1,0 +1,46 @@
+@import url("../../../../styles/constant.css");
+
+.wrapper {
+  padding: 83px 0;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  max-width: 850px;
+  margin: 0 auto;
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 70px;
+}
+.name-section {
+  display: flex;
+  align-items: center;
+}
+.header {
+  color: #101414;
+  margin-left: 14px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 27px;
+}
+.description {
+  margin-top: 16px;
+  color: #101414;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
+}
+.item:last-of-type {
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: $mobile) {
+  .wrapper {
+    padding: 40px 0;
+  }
+  .item {
+    margin-bottom: 30px;
+  } 
+}

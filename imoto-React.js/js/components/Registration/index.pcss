@@ -1,0 +1,125 @@
+@import url("../../../styles/constant.css");
+
+.main {
+  background-color: #f5f6f7;
+}
+.wrapper {
+  padding: 60px 0 120px 0;
+  margin-top: 65px;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.col {
+  width: 48.9719626168%; /* 524px / 1070px */
+  margin-right: 2.05607476636%; /* 22px / 1070px */
+  margin-bottom: 22px;
+}
+.row :last-child {
+  margin-right: 0;
+}
+.main-container {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #FFF;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px rgba(207, 209, 210, 0.4);
+  width: 100%;
+}
+.description-container {
+  display: flex;
+  justify-content: space-between;
+  height: 240px;
+  padding: 40px 40px 0 40px;
+}
+.button-container {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #d6d9dc;
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  width: 291px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.header {
+  color: #101414;
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.description {
+  color: #707272;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+}
+.tab-header {
+  color: #101414;
+  font-size: 18px;
+  font-weight: 400;
+  margin: 25px 0;
+}
+.dropbox-container {
+  text-align: center;
+  height: 212px;
+  width: 100%;
+}
+.fullwidth-recaptcha {
+  width: 100%;
+  height: 75px;
+  justify-content: center;
+  display: flex;
+  background-color: #f5f6f7;
+}
+.double-wrapper-left{
+  width: 50%;
+  border-right: 1px solid #d6d9dc;
+  height: 123px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.double-wrapper-right {
+  width: 50%;
+  height: 123px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.save-pass-field {
+  padding: 5px;
+}
+.button-create-account {
+  margin: 0 5px !important;
+}
+.dropzone {
+  cursor: pointer;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  margin: 0 auto !important;
+}
+.dropzone img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+@media screen and (max-width: $the-tablet) {
+  .col {
+    width: 524px;
+    margin-right: 0;
+  }
+  .main-container {
+    width: 100%;
+  }
+}

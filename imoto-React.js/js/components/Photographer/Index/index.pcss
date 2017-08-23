@@ -1,0 +1,281 @@
+@import url("../../../../styles/constant.css");
+
+.row {
+  display: flex;
+  justify-content: center;
+  margin-top: 90px;
+}
+
+.message {
+  background-color: #FFF;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px rgba(207, 209, 210, 0.4);
+  margin: 35px 0px 35px 10px;
+  width: 1030px;
+  padding: 15px 30px;
+  top: 75px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: #FFF;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px rgba(207, 209, 210, 0.4);
+  margin: 0 10px 20px 10px;
+  width: 330px;
+  height: 340px;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.wrapper-head-container {
+  display: flex;
+  padding: 21px;
+  border-bottom: 1px solid #d6d9dc;
+  height: 55px;
+}
+
+.head-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 70px;
+}
+
+.content {
+  margin: 20px 20px 0 0;
+  width: 740px;
+}
+
+.side-bar {
+  margin-top: 20px;
+  width: 310px;
+  height: 200px;
+}
+
+.name {
+  color: #101414;
+  font-family: Lato;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19px;
+}
+
+.description {
+  color: #707272;
+  font-family: Lato;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15px;
+}
+
+.block-title {
+  color: #101414;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19px;
+}
+
+.block-content {
+  padding: 21px;
+  height: 280px;
+}
+
+.title-description {
+  color: #707272;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15px;
+}
+
+.dia-wrapper {
+  position: relative;
+  text-align: center;
+  margin: 25px;
+}
+
+.dia-description {
+  font-size: .8em;
+}
+
+.circliful-wrapper {
+  position: relative;
+  height: 147px;
+  svg {
+    position: absolute;
+    top: -33px;
+    left: 10px;
+    height: 200px;
+  }
+}
+
+.large-font {
+  font-size: 150%;
+  vertical-align: -0.25em;
+}
+
+.dia-text-divider {
+  font-size: 1em;
+  font-weight: 100;
+  vertical-align: -0.1em;
+}
+
+.orders-dia-text-orders {
+  position: absolute;
+  top: 50px;
+  left: 80px;
+  width: 75px;
+  color: #FD9830;
+  font-size: 1.5em;
+}
+
+.shoots-dia-text-orders {
+  position: absolute;
+  top: 50px;
+  left: 80px;
+  width: 75px;
+  color: #03A8F3;
+  font-size: 1.5em;
+}
+
+.earnings-wrapper {
+  text-align: center;
+  top: 50%;
+  position: relative;
+  transform: translateY(-50%);
+}
+
+.resource-wrapper {
+  display: block;
+  margin: 15px 0;
+}
+
+.resource-wrapper img {
+  display: inline-block;
+  margin: 10px;
+}
+
+.resource-text {
+  display: inline-block;
+  width: 250px;
+}
+
+.link-text {
+  color: #FF9D38;
+  cursor: pointer;
+}
+
+.warning-text {
+  color: #E2574C;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.message-text {
+  margin: 0 15px;
+}
+
+.dot {
+  width: 7px;
+  margin: 0 3px;
+}
+
+.earnings {
+  font-size: 45px;
+  padding: 0 10px;
+  vertical-align: bottom;
+  color: #4C4D4F;
+}
+
+.legend {
+  display: block;
+}
+
+.legend-half {
+  display: inline-block;
+  width: 50%;
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  width: 15px;
+  cursor: pointer;
+}
+
+.owner-name {
+  color: #101414;
+  font-family: Lato;
+  font-size: 14px;
+  letter-spacing: 0.58px;
+  line-height: 17px;
+  font-weight: 600;
+}
+
+.delete-mark-container {
+  align-self: center;
+  width: 25px;
+  height: 25px;
+  flex-basis: 25px;
+  flex-shrink: 0;
+  background-color: #fd9426;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-mark {
+  img {
+    display: block;
+  }
+}
+
+@media screen and (max-width: $the-tablet) {
+  .row {
+    flex-wrap: wrap-reverse;
+  }
+
+  .content {
+    margin-right: 0;
+  }
+
+  .side-bar {
+    width: 740px;
+  }
+  .wrapper {
+    margin: 0;
+    width: 100%;
+  }
+  .message {
+    width: 100%;
+    margin: 35px 0;
+  }
+  .message-text {
+    margin-left: 60px;
+  }
+  .warning-img-wrap {
+
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .content {
+    width: 100%;
+  }
+
+  .side-bar {
+    width: 100%;
+  }
+
+  .wrapper-head-container {
+    flex-direction: column;
+  }
+}
+

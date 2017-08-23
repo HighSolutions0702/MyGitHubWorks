@@ -1,0 +1,121 @@
+@import url("../../../../styles/constant.css");
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #f8f8f8;
+  border: 1px solid #e3e3e3;
+}
+.header {
+  margin: 46px 0 106px;
+  color: #404040;
+  font-family: Montserrat;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 1.95px;
+  line-height: 37px;
+  text-align: center;
+}
+.row {
+  display: flex;
+  margin-bottom: 89px;
+}
+.photo-gallery {
+  display: flex;
+  width: 55.8441558442%; /* 688px / 1232px */
+  flex-direction: column;
+  margin-right: 65px;
+}
+.photo-gallery img {
+  display: block;
+  width: 100%; 
+  height: auto;
+}
+.photos {
+  display: flex;
+  margin-top: 3.1976744186%; /* 22px / 688px */
+}
+.photos img {
+  display: block;
+  width: 100%; 
+  height: auto;
+}
+.photos :last-child {
+  margin-right: 0;
+}
+.photo {
+  margin-right: 3.34302325581%; /* 23px / 688px */
+}
+.description {
+  display: flex;
+  width: 38.8798701299%; /* 479px / 1232px */
+  flex-direction: column;
+  padding-top: 18px;
+}
+.head-section {
+  color: #404040;
+  font-family: Montserrat;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1.53px;
+  line-height: 29px;
+  max-width: 479px;
+}
+.description-section {
+  max-width: 479px;
+  color: #8c8c8c;
+  font-family: Avenir;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 28px;
+  margin-top: 5.219207%;
+}
+.blocks-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 91.0229645094%; /* 436px / 479px */
+  margin-top: 11.4822546973%; /* 55px / 479px */
+}
+.blocks-section :first-child {
+  margin-top: 0;
+}
+.two-blocks {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 8.94495412844%; /* 39px / 479px */
+}
+.two-blocks :last-child {
+  margin-right: 0;
+}
+.block {
+  width: 44.7247706422%; /* 195px / 436px */
+  margin-right: 10.5504587156%; /* 46px / 436px */
+}
+
+@media screen and (max-width: $the-tablet) {
+  .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .header {
+    margin: 46px 0 106px;
+  }
+  .photo-gallery {
+    width: 100%;
+    margin-right: 0;
+  }
+  .description {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .header {
+    margin: 25px 0 50px;
+  }
+}

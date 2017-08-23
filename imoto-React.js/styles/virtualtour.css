@@ -1,0 +1,69 @@
+.virtualtour-nav {
+  border: 1px solid #e3e3e3;
+  background-color: white;
+  z-index: 99;
+}
+.virtualtour-nav .content {
+  display: flex;
+  justify-content: space-between;
+  width: 98.5046728972%; /* 1054px / 1070px */
+}
+.virtualtour-nav .header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  font-family: Avenir;
+  line-height: 24px;
+  color: #6c6c6c;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+}
+
+.virtualtour-nav .header:hover .rectangle,
+.virtualtour-nav .header.active .rectangle {
+      display: block !important;
+      position: absolute !important;
+      top: 100px !important;
+}
+  
+.virtualtour-nav .header span {
+    display: inline-block;
+    font-weight: 500;
+    padding: 47px 0 32px;
+}
+
+.virtualtour-nav .header span::after {
+    display: block;
+    height: 1px;
+    content: attr(title);
+    font-weight: 900;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.virtualtour-nav .header .rectangle {
+    display: none;
+    width: 86px;
+    height: 9px;
+    background-color: #ff8402;
+    border-radius: 100px;
+}
+
+@media screen and (max-width: $mobile) {
+  .virtualtour-nav .header .content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }  
+    .virtualtour-nav .header .header {
+        flex-basis: 180px;
+    }
+    .virtualtour-nav .header .header:hover .rectangle {
+        display: none;
+    }
+    .virtualtour-nav .header .header:hover span {
+        padding: 20px 0;
+}
+}

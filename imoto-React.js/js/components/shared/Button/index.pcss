@@ -1,0 +1,153 @@
+@define-mixin colored-button $defaultColor, $hoverColor, $activeColor {
+  background-color: $defaultColor;
+  color: #ffffff;
+
+  &:disabled {
+    opacity: 0.8;
+  }
+  &:hover {
+    background-color: $hoverColor;
+  }
+  &:active {
+    background-color: $activeColor;
+  }
+  &.inversed {
+    background-color: #ffffff;
+    color: $defaultColor;
+    &:hover {
+      border-color: $hoverColor;
+      background-color: $hoverColor;
+      color: #ffffff;
+    },
+    &:active {
+      background-color: $activeColor;
+      border-color: $activeColor;
+      color: #ffffff;
+    }
+  }
+}
+
+.button {
+  cursor: pointer;
+  text-align: center;
+  border-radius: 40px;
+  border: none;
+  font-family: Lato;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  img {
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+}
+.xsmall {
+  font-size: 12px;
+  width: 110px;
+  height: 34px;
+}
+.xxsmall {
+  font-size: 12px;
+  width: 109px;
+  height: 23px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+.small {
+  font-size: 12px;
+  width: 90px;
+  height: 38px;
+}
+.xxnormal {
+  width: 105px;
+  height: 32px;
+  font-size: 12px;
+}
+.xnormal {
+  width: 125px;
+  height: 32px;
+  font-size: 12px;
+}
+.normal {
+  font-size: 12px;
+  width: 130px;
+  height: 38px;
+}
+.large {
+  width: 160px;
+  height: 38px;
+  font-size: 12px;
+}
+.xlarge {
+  width: 180px;
+  height: 38px;
+  font-size: 12px;
+}
+.xxlarge {
+  width: 150px;
+  height: 38px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.fullwidth {
+  display: block;
+  width: 100%
+}
+
+.shadow {
+  box-shadow: 0 29px 40px rgba(0, 0, 0, 0.62);
+}
+
+.orange {
+  @mixin colored-button rgb(219, 99, 99), #ea4353, #c03341;
+  background: linear-gradient(to bottom, rgb(255, 181, 14) 0%, rgb(255, 133, 3) 100%);
+  color: #FFF;
+}
+
+.transparent {
+  border: 2px solid #FFF;
+  background: transparent;
+  color: #FFF;
+}
+.white-gray {
+  @mixin colored-button #FFF, #F5F5F5, #E8E8E8;
+  background-color: #FFF;
+  color: #8c8e8b;
+  border: 2px solid #e9ebed;
+}
+.transparent-orange {
+  @mixin colored-button #FFF, #F5F5F5, #7c7c7c;
+  background: transparent;
+  color: #ff8d06;
+  border: 2px solid #ff8d06;
+}
+.white-orange {
+  @mixin colored-button #FFF, #F5F5F5, #7c7c7c;
+  background-color: #FFF;
+  color: #ff8d06;
+  border: 2px solid #ff8d06;
+}
+.gray {
+  @mixin colored-button #FFF, #F5F5F5, #7c7c7c;
+  background-color: #fafafa;
+  color: #8c8e8c;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.white-orange2 {
+  background-color: #FFF;
+  color: #ff8c04;
+  border: 1px solid #fd9426;
+  border-radius: 99px;
+}
+.orange-white {
+  color: #fff;
+  background-image: linear-gradient(180deg, #ffb810 0%, #ff8302 100%);
+  border-radius: 99px;
+}
+
+

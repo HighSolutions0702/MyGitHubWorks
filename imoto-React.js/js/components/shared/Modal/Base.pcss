@@ -1,0 +1,51 @@
+@import url("../../../../styles/constant.css");
+
+/* General styles */
+
+.modal {
+  position: fixed;
+  z-index:  9;
+  top:      0;
+  bottom:   0;
+  left:     0;
+  right:    0;
+}
+.backdrop {
+  position:         fixed;
+  top:              0;
+  bottom:           0;
+  left:             0;
+  right:            0;
+  z-index:          auto;
+  background-color: #000000;
+  opacity:          0.5;
+}
+.wrapper {
+  position:      absolute;
+  min-width:     620px;
+  top:           40%;
+  left:          50%;
+  transform:     translate(-50%, -50%);
+  outline:       none;
+}
+.window {
+  box-shadow:    0 5px 15px rgba(0,0,0,.5);
+}
+.close {
+  cursor: pointer;
+  display: block;
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  font-size: 19px;
+  color: #ABABAB;
+}
+.context {
+  background-color: #FFFFFF;
+}
+
+@media screen and (max-width: $mobile) {
+  .wrapper {
+    min-width: 310px;
+  } 
+}

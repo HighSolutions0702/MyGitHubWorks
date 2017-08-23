@@ -1,0 +1,36 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 195px;
+  height: 140px;
+  background-color: white;
+  border-radius: 2px;
+  padding-left: 15px;
+  box-shadow: 0 12px 16px rgba(16, 20, 20, 0.15), 0 1px 4px rgba(0, 0, 0, 0.02);  
+}
+.row-container {
+  display: flex;
+  color: #8c8e8c;
+  font-family: Lato;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 30px;
+  cursor: pointer;
+  .arrow-container {
+    display: none;
+    margin-left: 25px;
+  }
+  &:hover {
+    .arrow-container {
+      display: block;
+    }
+  }
+}
+.img-container {
+  align-self: center;
+  margin-right: 12px;
+}
+.img-container img {
+  display: block;
+}

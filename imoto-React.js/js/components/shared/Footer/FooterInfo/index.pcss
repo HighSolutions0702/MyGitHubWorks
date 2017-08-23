@@ -1,0 +1,87 @@
+@import url("../../../../../styles/constant.css");
+
+.wrapper {
+  padding: 60px 0;
+  font-size: 16px;
+}
+.main {
+  display: flex;
+  justify-content: space-between;
+  width: 89.8130841121%;
+  margin: 0 auto;
+}
+.section {
+  color: #FFF;
+  display: flex;
+  flex-direction: column;
+  max-width: 360px;
+}
+.header {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.icons-wrapper {
+  display: flex;
+
+  a:last-child {
+    margin-right: 0;
+  }
+
+  a {
+    display: block;
+    height: 16px;
+    margin-right: 25px;
+    cursor: pointer;
+  }
+}
+.icon {
+  height: 16px;
+}
+.email {
+  margin-bottom: 15px;
+  color: #FFF;
+}
+.phone {
+  color: #FFF;
+}
+.logo {
+  height: 36px;
+}
+.logo img {
+  display: block;
+}
+
+@media screen and (max-width: $the-tablet) {
+  .wrapper {
+    padding: 10px 0 30px;
+  }
+  .main {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .section {
+    margin-bottom: 15px;
+    padding: 0 20px;
+    max-width: 330px;
+  }
+  .logo {
+    padding: 0 20px;
+    margin-bottom: 15px; 
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .wrapper {
+    padding: 30px 0;
+  }
+  .main {
+    justify-content: center;
+  }
+  .section {
+    padding: 0 10px;
+    max-width: 265px;
+  }
+  .logo {
+    padding: 0 10px;
+  }
+}

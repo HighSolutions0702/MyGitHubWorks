@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="SvgjsSvg1012"
+   version="1.1"
+   width="91"
+   height="86"
+   viewBox="0 0 91 86"
+   inkscape:version="0.91 r"
+   sodipodi:docname="imoto_logo1.svg">
+  <metadata
+     id="metadata14">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Oval</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1855"
+     inkscape:window-height="1056"
+     id="namedview12"
+     showgrid="false"
+     inkscape:zoom="5.4883721"
+     inkscape:cx="36.162889"
+     inkscape:cy="16.95622"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="SvgjsSvg1012" />
+  <title
+     id="title3">Oval</title>
+  <desc
+     id="desc5">Created with Avocode.</desc>
+  <defs
+     id="SvgjsDefs1013">
+    <clipPath
+       id="SvgjsClipPath1016">
+      <path
+         id="SvgjsPath1015"
+         d="M751 242.5C751 222.34161 767.34161 206 787.5 206C807.65839 206 824 222.34161 824 242.5C824 262.65839 807.65839 279 787.5 279C767.34161 279 751 262.65839 751 242.5Z "
+         fill="#ffffff" />
+    </clipPath>
+  </defs>
+  <path
+     id="SvgjsPath1014"
+     d="M751 242.5C751 222.34161 767.34161 206 787.5 206C807.65839 206 824 222.34161 824 242.5C824 262.65839 807.65839 279 787.5 279C767.34161 279 751 262.65839 751 242.5Z "
+     stroke-miterlimit="50"
+     clip-path="url(&quot;#SvgjsClipPath1016&quot;)"
+     transform="matrix(1,0,0,1,-751,-193)"
+     stroke-dasharray="0"
+     stroke-opacity="1"
+     stroke-linejoin="miter"
+     stroke-linecap="butt"
+     stroke-width="18"
+     stroke="#ffffff"
+     fill-opacity="0"
+     fill="#ffffff" />
+  <path
+     id="SvgjsPath1017"
+     d="M822 203C822 197.47715 826.47715 193 832 193C837.52285 193 842 197.47715 842 203C842 208.52285 837.52285 213 832 213C826.47715 213 822 208.52285 822 203Z "
+     fill="#ff8402"
+     fill-opacity="1"
+     transform="matrix(1,0,0,1,-751,-193)" />
+  <path
+     style="opacity:0.98999999;fill:#ff8402;fill-opacity:1"
+     id="path3346"
+     sodipodi:type="arc"
+     sodipodi:cx="38.900421"
+     sodipodi:cy="48.010593"
+     sodipodi:rx="38.900421"
+     sodipodi:ry="38.171608"
+     sodipodi:start="6.2648723"
+     sodipodi:end="6.1440445"
+     sodipodi:open="true"
+     d="M 77.79432,47.311596 A 38.900421,38.171608 0 0 1 40.787127,86.137279 38.900421,38.171608 0 0 1 0.12048871,51.012623 38.900421,38.171608 0 0 1 34.671224,10.065245 38.900421,38.171608 0 0 1 77.42489,42.716486" />
+  <path
+     style="opacity:0.98999999;fill:#ffffff;fill-opacity:1"
+     id="path3348"
+     sodipodi:type="arc"
+     sodipodi:cx="38.904659"
+     sodipodi:cy="48.188557"
+     sodipodi:rx="29.972456"
+     sodipodi:ry="29.243645"
+     sodipodi:start="6.2648768"
+     sodipodi:end="6.1440477"
+     sodipodi:open="true"
+     d="M 68.872092,47.653179 A 29.972456,29.243645 0 0 1 40.358226,77.397792 29.972456,29.243645 0 0 1 9.0250298,50.488329 29.972456,29.243645 0 0 1 35.646203,19.11824 29.972456,29.243645 0 0 1 68.587461,44.132782" />
+</svg>

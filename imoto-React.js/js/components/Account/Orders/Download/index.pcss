@@ -1,0 +1,254 @@
+@import url("../../../../../styles/constant.css");
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.main {
+  min-height: 766px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px rgba(207, 209, 210, 0.4);
+  margin-bottom: 33px;
+}
+.download-button {
+  margin-bottom: 54px;
+}
+.head-container {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #d6d9dc;
+}
+.head-left-field {
+  padding: 18px 17px;
+  cursor: pointer;
+  &:hover {
+    background: linear-gradient(90deg, #fafafa 75%, #fff);
+  }
+  a {
+    display: flex;
+    align-items: center;
+  }
+}
+.head-right-field {
+  padding: 17px 21px 18px;
+}
+.arrow-left-gray {
+  padding: 5px;
+}
+.arrow-left-gray img {
+  display: block;
+  height: 12px;
+}
+.head-description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 16px;
+}
+.name {
+  color: #101414;
+  font-family: Lato;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19px;
+}
+.description {
+  color: #707272;
+  font-family: Lato;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15px;
+}
+.menu-item {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 11px 15px 10px 15px;
+  border-bottom: 1px solid #d6d9dc;
+  background-color: white;
+  &:hover {
+    .black-arrow {
+      display: block;
+    }
+  }
+}
+.black-arrow {
+  display: none;
+  padding-left: 10px;
+}
+.wrapper-downloadblock-container {
+  position: relative;
+}
+.downloadblock-container {
+  position: absolute;
+  right: -12px;
+  top: 8px;
+}
+.black-arrow img {
+  display: block;
+}
+.left-field {
+  display: flex;
+}
+.orange-arrow {
+  cursor: pointer;
+  padding: 5px;
+  transform: rotate(-180deg);
+}
+.orange-arrow img {
+  display: block;
+}
+.activeArrow {
+  transform: rotate(0deg);
+  -webkit-transition: transform 300ms linear;
+  transition: transform 300ms linear;
+}
+.noactiveArrow {
+  -webkit-transition: transform 300ms linear;
+  transition: transform 300ms linear;
+}
+.header {
+  color: #fd9426;
+  font-family: Lato;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 15px;
+  margin-left: 16px;
+}
+.activeDots {
+  border: 1px solid #d6d9dc;
+  padding: 0 !important;
+}
+.cursor {
+  cursor: pointer;
+  padding: 1px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+}
+.cursor img {
+  display: block;
+}
+.row-parameters {
+  display: flex;
+  justify-content: space-between;
+  padding: 13px 20px 13px;
+  background-color: #fafafa;
+  border-bottom: 1px solid #d6d9dc;
+}
+.left-field {
+  display: flex;
+  align-items: center;
+}
+.right-field {
+  width: 145px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.square {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border: 0.5px solid #d6d9dc;
+  border-radius: 2px;
+  margin-right: 19px;
+  cursor: pointer;
+}
+.activeCross {
+  position: relative;
+  right: 6px;
+  top: 2px;
+}
+.activeCross:before, .activeCross:after {
+  position: absolute;
+  left: 15px;
+  content: ' ';
+  height: 16px;
+  width: 2px;
+  background-color: #fd9426;
+}
+.activeCross:before {
+  transform: rotate(45deg);
+}
+.activeCross:after {
+  transform: rotate(-45deg);
+}
+.parameter-size {
+  flex-basis: 120px
+}
+.parameter-kind {
+  flex-basis: 60px;
+}
+.header-parameter {
+  color: #101414;
+  font-family: Lato;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 22px;
+}
+.row-values {
+  display: flex;
+  justify-content: space-between;
+  padding: 13px 20px 13px;
+  border-bottom: 1px solid #d6d9dc;
+}
+.activeRow {
+  background-color: #fafafa;
+}
+.work-description {
+  display: flex;
+  align-items: center;
+}
+.work-icon img {
+  width: 50px;
+  height: 50px;
+  display: block;
+}
+.work-name {
+  color: #101414;
+  font-family: Lato;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+  margin-left: 20px;
+}
+.path {
+  background-color: #f6f8f8;
+  border: 0.5px solid #d6d9dc;
+  color: #7e8890;
+  font-family: Lato;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 15px;
+  padding: 4px 11px 5px;
+  margin-top: 5px;
+}
+.parameter {
+  color: #707272;
+  font-family: Lato;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+@media screen and (max-width: $mobile) {
+  .work-description {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .work-name {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+  .head-right-field {
+    display: flex;
+    align-items: center;
+  }
+  .path {
+    display: none;
+  }
+}

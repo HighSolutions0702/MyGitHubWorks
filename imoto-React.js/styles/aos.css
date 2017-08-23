@@ -1,0 +1,168 @@
+/* AOS has limit for delay and duration (max 3000ms). We must declare
+them as global if we want to add new value */
+
+body[data-aos-delay='3300'] [data-aos], [data-aos][data-aos][data-aos-delay='3300']{
+  transition-delay: 3300ms;
+}
+body[data-aos-delay='3600'] [data-aos], [data-aos][data-aos][data-aos-delay='3600']{
+  transition-delay: 3600ms;
+}
+body[data-aos-delay='3900'] [data-aos], [data-aos][data-aos][data-aos-delay='3900']{
+  transition-delay: 3900ms;
+}
+body[data-aos-delay='4800'] [data-aos], [data-aos][data-aos][data-aos-delay='4800']{
+  transition-delay: 4800ms;
+}
+[data-aos="services"] {
+  opacity: 0;
+  &.aos-animate {
+    opacity: 1;
+    transition-delay: 4800ms;
+  }
+}
+[data-aos="animate-two-numbers"] {
+  &.aos-animate {
+    margin-top: -60px;
+    transition-property: margin-top;
+    transition-timing-function: ease;
+  }
+}
+[data-aos="animate-three-numbers"] {
+  &.aos-animate {
+    margin-top: -120px;
+    transition-property: margin-top;
+    transition-timing-function: ease;
+  }
+}
+[data-aos="animate-four-numbers"] {
+  &.aos-animate {
+    margin-top: -180px;
+    transition-property: margin-top;
+    transition-timing-function: ease;
+  }
+}
+[data-aos="animate-six-numbers"] {
+  &.aos-animate {
+    margin-top: -300px;
+    transition-property: margin-top;
+    transition-timing-function: ease;
+  }
+}
+[data-aos="animate-seven-numbers"] {
+  &.aos-animate {
+    margin-top: -360px;
+    transition-property: margin-top;
+    transition-timing-function: ease;
+  }
+}
+[data-aos="background"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  &.aos-animate {
+    height: 25%;
+    transition-delay: 3s;
+  }
+}
+[data-aos="anim"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  background-color: white;
+  z-index: 10;
+  height: 100%;
+  width: 100%;
+  &.aos-animate {
+    height: 0%;
+    z-index: 3;
+    transition-delay: 3s;
+  }
+}
+[data-aos="logo"] {
+  position: relative;
+  top: 50px;
+  width: 100px;
+  height: 100px;
+  margin: 30px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 11;
+  &.aos-animate {
+    z-index: 4;
+    transition-delay: 3s;
+  }
+}
+[data-aos="oval"] {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 5px solid black;
+  &.aos-animate {
+    border-color: white;
+    transition-delay: 3000ms;
+    transition-duration: 1200ms;
+  }
+}
+[data-aos="circle-container"] {
+  opacity: 0;
+  margin: 0 auto;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: transparent;
+  -webkit-animation-name: rotation, rotation, rotation;
+  -webkit-animation-duration: 200ms, 200ms, 600ms;
+  -webkit-animation-iteration-count: 1, 1, 1;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-delay: 1000ms, 1200ms, 1400ms;
+  animation-name: rotation, rotation, rotation;
+  animation-duration: 200ms, 200ms, 600ms;
+  animation-iteration-count: 1, 1, 1;
+  animation-timing-function: linear;
+  animation-delay: 1000ms, 1200ms, 1400ms;
+    &.aos-animate {
+    opacity: 1;
+    transition-delay: 500ms;
+    transition-duration: 500ms;
+  }
+}
+[data-aos="circle"] {
+  margin-left: 40px;
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  background: black;
+  &.aos-animate {
+    background: white;
+    transition-delay: 3000ms;
+    transition-duration: 1200ms;
+  }
+}
+
+@-webkit-keyframes rotation {
+  from { -webkit-transform: rotate(0deg); }
+  to { -webkit-transform: rotate(360deg); }
+}
+@keyframes rotation {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+@media screen and (max-width: $mobile) {
+  [data-aos="services"] {
+    opacity: 0;
+    &.aos-animate {
+      transition-delay: 300ms;
+      opacity: 1;
+    }
+  }
+}

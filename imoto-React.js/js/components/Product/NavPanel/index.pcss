@@ -1,0 +1,48 @@
+@import url("../../../../styles/constant.css");
+.sub-header-wrapper {
+  margin-top: 65px;
+  background-color: white;
+  border: 1px solid #e3e3e3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.42);
+  opacity: 0.95;
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+}
+.sub-header {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: 527px;
+}
+.sub-header-elem {
+  color: #7e8890;
+  cursor: pointer;
+  display: flex;
+  font-size: 13px;
+  font-weight: 600;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  line-height: 20px;
+  padding: 18px 0 12px;
+  text-align: center;
+  &:hover {
+    color: #101414;
+  }
+}
+@media screen and (max-width: $mobile) {
+  .sub-header-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }  
+  .sub-header {
+    width: 100%;
+  }
+  .sub-header-elem {
+    flex-basis: 181px;
+    padding: 10px 0;
+    font-size: 12px;
+    align-items: center;
+  }
+}

@@ -1,0 +1,59 @@
+@import url("../../../../../styles/constant.css");
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 59px 0 48px 0;
+}
+.menu-footer {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 70.9345794393%;
+}
+.menu-footer ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.menu-footer li {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  color: #fff;
+  font-family: Lato;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+
+  a {
+    color: #fff;
+  }
+}
+.menu-footer li:last-of-type {
+  margin-right: 0;
+}
+
+@media screen and (max-width: $the-tablet) {
+  .menu-footer {
+    width: 85.934579%;
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .menu-footer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 88.934579%%;
+  }
+  .menu-footer li {
+    margin: 15px 0;
+    flex-basis: 25.3411306043%;
+  }
+  .wrapper {
+    margin: 20px 0;
+  }
+}

@@ -1,0 +1,215 @@
+@import url("./constant.css");
+@import url("../node_modules/react-select/dist/react-select.css");
+@import url("../node_modules/react-datepicker/dist/react-datepicker.min.css");
+@import url("./aos.css");
+@import url("./alert.css");
+@import url("./slider.css");
+@import url("./cssTransitionClasses.css");
+@import url("./react-select.css");
+@import url("./virtualtour.css");
+@import url("./carousel.css");
+@import url("./tags.css");
+
+
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  font-family: Lato;
+  max-width: 100%;
+}
+#app {
+  height: 100%;
+}
+.app {
+  height: 100%;
+}
+ul {
+  padding: 0;
+}
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+input[type="text"]:disabled {
+  background: #f9f9f9;
+}
+a {
+  text-decoration: none;
+}
+button:focus {
+  outline:0;
+}
+textarea {
+  resize: none;
+}
+/*Main container*/
+.root {
+  max-width: 1070px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+.root-2 {
+  max-width: 1232px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/*Adding fonts*/
+
+@font-face {
+  font-family: 'Arial Rounded MT Bold';
+  src: url('/fonts/arial-rounded-mt-bold');
+  src: url('/fonts/arial-rounded-mt-bold.ttf')  format('truetype')
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/montserrat-bold');
+  src: url('/fonts/montserrat-bold.ttf')  format('truetype')
+}
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/lato-regular');
+  src: url('/fonts/lato-regular.ttf')  format('truetype')
+}
+
+/*Product page text wrapper*/
+
+.product-text-wrapper {
+  width: 630px;
+  padding: 0 15px;
+}
+/*React-Select styles*/
+/* .Select-control {
+  border-top-right-radius: 100px;
+  border-top-left-radius: 100px;
+  border-bottom-right-radius: 100px;
+  border-bottom-left-radius: 100px;
+}
+.Select-menu-outer {
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+.Select-placeholder, .Select-noresults, .Select-option {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.is-open .Select-control {
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.Select-option:last-child {
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+} */
+.form-select .Select {
+  height: 66px;
+}
+.form-select .Select-control {
+  border: none;
+  height: 66px;
+}
+.is-focused .Select-control {
+  border: none;
+  box-shadow: none;
+}
+.is-pseudo-focused .Select-control {
+  border: none;
+  box-shadow: none;
+}
+.is-pseudo-focused:not(.is-open) .Select-control {
+  border: none;
+  box-shadow: none;
+}
+.form-select .Select-control .Select-placeholder {
+  border: none;
+  width: 100%;
+  height: 66px;
+  padding-left: 30px;
+  padding-top: 17px;
+}
+.form-select .Select-control .Select-value {
+  padding-left: 30px;
+  padding-top: 17px;
+}
+.form-select .Select-control .Select-input {
+  padding-left: 30px;
+  padding-top: 17px;
+}
+.form-select .Select-option {
+  padding-left: 30px;
+}
+
+.order-form-select .Select-control .Select-placeholder {
+  padding-right: 25px;
+  color: #707272;
+}
+.order-form-select .Select-control .Select-arrow-zone {
+  padding-right: 25px;
+}
+.order-form-select .Select-control .Select-value-label {
+  font-size: 18px;
+}
+.errorPlaceholder .Select-control .Select-placeholder {
+  color: #E74C3C;
+}
+/* fields wrapper */
+
+.field-fullwidth {
+  width: 100%;
+  border-top: 1px solid #d6d9dc;
+}
+.two-fields-wrapper {
+  display: flex;
+  width: 100%;
+}
+.field-left {
+  width: 50%;
+  border-top: 1px solid #d6d9dc;
+  border-right: 1px solid #d6d9dc;
+}
+.field-right {
+  border-top: 1px solid #d6d9dc;
+  width: 50%;
+}
+.three-fields-wrapper {
+  display: flex;
+  width: 100%;
+}
+.third-left {
+  width: 33.3333333%;
+  border-top: 1px solid #d6d9dc;
+  border-right: 1px solid #d6d9dc;
+}
+.third-center {
+  width: 33.3333333%;
+  border-top: 1px solid #d6d9dc;
+  border-right: 1px solid #d6d9dc;
+}
+.third-right {
+  width: 33.3333333%;
+  border-top: 1px solid #d6d9dc;
+}
+.darkened-field {
+  background-color: #f9f9f9;
+}
+
+@media screen and (max-width: $mobile) {
+  .virtual-dots li {
+    display: none;
+  }
+  .two-fields-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  .field-left {
+    width: 100%;
+    border-right: 0;
+  }
+  .field-right {
+    width: 100%;
+  }
+}

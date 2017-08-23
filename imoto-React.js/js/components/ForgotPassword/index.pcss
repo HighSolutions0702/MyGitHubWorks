@@ -1,0 +1,53 @@
+@import url("../../../styles/constant.css");
+.content {
+  background-color: #f5f6f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 65px;
+  padding: 55px 0 76px 0;
+  min-height: 50vh;
+}
+.main {
+  background-color: #FFF;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px rgba(207, 209, 210, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 524px;
+}
+.header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 210px;
+  width: 100%;
+}
+.header-title {
+  color: #101414;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 29px;
+  margin-bottom: 35px;
+}
+.form-input {
+  width: 100%;
+  border-top: 1px solid #d6d9dc;
+  border-bottom: 1px solid #d6d9dc;
+}
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 30px 50px;
+  width: 100%;
+}
+@media screen and (max-width: $mobile) {
+  .main {
+    width: 100%;
+    margin: 0 25px;
+  }
+}

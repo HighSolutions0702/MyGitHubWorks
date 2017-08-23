@@ -1,0 +1,93 @@
+.orderDropDown {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.orderDropDown button {
+	display: inline-block;
+}
+
+.orderDropDown button:hover {
+	cursor: pointer;
+}
+
+.dropDownOptions {
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	display: block;
+	transform: translateX(-50%);
+	z-index: 5;
+	overflow: hidden;
+	border-radius: 3px;
+}
+
+.square {
+	width: 10px;
+	height: 10px;
+	position: relative;
+	top: 5px;
+	left: 50%;
+	transform: translateX(-50%) rotate(45deg);
+	display: block;
+	background: #25292a;
+	z-index: 3;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.dropDownOptions button {
+	z-index: 5;
+	display: flex;
+	background: #25292a;
+	color: #fff;
+	border: none;
+	font-size: 12px;
+	width: 180px;
+	padding: 12px 14px;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.greenSmallSquare {
+	width: 13px;
+	height: 10px;
+	display: inline-block;
+	background: #75BA00;
+	border-radius: 3px;
+}
+
+.yellowSmallSquare {
+	width: 13px;
+	height: 10px;
+	display: inline-block;
+	background: #F1C40F;
+	border-radius: 3px;
+}
+
+.orangeSmallSquare {
+	width: 13px;
+	height: 10px;
+	display: inline-block;
+	background: #FF8402;
+	border-radius: 3px;
+}
+
+.dropDownOptions button:hover {
+	background: #323431;
+}
+
+.deployDropDown {
+	color: #888888;
+	border: 1px solid #cbcbcb;
+	text-transform: capitalize;
+	font-size: 12px;
+	background: none;
+	padding: 9px 40px;
+	border-radius: 30px;
+	font-weight: bold;
+}

@@ -1,0 +1,72 @@
+@import url("../../../../styles/constant.css");
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #FFF;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px rgba(207, 209, 210, 0.4);
+  padding: 0 10px;
+}
+.user-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.field-fullwidth {
+  border-top: 1px solid #d6d9dc;
+  width: 100%;
+}
+.user-img {
+  padding-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+.user-name {
+  color: #101414;
+  font-family: Lato;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 22px;
+  padding-top: 20px;
+  padding-bottom: 25px;
+}
+.description-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: Lato;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 24px;
+  cursor: pointer;
+  padding: 25px 25px 30px;
+}
+.sidebar-menu {
+  padding: 7px 0;
+}
+.avatar {
+  width: 128px;
+  height: 128px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+a {
+  color: #101414;
+  cursor: auto;
+}
+.active {
+  color: #8c8e8c;
+}
+
+@media screen and (max-width: $the-tablet) {
+  .field-fullwidth {
+    border-top: 0;
+    width: initial;
+  }
+  .wrapper {
+    flex-direction: row;
+    justify-content: center;
+  }
+}

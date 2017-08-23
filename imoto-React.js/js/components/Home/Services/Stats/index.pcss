@@ -1,0 +1,54 @@
+@import url("../../../../../styles/constant.css");
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 945px;
+}
+.unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 205px;
+}
+.quantity {
+  display: flex;
+  color: #fd9426;
+  font-size: 50px;
+  font-weight: 300;
+  line-height: 60px;
+}
+.digit {
+  height: 50px;
+  overflow: hidden;
+}
+.key {
+  font-size: 20px;
+  font-weight: 400;
+  margin: 10px 0;
+}
+
+.description {
+  text-align: center;
+  color: #7e8890;
+  font-size: 16px;
+}
+
+@media screen and (max-width: $mobile) {
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  .unit {
+    margin-bottom: 2.5%;
+  }
+  .key {
+    font-size: 22px;
+  }
+  .description {
+    font-size: 18px;
+  }
+}

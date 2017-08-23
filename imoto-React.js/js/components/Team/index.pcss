@@ -1,0 +1,61 @@
+@import url("../../../styles/constant.css");
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f6f7;
+}
+.content {
+  margin-top: 65px;
+}
+.team-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+.member {
+  margin-bottom: 35px;
+}
+.section-name {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 57px;
+  margin-bottom: 45px;
+  margin-top: 106px; 
+  text-align: center;
+}
+.section-description {
+  color: #7e8890;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 24px;
+  margin-bottom: 23px;
+  text-align: center;
+}
+
+@media screen and (max-width: $the-tablet) {
+  .team-wrapper {
+    justify-content: space-around;
+    margin: 0 !important;
+  }
+  .section-name {
+    margin-top: 60px;
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .section-name {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 48px;
+    margin: 40px auto;
+    padding: 0 10px;
+    text-align: center;
+  }
+  .member {
+    padding: 0 10px;
+  }
+}

@@ -1,0 +1,20 @@
+.react-datepicker__input-container {
+  width: 100%;
+  input {
+    box-sizing:  border-box;
+    background-color: white;
+    border: none;
+    color: #101414;
+    font-size: 14px;
+    font-weight: 400;
+    height: 100%;
+    line-height: 17px;
+    padding: 0 20px;
+    width: 100%;
+    height: 33px;
+    outline: none;
+  }
+  input::focus {
+    border: none;
+  }
+}

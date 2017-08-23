@@ -1,0 +1,73 @@
+@import url("../../../../styles/constant.css");
+
+.wrapper {
+  padding-bottom: 140px;
+}
+.head-section {
+  margin: 55px 0 49px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.head-section img {
+  display: block;
+}
+.header {
+  font-size: 32px;
+}
+.description {
+  color: #7e8890;
+  font-size: 18px;
+  margin-top: 7px;
+  margin-bottom: 24px;
+}
+.about {
+  text-align: center;
+  max-width: 650px;
+  color: #707272;
+  font-size: 26px;
+  font-weight: 300;
+  line-height: 40px;
+  margin: 133px auto 97px auto;
+}
+.bg {
+  color: #f6f8f8;
+  font-family: Montserrat;
+  font-size: 120px;
+  font-weight: 600;
+  line-height: 159px;
+  margin-bottom: -70px;
+}
+
+@media screen and (max-width: $the-tablet) {
+  .wrapper {
+    padding-bottom: 90px;
+  }
+  .section-name {
+    margin: 40px 0 60px 0;
+  }
+  .about {
+    margin: 100px auto 70px auto;
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .wrapper {
+    padding-bottom: 25px;
+  }
+  .head-section {
+    margin: 10px 0 40px 0;
+  }
+  .about {
+    max-width: 740px;
+    font-size: 18px;
+    line-height: 24px;
+    margin: 50px auto 30px auto;
+  }
+  .bg {
+    font-size: 65px;
+    line-height: 100px;
+    margin-bottom: -50px
+  }
+}

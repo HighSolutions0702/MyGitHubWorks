@@ -1,0 +1,159 @@
+.header-pic {
+	border-radius: 3px;
+	margin: 0 5px 0 0;
+}
+
+.item {
+	background: #fff;
+	overflow: hidden;
+	border-radius: 3px;
+	box-shadow: 1px 1px 2px rgba(0,0,0, .1);
+	position: relative;
+	margin-bottom: 25px;
+}
+
+@media (max-width: 650px) {
+	.item {
+		width: 100%;
+	}
+}
+
+@media (min-width: 651px) and (max-width: 920px) {
+	.item {
+		width: 48%;
+	}
+}
+
+@media (min-width: 921px) {
+	.item {
+		width: 31%;
+	}
+}
+
+.item header {
+	display: flex;
+	padding: 20px 10px;
+	border-bottom: 1px solid rgba(0,0,0,.15);
+	align-items: center;
+}
+
+.item header h4 {
+	margin: 0;
+	font-weight: normal;
+	font-size: 14px;
+	margin-right: 3px;
+}
+
+.item header .info {
+	border-radius: 10px;
+	color: #bebebe;
+	font-style: italic;
+	font-weight: bold;
+	font-size: 12px;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #bebebe;
+	background: #fff;
+}
+
+.item header .state-pending {
+	display: inline-block;
+	color: #fff;
+	margin-left: auto;
+	padding: 6px 15px;
+	font-size: 11px;
+	border-radius: 3px;
+	text-transform: uppercase;
+	background: #75BA00;
+	width: 90px;
+	text-align: center;
+}
+
+.item header .state-in_progress  {
+	display: inline-block;
+	color: #fff;
+	margin-left: auto;
+	padding: 5px 15px;
+	font-size: 11px;
+	border-radius: 3px;
+	text-transform: uppercase;
+	background: #F1C40F;
+}
+
+.item header .state-completed {
+	display: inline-block;
+	color: #fff;
+	margin-left: auto;
+	padding: 5px 15px;
+	font-size: 11px;
+	border-radius: 3px;
+	text-transform: uppercase;
+	background: #FF8402;
+}
+
+.item .information {
+
+}
+
+.item .maps {
+	padding: 18px 20px;
+	border-bottom: 1px solid rgba(0,0,0,.15);
+	background: url(/images/maps.png) no-repeat;
+	background-size: cover;
+	background-position: center center;
+}
+
+.item .maps h5 {
+	text-transform: uppercase;
+	color: #bebebe;
+	font-size: 10px;
+	margin: 0 0 5px;
+}
+
+.item .maps strong {
+	width: 100%;
+	max-width: 170px;
+	font-size: 12px;
+	display: block;
+	font-weight: normal;
+	line-height: 16px;
+}
+
+.item .pricing {
+	padding: 20px;
+}
+.item .pricing table {
+	width: 100%;
+}
+
+.item .pricing th,
+.item .pricing td {
+	text-align: left;
+	font-size: 12px;
+	width: 20%;
+	padding: 0 0 15px;
+}
+
+.item .pricing th:first-child,
+.item .pricing td:first-child {
+	width: 60%;
+}
+
+.item .pricing th {
+	text-transform: uppercase;
+	color: #bebebe;
+}
+
+.item .start-upload {
+	background-color: rgb(219, 99, 99);
+	background: linear-gradient(to bottom, rgb(255, 181, 14) 0%, rgb(255, 133, 3) 100%);
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 20px;
+	text-transform: uppercase;
+	font-size: 14px;
+	position: absolute;
+	bottom: 10px;
+	left: 20px;
+}

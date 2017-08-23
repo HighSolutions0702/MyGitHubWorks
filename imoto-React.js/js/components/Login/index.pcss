@@ -1,0 +1,76 @@
+@import url("../../../styles/constant.css");
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: #FFF;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px rgba(207, 209, 210, 0.4);
+  width: 524px;
+  text-align: left;
+}
+.main {
+  display: flex;
+  justify-content: center;
+}
+.content {
+  width: 100%;
+  margin-top: 65px;
+  padding: 55px 0 76px 0;
+  background-color: #f5f6f7;
+}
+.tab-header {
+  color: #101414;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 29px;
+  margin-bottom: 35px;
+}
+.logo-container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 210px;
+  width: 100%;
+}
+.confirm-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #d6d9dc;
+  height: 140px;
+  padding: 20px 30px;
+  color: #707272;
+  font-size: 12px;
+  font-weight: 400;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.forgot {
+  margin-top: 5px;
+}
+.button-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.sign-up a {
+  color: #fd9426;
+}
+
+@media screen and (max-width: $the-tablet) {
+  .content {
+    padding-top: 62px;
+  }
+}
+
+@media screen and (max-width: $mobile) {
+  .wrapper {
+    width: 100%;
+  }
+}

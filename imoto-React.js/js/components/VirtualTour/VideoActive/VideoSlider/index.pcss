@@ -1,0 +1,37 @@
+.videoSlider {
+	display: inline-block;
+  position: relative;
+}
+
+.videoSlider button {
+	appearance: none;
+	background: none;
+	border: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.videoSlider button:hover {
+  cursor: pointer;
+}
+
+.videoSlider button img {
+  width: 40px;
+  height: auto;
+}
+
+.videoSlider .prev {
+  left: -80px;
+}
+
+.videoSlider .next {
+  right: -80px;
+}
+
+.videoSlider .showCount {
+  position: absolute;
+  right: 20px;
+  bottom: -40px;
+  color: #fff;
+}
